@@ -67,5 +67,3 @@ Luego ejecutar el archivo principal del proyecto con Python.
 * Macarena Prieto
 * Solana Cosenza
 * Juan Cruz Isola
-* Araceli Sinche
-* Molinari
