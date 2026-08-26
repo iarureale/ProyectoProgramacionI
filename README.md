@@ -64,8 +64,8 @@ Luego ejecutar el archivo principal del proyecto con Python.
 **Programación I**
 
 * Iara Reale
-* Lucila Mendizabal
-* Delfina Luengo
-* Carolina Albini
+* Macarena Prieto
+* Solana Cosenza
+* Juan Cruz Isola
 * Araceli Sinche
 * Molinari
