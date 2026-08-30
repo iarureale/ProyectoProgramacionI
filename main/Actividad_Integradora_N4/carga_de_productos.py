@@ -21,34 +21,36 @@ productos = funciones.cargar_productos()
 
 funciones.mostrar_productos(productos)
 
-codigo = input("Ingresar codigo a buscar: ")
+if productos:
+    codigo = input("Ingresar codigo a buscar: ")
+    buscado = funciones.buscar_producto(productos, codigo)
 
-buscado = funciones.buscar_producto(productos, codigo)
+    if buscado is None: 
+        print('El producto buscado no existe')
+    else:
+            print(f'El producto buscado esta disponible:')
+            print(f'Codigo: {buscado[0]}\nDescripción: {buscado[1]}\nPrecio: {buscado[2]}\n')
 
-if buscado is None: 
-    print('El producto buscado no existe')
-else:
-        print(f'El producto buscado esta disponible:')
-        print(f'Codigo: {buscado[0]}\nDescripción: {buscado[1]}\nPrecio: {buscado[2]}\n')
 
-mayor = funciones.producto_mayor_precio(productos)
-
-promedio = funciones.precio_promedio(productos)
-
-if mayor is None and promedio is None:
+if not productos:
       print("No se han cargado productos")
 else:
+    mayor = funciones.producto_mayor_precio(productos)
+    promedio = funciones.precio_promedio(productos)
     print(f'El producto de mayor precio es:')
     print(f'Codigo: {mayor[0]}\nDescripción: {mayor[1]}\nPrecio: {mayor[2]}\n')
 
     print(f'El promedio es de {promedio}')
 
-modificacion = input("Queres realizar una modificación de precio? (si/no)")
+if productos:
+    modificacion = input("Queres realizar una modificación de precio? (si/no)")
 
-if modificacion.lower() == 'si':
-      actualizacion = funciones.actualizar_precio(productos)
-      if actualizacion:
-            print("Se ha modificado correctamente")
-            print("El nuevo catalogo quedaría de la siguiente forma: ")
-            funciones.mostrar_productos(productos)
+    if modificacion.lower() == 'si':
+        actualizacion = funciones.actualizar_precio(productos)
+        if actualizacion:
+                print("Se ha modificado correctamente")
+                print("El nuevo catalogo quedaría de la siguiente forma: ")
+                funciones.mostrar_productos(productos)
+        else:
+            print("No se pudo actualizar: el código no existe")
 
