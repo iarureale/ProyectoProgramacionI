@@ -1,7 +1,7 @@
 suma = 0 
 cantidad = 0
 
-while true:
+while True:
     numero = int(input("Ingrese un numero entero (-1 para finalizar):"))
     if numero == -1:
         break
@@ -13,6 +13,6 @@ print("Suma:", suma)
 
 if cantidad != 0:
     promedio = suma / cantidad
-    print("El promedio es: {promedio: .2f}")
+    print("El promedio es:", promedio)
 else:
     print("No existen datos para calcular el promedio!")
