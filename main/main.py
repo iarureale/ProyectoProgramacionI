@@ -1,2 +1,7 @@
-# codigo/principal.py
-print("Primer programa del Proyecto Integrador")
+import menu
+import funciones
+
+
+lineup = funciones.grilla()
+
+menu.menu_principal()
