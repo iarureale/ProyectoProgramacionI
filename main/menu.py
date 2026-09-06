@@ -39,11 +39,37 @@ def menu_principal():
 
 def consultar_informacion():
     print("\nMENU: Consultar información")
-    print('\n1. Ingresar artista a buscar \n2. Salir\n')
+    print('\n1. SPONSORS \n2. INGRESO Y APERTURA \n3. OBJETOS NO PERMITIDOS \n4. REDES SOCIALES \n5. Salir\n')
 
-    opcion = pedir_opcion_valida("Ingresar: ", [1, 2])
-
-    if opcion == 2:
+    opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6])
+    if opcion == 1:
+        print("SPONSORS".center(35, "="))
+        print(f"│ {'PRESENTA':<15}: Personal")
+        print(f"│ {'MEDIOS DE PAGO':<15}: VISA y Santander")
+        print(f"│ {'INVITA':<15}: Fiat")
+        print(f"│ {'AUSPICIA':<15}: McDonalds")
+        print(f"│ {'PRODUCE':<15}: DfEntertainment\n")
+        opcion = pedir_opcion_valida("Ingrese (1) para volver al menú principal: ", [1])
+        menu_principal()
+    elif opcion == 2:
+        print("INGRESO Y APERTURA".center(35, "="))
+        print("Las puertas del OVERPALOOZA se abrirán a las 11:00AM para el ingreso del público. \n¡Te esperamos!\n")
+        opcion = pedir_opcion_valida("Ingrese (1) para volver al menú principal: ", [1])
+        menu_principal()
+    elif opcion == 3:
+        print("OBJETOS NO PERMITIDOS".center(35, "="))
+        print("\n│🛇  Elementos punzantes \n│🛇  Paraguas \n│🛇  Computadoras \n│🛇  Alcohol \n│🛇  Carteles políticos o religiosos \n│🛇  Alimentos o bebidas \n│🛇  Encendedores \n│🛇  Bengalas \n│🛇  Drones \n")
+        opcion = pedir_opcion_valida("Ingrese (1) para volver al menú principal: ", [1])
+        menu_principal()
+    elif opcion == 4:
+        print("REDES SOCIALES".center(35, "="))
+        print(f"│ {'INSTAGRAM':<15}: overpaloozaar")
+        print(f"│ {'FACEBOOK':<15}: overpalooza.ar")
+        print(f"│ {'YOUTUBE':<15}: OverpaloozaARG")
+        print(f"│ {'TWITTER (X)':<15}: Overpaloozaar \n")
+        opcion = pedir_opcion_valida("Ingrese (1) para volver al menú principal: ", [1])
+        menu_principal()
+    elif opcion == 5:
         menu_principal()
 
 
