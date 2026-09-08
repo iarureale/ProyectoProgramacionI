@@ -18,10 +18,14 @@ def artista_ya_ingresado(artista, lineup):
 
 
 def ingresar_artista(lineup):
-    artista = input("Ingresar codigo del artista a insertar: ").upper()
-    while artista_ya_ingresado(artista, lineup):
-        print(f'{artista} ya esta ingresado en el lineup, Ingresar uno no ingresado')
-        artista = input("Ingresar artista a insertar: ")
+    codigo = input("Ingresar codigo del artista a insertar: ").upper()
+    while not validar_codigo(codigo):
+        print("ERROR. Ingresé un código válido. ('A-XX')")
+        codigo = input("Ingresar codigo del artista a insertar: ").upper()
+
+    while artista_ya_ingresado(codigo, lineup):
+        print(f'{codigo} ya esta ingresado en el lineup, Ingresar uno no ingresado')
+        artista = input("Ingresar artista a insertar: ").upper
 
     nombre_artistico = input("Ingresar nombre del artista ingresado: ")
     horario = int(input("Elegir horario: "))
@@ -77,6 +81,20 @@ def calcular_porcentaje(tot, capacidad):
 def calcular_disponibilidad_general(tot, capacidad):
     porcentaje_vendido = calcular_porcentaje(tot, capacidad)
     return 100 - porcentaje_vendido
+
+def validar_codigo(codigo):
+    """
+    Válida qué el código (str) cumpla con el formato adecuado; "A-XX"
+    False -> si no cumple con el formato indicado.
+    True -> Si cumple con el formato indicado.
+    """
+    if len(codigo) != 4:
+        return False
+    if codigo[0:2] != "A-":
+        return False
+    if not codigo[2::].isdigit():
+        return False
+    return True
 
 
 horarios = ['1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00']
