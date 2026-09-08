@@ -1,2 +1,6 @@
-# codigo/principal.py
-print("Primer programa del Proyecto Integrador")
+import menu
+import funciones
+
+
+menu.menu_principal()
+
