@@ -53,7 +53,7 @@ def consultar_informacion():
     opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6])
     if opcion == 1:
         print("SPONSORS".center(35, "="))
-        print(f"│ {'PRESENTA':<15}: Personal")
+        print(f"│ {'PRESENTA':<15}: Personal y FLOW")
         print(f"│ {'MEDIOS DE PAGO':<15}: VISA y Santander")
         print(f"│ {'INVITA':<15}: Fiat")
         print(f"│ {'AUSPICIA':<15}: McDonalds")
