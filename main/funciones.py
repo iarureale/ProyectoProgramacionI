@@ -99,11 +99,11 @@ def imprimir_grilla(lineup, horarios, escenarios):
         print()
 
 
-def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip):
+def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion):
     print("\nIngresar entradas a comprar:\n")
 
     entradas_a_comprar = int(input())
-    while entradas_a_comprar > 6:
+    while entradas_a_comprar > max_operacion:
         print('\nLa cantidad ingresada supera la permitida por compra. Se permiten 6 por usuario\n')
         entradas_a_comprar = int(input('Ingresar entradas a comprar: '))
 
