@@ -21,52 +21,36 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
         return
     
     codigo = input("Ingresar codigo del artista a insertar: ").upper()
-
     while not validar_codigo(codigo):
-        print("ERROR. Ingresé un formato de código válido. ('A-XX')")
+        print("ERROR. Ingresé un código válido. ('A-XX')")
         codigo = input("Ingresar codigo del artista a insertar: ").upper()
 
     while artista_ya_ingresado(codigo, codigos):
         print(f'{codigo} ya esta ingresado en el lineup, Ingresar uno no ingresado')
-        codigo = input("Ingrese otro código: ").upper()
-
-    nombre_artistico = input("Ingresar nombre del artista ingresado: ")
+        codigo = input("Ingresar artista a insertar: ").upper()
 
     codigos.append(codigo)
+    nombre_artistico = input("Ingresar nombre del artista ingresado: ")
+
     nombre_artistas.append(nombre_artistico)
 
-def asignar_artista(lineup, codigos):
-    codigo = input("Ingrese el código del artista: ").upper()
-
-    if codigo not in codigos:
-        print(f'El código {codigo} no está registrado. Por favor, registre el artista primero.')
-        return
-    
-    horario = int(input("Ingresar horario: "))
+    horario = int(input("Elegir horario: "))
     escenario = int(input("Ingresar escenario: "))
 
     while horario < 1 or horario > len(lineup) or escenario < 1 or escenario > len(lineup[0]):
         print(f'Horario o escenario inválido. Horario debe ser entre 1 y {len(lineup)}, escenario entre 1 y {len(lineup[0])}')
-        horario = int(input("Ingresar horario: "))
+        horario = int(input("Elegir horario: "))
         escenario = int(input("Ingresar escenario: "))
 
     while lineup[horario-1][escenario-1] != '.':
         print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
-        return
-    
-    if artista_ya_programado(lineup, codigo):
-        print(f'El artista con código {codigo} ya está asignado en el lineup.')
-        return
+        horario = int(input("Elegir horario: "))
+        escenario = int(input("Ingresar escenario: "))
+
 
     lineup[horario-1][escenario-1] = codigo
 
     print(f'Artista con código {codigo} asignado al horario {horario} y escenario {escenario} exitosamente.')
-
-def artista_ya_programado(lineup, codigo):
-    for fila in lineup:
-        if codigo in fila:
-            return True
-    return False
 
 def imprimir_grilla(lineup, horarios, escenarios):
     """
@@ -99,11 +83,11 @@ def imprimir_grilla(lineup, horarios, escenarios):
         print()
 
 
-def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip):
+def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion):
     print("\nIngresar entradas a comprar:\n")
 
     entradas_a_comprar = int(input())
-    while entradas_a_comprar > 6:
+    while entradas_a_comprar > max_operacion:
         print('\nLa cantidad ingresada supera la permitida por compra. Se permiten 6 por usuario\n')
         entradas_a_comprar = int(input('Ingresar entradas a comprar: '))
 
@@ -112,10 +96,10 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip)
     venta_tot += entradas_a_comprar * precio
     # Contadores de entradas vendidas por tipo
     if tipo == 1:
-        vendidas_gen += 1
+        vendidas_gen += entradas_a_comprar
     else:
-        vendidas_vip += 1
-    return tot, venta_tot
+        vendidas_vip += entradas_a_comprar
+    return tot, venta_tot, vendidas_gen, vendidas_vip
 
 
 def calcular_disponibilidad_general(tot, capacidad):
@@ -137,5 +121,3 @@ def validar_codigo(codigo):
     if not codigo[2::].isdigit():
         return False
     return True
-
-
