@@ -77,7 +77,7 @@ def imprimir_grilla(lineup, horarios, escenarios):
         print()
 
 
-def comprar_entradas(tot, venta_tot, entradas, tipo):
+def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip):
     print("\nIngresar entradas a comprar:\n")
 
     entradas_a_comprar = int(input())
@@ -88,17 +88,21 @@ def comprar_entradas(tot, venta_tot, entradas, tipo):
     precio = entradas[tipo - 1][0] # tipo 1 -> general, tipo 2 -> vip
     tot += entradas_a_comprar
     venta_tot += entradas_a_comprar * precio
+    # Contadores de entradas vendidas por tipo
+    if tipo == 1:
+        vendidas_gen += 1
+    else:
+        vendidas_vip += 1
     return tot, venta_tot
 
 
 def calcular_porcentaje(tot, capacidad):
-    porcentaje = (tot / capacidad) * 100
-    return porcentaje
-
+    return (tot / capacidad) * 100
 
 def calcular_disponibilidad_general(tot, capacidad):
     porcentaje_vendido = calcular_porcentaje(tot, capacidad)
-    return 100 - porcentaje_vendido
+    capacidad_general = 100 - porcentaje_vendido
+    return capacidad_general
 
 def validar_codigo(codigo):
     """
@@ -130,3 +134,8 @@ venta_tot = 0
 general = (100000, 80) 
 vip = (250000, 20) 
 entradas = [general, vip] 
+
+vendidas_gen = 0
+vendidas_vip = 0
+
+capacidad_general = calcular_disponibilidad_general()
