@@ -177,12 +177,12 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, 
         tipo = pedir_opcion_valida("Ingresar: ", [1, 2])
 
         if tipo == 1:
-            tot, venta_tot, = funciones.comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, capacidad_general, max_operacion)
+            tot, venta_tot, vendidas_vip, vendidas_gen = funciones.comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, capacidad_general, max_operacion)
             print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
             pedir_opcion_valida("\nIngresar 1 para volver al menu principal: \n", [1])
             menu_comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, capacidad_general, max_operacion, lineup, nombre_artistas, codigos)
         elif tipo == 2:
-            tot, venta_tot, = funciones.comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, capacidad_general,max_operacion)
+            tot, venta_tot, vendidas_vip, vendidas_gen = funciones.comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, capacidad_general,max_operacion)
             print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
             pedir_opcion_valida("\nIngresar 1 para volver al menu principal: \n", [1])
             menu_comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, capacidad_general, max_operacion, lineup, nombre_artistas, codigos)
