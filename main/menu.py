@@ -30,13 +30,15 @@ def menu_principal():
     elif opcion == 4:
         menu_comprar_entradas()
     elif opcion == 5:
-        modificar_programacion()
+        modificar_programacion(funciones.codigos, funciones.nombre_artistas)
     elif opcion == 6:
         consultar_venta()
     elif opcion == 7:
         estadisticas()
     elif opcion == 8:
-        print('\nGracias por asistir al OVERPALOOZA!\n')
+        print("="*60)
+        print('Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
+        print("="*60)
 
 
 def consultar_informacion():
@@ -101,7 +103,7 @@ def consultar_grilla():
         menu_principal()
 
 
-def modificar_programacion():
+def modificar_programacion(codigos, nombre_artistas):
     print("\nMENU: Modificar programación")
     print('\n1. Registrar artista\n2. Asignar artista\n3. Salir\n')
 
@@ -116,9 +118,35 @@ def modificar_programacion():
             print("\nSi se quiere parar de ingresar porfavor ingresar 3 de lo contrario 1")
             opcion = pedir_opcion_valida('Ingresar:', [1, 3])
             if opcion == 3:
-                modificar_programacion()
+                modificar_programacion(codigos, nombre_artistas)
+    elif opcion == 2:
+        print("MENU: Modificar artista\n")
+        if not codigos:
+            print("No se ha registrado ningun artista todavía.\n")
+            pedir_opcion_valida("Volver al menu principal (1)", [1])
+            modificar_programacion(codigos, nombre_artistas)
+            return
+        for i in range(len(codigos)):
+            print(f'Artista {i+1}: {codigos[i]} - {nombre_artistas[i]}\n')
+        #FUNCION NUEVA
+        modificar_artista = input("Ingresar codigo del artista a modificar: ").upper()
+        while not funciones.validar_codigo(modificar_artista):
+            print("ERROR. Ingresé un código válido. ('A-XX')")
+            modificar_artista = input("Ingresar codigo del artista a modificar: ").upper()
 
+        indice = codigos.index(modificar_artista)
+        print('Ingresar numero del dato a modificar:\n1.Cambiar nombre del artista\n2.Cambiar horario\n3.Cambiar escenario')
+
+        modificar_datos = pedir_opcion_valida("Ingresar: ", [1, 2, 3])
+        if modificar_datos == 1:
+            nombre = input("Ingresar el nombre nuevo: ")
+            nombre_artistas[indice] = nombre
+            print(f"El artista {codigos[indice]} ha pasado a ser {nombre}")
             
+
+        
+
+
     if opcion == 3:
         menu_principal()
 
