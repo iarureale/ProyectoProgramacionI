@@ -35,7 +35,7 @@ def menu_principal():
     elif opcion == 3:
         consultar_grilla()
     elif opcion == 4:
-        comprar_entradas()
+        menu_comprar_entradas()
     elif opcion == 5:
         modificar_programacion()
     elif opcion == 6:
@@ -130,7 +130,7 @@ def modificar_programacion():
         menu_principal()
 
 
-def comprar_entradas():
+def menu_comprar_entradas():
     print("\nMENU: Comprar entradas")
     print("\n1. Comprar entradas\n2. Chequear disponibilidad\n3. Salir\n")
 
@@ -138,16 +138,17 @@ def comprar_entradas():
 
     if opcion == 1:
         print("\nMENU: Comprar entradas")
+        print(f'\nGeneral: ${funciones.entradas[0][0]} \nVIP: ${funciones.entradas[1][0]}')
         print("\nQue tipo de entradas queres comprar?")
         print("1. General\n2. VIP\n")
 
         tipo = pedir_opcion_valida("Ingresar: ", [1, 2])
 
         if tipo == 1:
-            funciones.tot, funciones.venta_tot = funciones.comprar_entradas(funciones.tot, funciones.venta_tot)
+            funciones.tot, funciones.venta_tot, = funciones.comprar_entradas(funciones.tot, funciones.venta_tot, funciones.entradas, tipo)
             print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
             pedir_opcion_valida("\nIngresar 1 para volver al menu principal: \n", [1])
-            comprar_entradas()
+            menu_comprar_entradas()
         
 
     elif opcion == 2:

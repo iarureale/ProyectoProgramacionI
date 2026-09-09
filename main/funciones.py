@@ -77,16 +77,17 @@ def imprimir_grilla(lineup, horarios, escenarios):
         print()
 
 
-def comprar_entradas(tot, venta_tot):
+def comprar_entradas(tot, venta_tot, entradas, tipo):
     print("\nIngresar entradas a comprar:\n")
 
-    entradas = int(input())
-    while entradas > 5:
+    entradas_a_comprar = int(input())
+    while entradas_a_comprar > 5:
         print('\nLa cantidad ingresada supera la permitida por compra. Se permiten 5 por usuario\n')
-        entradas = int(input('Ingresar entradas a comprar: '))
+        entradas_a_comprar = int(input('Ingresar entradas a comprar: '))
 
-    tot += entradas
-    venta_tot += entradas * precio
+    precio = entradas[tipo - 1][0]
+    tot += entradas_a_comprar
+    venta_tot += entradas_a_comprar * precio
     return tot, venta_tot
 
 
@@ -124,5 +125,8 @@ nombre_artistas = []
 lineup = grilla()
 tot = 0
 venta_tot = 0
-precio = 100000
-capacidad_general = 80
+
+
+general = (100000, 80) 
+vip = (250000, 20) 
+entradas = [general, vip] 
