@@ -1,3 +1,6 @@
 main/.DS_Store
 .DS_Store
 orientadores/.DS_Store
+
+__pycache__/
+*.pyc
