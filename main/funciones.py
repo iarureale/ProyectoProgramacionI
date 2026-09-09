@@ -118,11 +118,9 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip)
     return tot, venta_tot
 
 
-def calcular_porcentaje(tot, capacidad):
-    return (tot / capacidad) * 100
-
 def calcular_disponibilidad_general(tot, capacidad):
-    porcentaje_vendido = calcular_porcentaje(tot, capacidad)
+    porcentaje = lambda tot, capacidad: (tot/capacidad) *100
+    porcentaje_vendido = porcentaje(tot, capacidad)
     capacidad_general = 100 - porcentaje_vendido
     return capacidad_general
 
