@@ -8,8 +8,7 @@ def grilla():
 def artista_ya_ingresado(artista, lineup):
     """
     Recorre toda la matriz en busca del artista. Retorna true si lo encuentra.
-
-    No se encuentra "while artista in lineup" debido a que chequeria si toda la fila equivale a artista
+    No se encuentra "while artista in lineup" debido a que chequearia si toda la fila equivale a artista
     """
     for fila in lineup:
         if artista in fila:
@@ -25,7 +24,7 @@ def ingresar_artista(lineup):
 
     while artista_ya_ingresado(codigo, lineup):
         print(f'{codigo} ya esta ingresado en el lineup, Ingresar uno no ingresado')
-        artista = input("Ingresar artista a insertar: ").upper
+        artista = input("Ingresar artista a insertar: ").upper()
 
     nombre_artistico = input("Ingresar nombre del artista ingresado: ")
     horario = int(input("Elegir horario: "))
@@ -85,8 +84,8 @@ def calcular_disponibilidad_general(tot, capacidad):
 def validar_codigo(codigo):
     """
     Válida qué el código (str) cumpla con el formato adecuado; "A-XX"
-    False -> si no cumple con el formato indicado.
-    True -> Si cumple con el formato indicado.
+    False: Si no cumple con el formato indicado.
+    True: Si cumple con el formato indicado.
     """
     if len(codigo) != 4:
         return False
@@ -97,7 +96,7 @@ def validar_codigo(codigo):
     return True
 
 
-horarios = ['1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00']
+horarios = ['13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00']
 escenarios = ['McStage', 'PersonalStage', 'FIATStage', 'FlowStage', 'SantanderStage']
 
 lineup = grilla()
