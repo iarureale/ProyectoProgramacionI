@@ -113,13 +113,13 @@ def modificar_programacion():
     print('\n1. Registrar artista\n2. Asignar artista\n3. Salir\n')
 
     opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3])
-    Registrados = 0
+    registrados = 0
 
     if opcion == 1:
         print("MENU: Registrar artista")
-        while Registrados <= 30:
+        while registrados < 30:
             funciones.ingresar_artista(funciones.lineup, funciones.nombre_artistas, funciones.codigos)
-            Registrados +=1
+            registrados +=1
             print("\nSi se quiere parar de ingresar porfavor ingresar 3 de lo contrario 1")
             opcion = pedir_opcion_valida('Ingresar:', [1, 3])
             if opcion == 3:

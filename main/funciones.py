@@ -81,8 +81,8 @@ def comprar_entradas(tot, venta_tot, entradas, tipo):
     print("\nIngresar entradas a comprar:\n")
 
     entradas_a_comprar = int(input())
-    while entradas_a_comprar > 5:
-        print('\nLa cantidad ingresada supera la permitida por compra. Se permiten 5 por usuario\n')
+    while entradas_a_comprar > 6:
+        print('\nLa cantidad ingresada supera la permitida por compra. Se permiten 6 por usuario\n')
         entradas_a_comprar = int(input('Ingresar entradas a comprar: '))
 
     precio = entradas[tipo - 1][0] # tipo 1 -> general, tipo 2 -> vip
@@ -115,8 +115,8 @@ def validar_codigo(codigo):
     return True
 
 
-horarios = ['13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00']
-escenarios = ['McStage', 'PStage', 'FIATStage', 'FlowStage', 'SanStage']
+horarios = ('13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00')
+escenarios = ('McStage', 'PStage', 'FIATStage', 'FlowStage', 'SanStage')
 
 codigos = []
 nombre_artistas = []
