@@ -82,6 +82,42 @@ def imprimir_grilla(lineup, horarios, escenarios):
             print(f"{lineup[f][c]:<{ancho}}|", end="")
         print()
 
+def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horarios):
+    buscado_limpio = buscado.strip().lower()
+    indice_encontrado = []
+    encontrado = False
+
+    i = 0
+    while i < len(codigos) and not encontrado:
+        if codigos[i].lower() == buscado_limpio or nombre_artistas[i].lower() == buscado_limpio:
+            indice_encontrado = i
+            encontrado = True 
+        i += 1
+
+    if indice_encontrado == -1:
+        print(f"No se encontró ningún artista con ese código o nombre. Vuelva a intentarlo.")
+        return
+
+    codigo_oficial = codigos[indice_encontrado]
+    nombre_oficial = nombre_artistas[indice_encontrado]
+
+    asignado = False
+    escenario_asignado = "."
+    horario_asignado = "."
+
+    f = 0
+    while f < len(lineup) and not asignado:
+        c = 0
+        while c < len(lineup[f]) and not asignado:
+            if lineup[f][c] == codigo_oficial:
+                escenario_asignado = escenario[c]
+                horario_asignado = horarios[f]
+                asignado = True
+            c += 1
+        f += 1
+
+    return nombre_oficial, escenario_asignado, horario_asignado
+
 
 def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion):
     print("\nIngresar entradas a comprar:\n")
