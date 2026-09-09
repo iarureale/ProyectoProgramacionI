@@ -138,12 +138,16 @@ def menu_comprar_entradas():
         tipo = pedir_opcion_valida("Ingresar: ", [1, 2])
 
         if tipo == 1:
-            funciones.tot, funciones.venta_tot, = funciones.comprar_entradas(funciones.tot, funciones.venta_tot, funciones.entradas, tipo)
+            funciones.tot, funciones.venta_tot, = funciones.comprar_entradas(funciones.tot, funciones.venta_tot, funciones.entradas, tipo, funciones.vendidas_vip, funciones.vendidas_gen)
+            print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
+            pedir_opcion_valida("\nIngresar 1 para volver al menu principal: \n", [1])
+            menu_comprar_entradas()
+        elif tipo == 2:
+            funciones.tot, funciones.venta_tot, = funciones.comprar_entradas(funciones.tot, funciones.venta_tot, funciones.entradas, tipo, funciones.vendidas_vip, funciones.vendidas_gen)
             print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
             pedir_opcion_valida("\nIngresar 1 para volver al menu principal: \n", [1])
             menu_comprar_entradas()
         
-
     elif opcion == 2:
         disponibilidad = funciones.calcular_disponibilidad_general(funciones.tot, funciones.capacidad_general)
         print(f'\nTodavía queda el {disponibilidad:.2f}% de las entradas generales\n')
