@@ -41,7 +41,7 @@ def ingresar_artista(lineup):
         escenario = int(input("Ingresar escenario: "))
 
 
-    lineup[horario-1][escenario-1] = artista
+    lineup[horario-1][escenario-1] = codigo
 
 
 def imprimir_grilla(lineup, horarios, escenarios):
