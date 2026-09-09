@@ -43,17 +43,32 @@ def ingresar_artista(lineup):
 
     lineup[horario-1][escenario-1] = codigo
 
-
 def imprimir_grilla(lineup, horarios, escenarios):
-    ancho = 12
-    print(" " * (5), end="")
-    for i in range(len(lineup[0])): #Cuenta las columnas de la primera fila
-        print(f"|{escenarios[i]:<{ancho}}", end="")
-    print("|", end="")
-    print()
-    
+    """
+    Imprime la grilla usando un unico ancho para todas las columnas de
+    escenario, calculado automáticamente en base al nombre más largo
+    y a los datos cargados. Nos ayuda sin importar qué tan largos sean los nombres, 
+    todas las columnas quedan parejas y alineadas.
+    """
+    margen = 1 
+
+    # Ancho de la columna de horarios
+    ancho_horarios = max(len(h) for h in horarios) + margen
+
+    # Ancho único para todas las columnas de escenario:
+    ancho = max(len(e) for e in escenarios)
     for f in range(len(lineup)):
-        print(f"{horarios[f]:<{5}}|", end="") #El end='' permite que no haya salto de linea
+        for c in range(len(lineup[f])):
+            ancho = max(ancho, len(str(lineup[f][c])))
+    ancho += margen
+
+    print(" " * ancho_horarios, end="")
+    for i in range(len(escenarios)):
+        print(f"|{escenarios[i]:<{ancho}}", end="")
+    print("|")
+
+    for f in range(len(lineup)):
+        print(f"{horarios[f]:<{ancho_horarios}}|", end="") 
         for c in range(len(lineup[f])):
             print(f"{lineup[f][c]:<{ancho}}|", end="")
         print()
