@@ -160,4 +160,4 @@ entradas = [general, vip]
 vendidas_gen = 0
 vendidas_vip = 0
 
-capacidad_general = calcular_disponibilidad_general()
+capacidad_general = general[1] + vip[1]
