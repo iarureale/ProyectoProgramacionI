@@ -5,14 +5,7 @@ def pedir_opcion_valida(mensaje, opciones_validas):
     '''
     Pide un input numérico hasta que sea una de las opciones válidas.
     opciones_validas es una lista de ints, ej: [1, 2, 3]
-
-    while True:
-        try:
-            opcion = int(input(mensaje))
-        except ValueError:
-            print('\nERROR. Tenés que ingresar un número.\n')
-            continue
-    '''
+   '''
 
     opcion = int(input(mensaje))
         

@@ -16,35 +16,51 @@ def artista_ya_ingresado(codigo, codigos):
 
 
 def ingresar_artista(lineup, nombre_artistas, codigos):
+    if len(codigos) >= 30:
+        print("No se pueden ingresar más artistas, ya se alcanzó el límite de 30")
+        return
+    
     codigo = input("Ingresar codigo del artista a insertar: ").upper()
+
     while not validar_codigo(codigo):
-        print("ERROR. Ingresé un código válido. ('A-XX')")
+        print("ERROR. Ingresé un formato de código válido. ('A-XX')")
         codigo = input("Ingresar codigo del artista a insertar: ").upper()
 
     while artista_ya_ingresado(codigo, codigos):
         print(f'{codigo} ya esta ingresado en el lineup, Ingresar uno no ingresado')
-        codigo = input("Ingresar artista a insertar: ").upper()
+        codigo = input("Ingrese otro código: ").upper()
 
-    codigos.append(codigo)
     nombre_artistico = input("Ingresar nombre del artista ingresado: ")
 
+    codigos.append(codigo)
     nombre_artistas.append(nombre_artistico)
 
-    horario = int(input("Elegir horario: "))
+def asignar_artista(lineup, codigos):
+    codigo = input("Ingrese el código del artista: ").upper()
+
+    if codigo not in codigos:
+        print(f'El código {codigo} no está registrado. Por favor, registre el artista primero.')
+        return
+    
+    horario = int(input("Ingresar horario: "))
     escenario = int(input("Ingresar escenario: "))
 
     while horario < 1 or horario > len(lineup) or escenario < 1 or escenario > len(lineup[0]):
         print(f'Horario o escenario inválido. Horario debe ser entre 1 y {len(lineup)}, escenario entre 1 y {len(lineup[0])}')
-        horario = int(input("Elegir horario: "))
+        horario = int(input("Ingresar horario: "))
         escenario = int(input("Ingresar escenario: "))
 
     while lineup[horario-1][escenario-1] != '.':
         print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
-        horario = int(input("Elegir horario: "))
-        escenario = int(input("Ingresar escenario: "))
-
+        return
+    
+    if artista_ya_ingresado(codigo, codigos):
+        print(f'El artista con código {codigo} ya está asignado en el lineup.')
+        return
 
     lineup[horario-1][escenario-1] = codigo
+
+    print(f'Artista con código {codigo} asignado al horario {horario} y escenario {escenario} exitosamente.')
 
 def imprimir_grilla(lineup, horarios, escenarios):
     """
