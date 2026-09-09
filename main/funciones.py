@@ -85,7 +85,7 @@ def comprar_entradas(tot, venta_tot, entradas, tipo):
         print('\nLa cantidad ingresada supera la permitida por compra. Se permiten 5 por usuario\n')
         entradas_a_comprar = int(input('Ingresar entradas a comprar: '))
 
-    precio = entradas[tipo - 1][0]
+    precio = entradas[tipo - 1][0] # tipo 1 -> general, tipo 2 -> vip
     tot += entradas_a_comprar
     venta_tot += entradas_a_comprar * precio
     return tot, venta_tot
