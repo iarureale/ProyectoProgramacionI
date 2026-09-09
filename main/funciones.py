@@ -5,28 +5,31 @@ def grilla():
 
     return lineup
 
-def artista_ya_ingresado(artista, lineup):
+def artista_ya_ingresado(codigo, codigos):
     """
     Recorre toda la matriz en busca del artista. Retorna true si lo encuentra.
     No se encuentra "while artista in lineup" debido a que chequearia si toda la fila equivale a artista
     """
-    for fila in lineup:
-        if artista in fila:
-            return True
+    if codigo in codigos:
+        return True
     return False
 
 
-def ingresar_artista(lineup):
+def ingresar_artista(lineup, nombre_artistas, codigos):
     codigo = input("Ingresar codigo del artista a insertar: ").upper()
     while not validar_codigo(codigo):
         print("ERROR. Ingresé un código válido. ('A-XX')")
         codigo = input("Ingresar codigo del artista a insertar: ").upper()
 
-    while artista_ya_ingresado(codigo, lineup):
+    while artista_ya_ingresado(codigo, codigos):
         print(f'{codigo} ya esta ingresado en el lineup, Ingresar uno no ingresado')
-        artista = input("Ingresar artista a insertar: ").upper()
+        codigo = input("Ingresar artista a insertar: ").upper()
 
+    codigos.append(codigo)
     nombre_artistico = input("Ingresar nombre del artista ingresado: ")
+
+    nombre_artistas.append(nombre_artistico)
+
     horario = int(input("Elegir horario: "))
     escenario = int(input("Ingresar escenario: "))
 
@@ -112,7 +115,11 @@ def validar_codigo(codigo):
 
 
 horarios = ['13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00']
-escenarios = ['McStage', 'PersonalStage', 'FIATStage', 'FlowStage', 'SantanderStage']
+escenarios = ['McStage', 'PStage', 'FIATStage', 'FlowStage', 'SanStage']
+
+codigos = []
+nombre_artistas = []
+
 
 lineup = grilla()
 tot = 0

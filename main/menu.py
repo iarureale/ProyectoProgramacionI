@@ -118,7 +118,7 @@ def modificar_programacion():
     if opcion == 1:
         print("MENU: Registrar artista")
         while Registrados <= 30:
-            funciones.ingresar_artista(funciones.lineup)
+            funciones.ingresar_artista(funciones.lineup, funciones.nombre_artistas, funciones.codigos)
             Registrados +=1
             print("\nSi se quiere parar de ingresar porfavor ingresar 3 de lo contrario 1")
             opcion = pedir_opcion_valida('Ingresar:', [1, 3])
