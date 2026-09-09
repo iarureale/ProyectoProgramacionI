@@ -16,9 +16,14 @@ def artista_ya_ingresado(codigo, codigos):
 
 
 def ingresar_artista(lineup, nombre_artistas, codigos):
+    if len(codigos) >= 30:
+        print("No se pueden ingresar más artistas, ya se alcanzó el límite de 30")
+        return
+    
     codigo = input("Ingresar codigo del artista a insertar: ").upper()
+
     while not validar_codigo(codigo):
-        print("ERROR. Ingresé un código válido. ('A-XX')")
+        print("ERROR. Ingresé un formato de código válido. ('A-XX')")
         codigo = input("Ingresar codigo del artista a insertar: ").upper()
 
     while artista_ya_ingresado(codigo, codigos):
