@@ -139,23 +139,3 @@ def validar_codigo(codigo):
     return True
 
 
-horarios = ('13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00')
-escenarios = ('McStage', 'PStage', 'FIATStage', 'FlowStage', 'SanStage')
-
-codigos = []
-nombre_artistas = []
-
-
-lineup = grilla()
-tot = 0
-venta_tot = 0
-
-
-general = (100000, 80) 
-vip = (250000, 20) 
-entradas = [general, vip] 
-
-vendidas_gen = 0
-vendidas_vip = 0
-
-capacidad_general = general[1] + vip[1]
