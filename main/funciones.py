@@ -54,13 +54,19 @@ def asignar_artista(lineup, codigos):
         print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
         return
     
-    if artista_ya_ingresado(codigo, codigos):
+    if artista_ya_programado(lineup, codigo):
         print(f'El artista con código {codigo} ya está asignado en el lineup.')
         return
 
     lineup[horario-1][escenario-1] = codigo
 
     print(f'Artista con código {codigo} asignado al horario {horario} y escenario {escenario} exitosamente.')
+
+def artista_ya_programado(lineup, codigo):
+    for fila in lineup:
+        if codigo in fila:
+            return True
+    return False
 
 def imprimir_grilla(lineup, horarios, escenarios):
     """
