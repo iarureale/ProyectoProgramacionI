@@ -83,6 +83,11 @@ def imprimir_grilla(lineup, horarios, escenarios):
         print()
 
 def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horarios):
+    """
+    Busca un artista por código o por nombre en las listas paralelas y luego en la grilla.
+    Utilizando variables bandera como condición en los ciclos while para cortar la búsqueda. 
+    Si no encuentra al artista, retorna (".")
+    """
     buscado_limpio = buscado.strip().lower()
     indice_encontrado = []
     encontrado = False
