@@ -50,7 +50,7 @@ def menu_principal():
     elif opcion == 3:
         consultar_grilla(lineup, horarios, escenarios)
     elif opcion == 4:
-        menu_comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, capacidad_general)
+        menu_comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, capacidad_general, max_operacion)
     elif opcion == 5:
         modificar_programacion(lineup, nombre_artistas, codigos)
     elif opcion == 6:
