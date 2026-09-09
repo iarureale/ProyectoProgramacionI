@@ -212,10 +212,33 @@ def consultar_venta(tot, capacidad_general):
     pedir_opcion_valida("Ingresar 1 para volver: ", [1])
     menu_principal()
 
-
 def estadisticas():
     print("\nMENU: Estadisticas e Informes")
-    print("\nEstadisticas:\n")
+    print("\n1. Grilla completa\n2. Entradas vendidas por tipo (General/VIP)\n3. Recaudacion Total\n4. Porcentaje de ocupacion\n5. Entradas agotadas o con baja disponibilidad\n6. Ranking de compras\n7. Artistas ordenados alfabeticamente\n8. Salir\n")
 
-    pedir_opcion_valida("Ingresar 1 para volver: ", [1])
+    opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6, 7, 8])
+
+    if opcion == 1:
+        funciones.imprimir_grilla(funciones.lineup, funciones.horarios, funciones.escenarios)
+    elif opcion == 2:
+        print(f"General vendidas: {funciones.vendidas_gen}\nVIP vendidas: {funciones.vendidas_vip}")
+    elif opcion == 3:
+        rec_gen = sum(funciones.compras_importe[i] for i in range(len(funciones.compras_tipo)) if funciones.compras_tipo[i] == "General")
+        rec_vip = funciones.venta_tot - rec_gen
+        print(f"Recaudación General: ${rec_gen}\nRecaudación VIP: ${rec_vip}\nRecaudación total: ${funciones.venta_tot}")
+    elif opcion == 4:
+        porcentaje = funciones.calcular_porcentaje(funciones.vendidas_gen + funciones.vendidas_vip, funciones.capacidad_general)
+        print(f"Porcentaje de ocupación: {porcentaje:.2f}%")
+    elif opcion == 5:
+        funciones.alerta_stock(funciones.vendidas_gen, funciones.vendidas_vip, funciones.entradas)
+    elif opcion == 6:
+        funciones.ranking_compras(funciones.compras_tipo, funciones.compras_cantidad, funciones.compras_importe)
+    elif opcion == 7:
+        for nombre, codigo in funciones.artistas_ordenados(funciones.codigos, funciones.nombre_artistas):
+            print(f"{nombre} ({codigo})")
+    elif opcion == 8:
+        menu_principal()
+        return
+
+    pedir_opcion_valida("\nIngresar 1 para volver al menu principal: ", [1])
     menu_principal()
