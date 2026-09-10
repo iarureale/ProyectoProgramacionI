@@ -1,6 +1,6 @@
 def grilla():
     """
-    Establecemos las filas (horarios) y columnas (horarios) con su respectivo valor para
+    Establecemos las filas (horarios) y columnas (escenarios) con su respectivo valor para
     crear la matriz (lineup) mediante una lista por comprensión.
     Retorna lineup
     """
