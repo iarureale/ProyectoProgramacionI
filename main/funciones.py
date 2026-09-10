@@ -123,7 +123,7 @@ def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horario
     Si no encuentra al artista, retorna (".")
     """
     buscado_limpio = buscado.strip().lower()
-    indice_encontrado = []
+    indice_encontrado = -1
     encontrado = False
 
     i = 0
@@ -158,34 +158,8 @@ def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horario
     return nombre_oficial, escenario_asignado, horario_asignado
 
 
-def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion):
-    """
-    Se piden cantidad de entradas a comprar (int) y valida que no supere el máximo a comprar por operación.
-    El precio de entrada se define dependiendo el tipo de entrada a comprar (1 - GENERAL) (2 - VIP).
-    Se acumula y retorna al total de entradas vendidas (tot), al total de recuadación (venta_tot) y al tipo de entrada
-    adquirida (vendidas_gen o vendidas_vip) 
-    """
-    print("\nIngresar entradas a comprar:\n")
-
-    entradas_a_comprar = int(input())
-    while entradas_a_comprar > max_operacion:
-        print('\nLa cantidad ingresada supera la permitida por compra. Se permiten 6 por usuario\n')
-        entradas_a_comprar = int(input('Ingresar entradas a comprar: '))
-
-    precio = entradas[tipo - 1][0] # tipo 1 -> general, tipo 2 -> vip
-    tot += entradas_a_comprar
-    venta_tot += entradas_a_comprar * precio
-    # Contadores de entradas vendidas por tipo
-    if tipo == 1:
-        vendidas_gen += entradas_a_comprar
-    else:
-        vendidas_vip += entradas_a_comprar
-    return tot, venta_tot, vendidas_gen, vendidas_vip
-
-
 def calcular_disponibilidad_general(tot, capacidad):
-    porcentaje = lambda tot, capacidad: (tot/capacidad) *100
-    porcentaje_vendido = porcentaje(tot, capacidad)
+    porcentaje_vendido = (tot/capacidad) *100
     capacidad_general = 100 - porcentaje_vendido
     return capacidad_general
 
@@ -202,3 +176,13 @@ def validar_codigo(codigo):
     if not codigo[2::].isdigit():
         return False
     return True
+
+
+def cambiar_artista(lineup, codigos, indice, codigo_nuevo):
+    codigo_viejo = codigos[indice]
+    codigos[indice] = codigo_nuevo
+
+    for fila in range(len(lineup)):
+        for columna in range(len(lineup[fila])):
+            if lineup[fila][columna] == codigo_viejo:
+                lineup[fila][columna] = codigo_nuevo
