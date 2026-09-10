@@ -79,8 +79,37 @@ def imprimir_grilla(lineup, horarios, escenarios):
     for f in range(len(lineup)):
         print(f"{horarios[f]:<{ancho_horarios}}|", end="") 
         for c in range(len(lineup[f])):
-            print(f"{lineup[f][c]:<{ancho}}|", end="")
+            valor = lineup[f][c] if lineup[f][c] != '.' else '.'
+            print(f"{valor:<{ancho}}|", end="")
         print()
+
+def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion, compras_tipo, compras_cantidad, compras_importe):
+    """
+    Registra una compra de entradas de tipo: General y VIP.
+    Validad cantidad maxima por operacion y disponibilidad de las mismas antes de confirmar.
+    Devuelve los acumuladores actualizados y ademas se agrega la operacion al registro de compras
+    """
+    print("\nIngresar entradas a comprar:\n")
+
+    entradas_a_comprar = int(input())
+    while entradas_a_comprar > max_operacion:
+        print('\nLa cantidad ingresada supera la permitida por compra. Se permiten 6 por usuario\n')
+        entradas_a_comprar = int(input('Ingresar entradas a comprar: '))
+
+    importe = entradas_a_comprar * entradas[tipo - 1][0]
+    tot += entradas_a_comprar
+    venta_tot += importe
+
+    if tipo == 1:
+        vendidas_gen += entradas_a_comprar
+    else:
+        vendidas_vip += entradas_a_comprar
+
+    compras_tipo.append("General" if tipo == 1 else "VIP")
+    compras_cantidad.append(entradas_a_comprar)
+    compras_importe.append(importe)
+
+    return tot, venta_tot, vendidas_gen, vendidas_vip
 
 def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horarios):
     """
