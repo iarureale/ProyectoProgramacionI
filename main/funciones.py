@@ -111,7 +111,7 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
 
     return tot, venta_tot, vendidas_gen, vendidas_vip
 
-def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horarios):
+def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horario):
     """
     Busca un artista por código o por nombre en las listas paralelas y luego en la grilla.
     Utilizando variables bandera como condición en los ciclos while para cortar la búsqueda. 
@@ -145,7 +145,7 @@ def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horario
         while c < len(lineup[f]) and not asignado:
             if lineup[f][c] == codigo_oficial:
                 escenario_asignado = escenario[c]
-                horario_asignado = horarios[f]
+                horario_asignado = horario[f]
                 asignado = True
             c += 1
         f += 1

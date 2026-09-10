@@ -94,6 +94,26 @@ def buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
 
     opcion = pedir_opcion_valida("Ingresar: ", [1, 2])
 
+    if opcion  == 1:
+        buscado = (input("\nIngresar código o nombre del artista a buscar: ")).strip()
+        while len(buscado) == 0:
+            print("ERROR. ingresar un código o nombre válido.")
+            buscado = (input("\nIngresar código o nombre del artista a buscar: ")).strip()
+
+        nombre, escenario, horario = funciones.buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horario)
+
+        if nombre != "":
+            if escenario != "":
+                print(f"\nArtista: {nombre}")
+                print(f"Escenario: {escenario}")
+                print(f"Horario: {horario}")
+            else:
+                print(f"\nEl artista {nombre} todavía no tiene ni escenario ni horario asignado.")
+        else:
+            print(f"\nNo se encontró ningún artista con ese código o nombre.")
+
+        pedir_opcion_valida("\nIngresar 1 para volver al menú anterior:", [1])
+
     if opcion == 2:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
 
