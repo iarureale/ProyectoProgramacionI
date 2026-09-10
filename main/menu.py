@@ -15,7 +15,7 @@ def pedir_opcion_valida(mensaje, opciones_validas):
     return int(opcion)
 
 
-def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip):
+def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, artistas_ordenados):
     horarios = ('13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00')
     escenarios = ('McStage', 'PStage', 'FIATStage', 'FlowStage', 'SanStage')
 
