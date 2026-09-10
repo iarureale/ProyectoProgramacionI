@@ -19,6 +19,38 @@ def artista_ya_ingresado(codigo, codigos):
         return True
     return False
 
+def validar_escenario(escenario, lineup, horario):
+    while escenario < 1 or escenario > len(lineup[0]) or lineup[horario-1][escenario-1] != '.':
+        if escenario < 1 or escenario > len(lineup[0]):
+            print(f'Escenario inválido. Debe ser entre 1 y {len(lineup[0])}')
+            escenario = int(input("Ingresar escenario: "))
+        else:
+            print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
+            escenario = int(input("Ingresar escenario: "))
+    return escenario
+
+def validar_horario(horario, lineup, escenario):
+    while horario < 1 or horario > len(lineup) or lineup[horario-1][escenario-1] != '.':
+        if horario < 1 or horario > len(lineup):
+            print(f'Horario inválido. Debe ser entre 1 y {len(lineup)}')
+            horario = int(input("Elegir horario: "))
+        else:
+            print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
+            horario = int(input("Ingresar horario: "))
+    return horario
+
+def validar_horario_escenario(lineup, horario, escenario):
+    while horario < 1 or horario > len(lineup) or escenario < 1 or escenario > len(lineup[0]):
+        print(f'Horario o escenario inválido. Horario debe ser entre 1 y {len(lineup)}, escenario entre 1 y {len(lineup[0])}')
+        horario = int(input("Elegir horario: "))
+        escenario = int(input("Ingresar escenario: "))
+
+    while lineup[horario-1][escenario-1] != '.':
+        print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
+        horario = int(input("Elegir horario: "))
+        escenario = int(input("Ingresar escenario: "))
+
+    return escenario, horario
 
 def ingresar_artista(lineup, nombre_artistas, codigos):
     if len(codigos) >= 30:
@@ -42,15 +74,7 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
     horario = int(input("Elegir horario: "))
     escenario = int(input("Ingresar escenario: "))
 
-    while horario < 1 or horario > len(lineup) or escenario < 1 or escenario > len(lineup[0]):
-        print(f'Horario o escenario inválido. Horario debe ser entre 1 y {len(lineup)}, escenario entre 1 y {len(lineup[0])}')
-        horario = int(input("Elegir horario: "))
-        escenario = int(input("Ingresar escenario: "))
-
-    while lineup[horario-1][escenario-1] != '.':
-        print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
-        horario = int(input("Elegir horario: "))
-        escenario = int(input("Ingresar escenario: "))
+    escenario, horario = validar_horario_escenario(lineup, horario, escenario)
 
 
     lineup[horario-1][escenario-1] = codigo
@@ -186,3 +210,15 @@ def cambiar_artista(lineup, codigos, indice, codigo_nuevo):
         for columna in range(len(lineup[fila])):
             if lineup[fila][columna] == codigo_viejo:
                 lineup[fila][columna] = codigo_nuevo
+
+
+def buscar_posicion_en_lineup(lineup, codigo):
+    """
+    Busca en la matriz lineup la posición (horario, escenario) del artista con el código dado.
+    Retorna una tupla (horario, escenario) en base 1, o (None, None) si no está asignado.
+    """
+    for f in range(len(lineup)):
+        for c in range(len(lineup[f])):
+            if lineup[f][c] == codigo:
+                return f + 1, c + 1
+    return None, None

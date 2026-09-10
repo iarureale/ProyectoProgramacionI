@@ -41,7 +41,7 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
     elif opcion == 4:
         menu_comprar_entradas(tot, venta_tot, entradas, vendidas_vip, vendidas_gen, capacidad_general, max_operacion, lineup, nombre_artistas, codigos)
     elif opcion == 5:
-        modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
+        modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios)
     elif opcion == 6:
         consultar_venta(tot, capacidad_general, lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendidas_vip)
     elif opcion == 7:
@@ -134,7 +134,7 @@ def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
 
 
-def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip):
+def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios):
     print("\nMENU: Modificar programación")
     print('\n1. Registrar artista\n2. Modificar artista\n3. Salir\n')
 
@@ -149,13 +149,13 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
             print("\nSi se quiere parar de ingresar porfavor ingresar 3 de lo contrario 1")
             opcion = pedir_opcion_valida('Ingresar:', [1, 3])
             if opcion == 3:
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
+                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios)
     elif opcion == 2:
         print("MENU: Modificar artista\n")
         if not codigos:
             print("No se ha registrado ningun artista todavía.\n")
             pedir_opcion_valida("Volver al menu principal (1)", [1])
-            modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
+            modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios)
             return
         for i in range(len(codigos)):
             print(f'Artista {i+1}: {codigos[i]} - {nombre_artistas[i]}\n')
@@ -165,9 +165,9 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
             modificar_artista = input("Ingresar codigo del artista a modificar: ").upper()
 
         indice = codigos.index(modificar_artista)
-        print('Ingresar numero del dato a modificar:\n1.Modificar codigo del artista\n2.Cambiar nombre del artista\n2.Cambiar horario\n3.Cambiar escenario')
+        print('Ingresar numero del dato a modificar:\n1.Modificar codigo del artista\n2.Cambiar nombre del artista\n3.Cambiar horario\n4.Cambiar escenario')
 
-        modificar_datos = pedir_opcion_valida("Ingresar: ", [1, 2, 3])
+        modificar_datos = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4])
         if modificar_datos == 1:
             codigo_nuevo = (input("Ingresar codigo nuevo: ")).upper()
             while not funciones.validar_codigo(codigo_nuevo) or funciones.artista_ya_ingresado(codigo_nuevo, codigos):
@@ -181,7 +181,7 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
 
             volver = pedir_opcion_valida("Volver al menu anterior (1): ", [1])
             if volver == 1:
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
+                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios)
 
         elif modificar_datos == 2:
             nombre = input("Ingresar el nombre nuevo: ")
@@ -189,7 +189,35 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
             print(f"El artista {codigos[indice]} ha pasado a ser {nombre}")
             volver =pedir_opcion_valida("Volver al menu anterior (1): ", [1])
             if volver == 1:
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
+                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios)
+        elif modificar_datos == 3:
+            horario_viejo, escenario_viejo = funciones.buscar_posicion_en_lineup(lineup, modificar_artista)
+
+            horario_nuevo = int(input("Ingresar el horario nuevo: "))
+            horario_nuevo = funciones.validar_horario(horario_nuevo, lineup, horario_viejo)
+
+            lineup[horario_viejo-1][escenario_viejo-1] = '.'
+            lineup[horario_nuevo-1][escenario_viejo-1] = modificar_artista
+            print(f"El artista {modificar_artista} ha sido movido al horario {horario_nuevo}.")
+
+            volver = pedir_opcion_valida("Volver al menu anterior (1): ", [1])
+            if volver == 1:
+                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios)
+        elif modificar_datos == 4:
+            horario_viejo, escenario_viejo = funciones.buscar_posicion_en_lineup(lineup, modificar_artista)
+        
+            escenario_nuevo = int(input("Ingresar el escenario nuevo: "))
+            escenario_nuevo = funciones.validar_escenario(escenario_nuevo, lineup, horario_viejo)
+        
+            lineup[horario_viejo-1][escenario_viejo-1] = '.'
+            lineup[horario_viejo-1][escenario_nuevo-1] = modificar_artista
+            print(f"El artista {modificar_artista} ha sido movido al escenario {escenario_nuevo}.")
+        
+            volver = pedir_opcion_valida("Volver al menu anterior (1): ", [1])
+            if volver == 1:
+                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios)
+          
+  
     elif opcion == 3:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
 
