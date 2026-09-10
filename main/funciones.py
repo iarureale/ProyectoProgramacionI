@@ -1,4 +1,9 @@
 def grilla():
+    """
+    Establecemos las filas (horarios) y columnas (horarios) con su respectivo valor para
+    crear la matriz (lineup) mediante una lista por comprensión.
+    Retorna lineup
+    """
     escenarios = 5
     horarios = 8
     lineup = [['.' for c in range(escenarios)] for f in range(horarios)]
@@ -154,6 +159,12 @@ def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horario
 
 
 def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion):
+    """
+    Se piden cantidad de entradas a comprar (int) y valida que no supere el máximo a comprar por operación.
+    El precio de entrada se define dependiendo el tipo de entrada a comprar (1 - GENERAL) (2 - VIP).
+    Se acumula y retorna al total de entradas vendidas (tot), al total de recuadación (venta_tot) y al tipo de entrada
+    adquirida (vendidas_gen o vendidas_vip) 
+    """
     print("\nIngresar entradas a comprar:\n")
 
     entradas_a_comprar = int(input())
