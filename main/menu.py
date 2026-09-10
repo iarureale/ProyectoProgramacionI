@@ -126,7 +126,18 @@ def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot
 
     if opcion == 1:
         print('\nLINEUP ACTUAL\n')
+
+        print("\nLINEUP POR CODIGO\n")
         funciones.imprimir_grilla(lineup, horarios, escenarios)
+        print('\n\n')
+
+        print('=' * 63)
+
+        print("\n\nLINEUP POR NOMBRE\n")
+
+        funciones.imprimir_grilla_con_nombres(lineup, horarios, escenarios, codigos, nombre_artistas)
+
+
         pedir_opcion_valida("\nPara volver al menu anterior ingresar 1: ", [1])
         consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
 
@@ -196,7 +207,7 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
             horario_viejo, escenario_viejo = funciones.buscar_posicion_en_lineup(lineup, modificar_artista)
 
             horario_nuevo = int(input("Ingresar el horario nuevo: "))
-            horario_nuevo = funciones.validar_horario(horario_nuevo, lineup, horario_viejo)
+            horario_nuevo = funciones.validar_horario(horario_nuevo, lineup, escenario_viejo)
 
             lineup[horario_viejo-1][escenario_viejo-1] = '.'
             lineup[horario_nuevo-1][escenario_viejo-1] = modificar_artista

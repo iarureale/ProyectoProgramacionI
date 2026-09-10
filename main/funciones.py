@@ -112,7 +112,25 @@ def imprimir_grilla(lineup, horarios, escenarios):
             print(f"{valor:<{ancho}}|", end="")
         print()
 
-def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion, compras_tipo, compras_cantidad, compras_importe):
+def imprimir_grilla_con_nombres(lineup, horarios, escenarios, codigos, nombre_artistas):
+    """
+    Muestra la grilla reemplazando cada código de artista por su nombre,
+    sin modificar la matriz original (lineup guarda códigos para el resto
+    del programa). Reutiliza imprimir_grilla() para mantener exactamente
+    el mismo formato de columnas y alineación.
+    """
+    copia = [fila[:] for fila in lineup]  # copia independiente, no afecta lineup
+
+    for f in range(len(copia)):
+        for c in range(len(copia[f])):
+            if copia[f][c] in codigos:
+                pos = codigos.index(copia[f][c])
+                copia[f][c] = nombre_artistas[pos]
+
+    imprimir_grilla(copia, horarios, escenarios)
+
+
+def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion):
     """
     Registra una compra de entradas de tipo: General y VIP.
     Validad cantidad maxima por operacion y disponibilidad de las mismas antes de confirmar.
@@ -134,9 +152,6 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
     else:
         vendidas_vip += entradas_a_comprar
 
-    compras_tipo.append("General" if tipo == 1 else "VIP")
-    compras_cantidad.append(entradas_a_comprar)
-    compras_importe.append(importe)
 
     return tot, venta_tot, vendidas_gen, vendidas_vip
 
