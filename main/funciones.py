@@ -37,6 +37,9 @@ def encuesta_escenario(escenarios, escenarios_rankeados):
     votar = pedir_opcion_valida("\nVotá el escenario por el cual estas mas emocionado/a por ir: ", [1, 2, 3, 4, 5])
     escenarios_rankeados[votar-1] = escenarios_rankeados[votar-1] + 1
 
+    print("¡VOTO REGISTRADO!".center(40, "★"))
+    print(f"Gracias por votar a {escenarios[votar-1]}.".center(40))
+
 def mostrar_ranking(escenarios, escenarios_rankeados):
     """
     Recibe la tupla de escenarios y la lista de votos acumulados.
