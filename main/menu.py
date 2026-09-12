@@ -33,9 +33,9 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
     max_operacion = 6
 
     print("\nBienvenido al OVERPALOOZA!\n")
-    print('1. Consultar información del festival \n2. Buscar artista\n3. Consultar grilla \n4. Comprar entradas \n5. Modificar programación\n6. Consultar ventas \n7. Estadísticas e informes\n8. Salir\n')
+    print('1. Consultar información del festival \n2. Buscar artista\n3. Consultar grilla \n4. Comprar entradas \n5. Modificar programación\n6. Estadísticas e informes\n7. Salir\n')
 
-    opcion = pedir_opcion_valida("Elegir opcion (8 para finalizar): ", [1, 2, 3, 4, 5, 6, 7, 8])
+    opcion = pedir_opcion_valida("Elegir opcion (8 para finalizar): ", [1, 2, 3, 4, 5, 6, 7])
 
     if opcion == 1:
         consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
@@ -48,10 +48,8 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
     elif opcion == 5:
         modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios)
     elif opcion == 6:
-        consultar_venta(tot, capacidad_general, lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendidas_vip)
-    elif opcion == 7:
         estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas)
-    elif opcion == 8:
+    elif opcion == 7:
         print("="*60)
         print('Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
         print("="*60)
@@ -143,7 +141,7 @@ def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendid
     else:
         print("\n[AVISO] Todavía no hay artistas registrados en el Overpalooza\nPor favor, intente nuevamente más adelante.\n")
         pedir_opcion_valida("\nIngresar 1 para volver al menú anterior: ", [1])
-        menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
+        menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
 
 def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip):
     """
@@ -350,22 +348,6 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
         return
 
-
-def consultar_venta(tot, capacidad_general, lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendidas_vip):
-    """
-    Recibe los acumuladores de venta, la capacidad general y las estructuras de programacion del festival.
-    No retorna un valor; muestra un resumen de las ventas realizadas y el porcentaje vendido sobre la capacidad total.
-    """
-    print("\nMENÚ: Resumen de ventas")
-    porcentaje_disponibilidad = funciones.calcular_disponibilidad_general(tot, capacidad_general)
-    porcentaje_vendido = 100 - porcentaje_disponibilidad
-
-    print(f"\nVentas realizadas: {tot}\nPorcentaje vendido general: {porcentaje_vendido:.2f}%\n")
-
-    volver = pedir_opcion_valida("Ingresar 1 para volver: ", [1])
-    if volver == 1:
-        menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
-
 def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas):
     """
     Recibe las estructuras de programacion del festival, los acumuladores de venta, la capacidad general y la configuracion de entradas.
@@ -393,7 +375,7 @@ def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
         return
 
-    volver = pedir_opcion_valida("\nIngresar 1 para volver al menu principal: ", [1])
+    volver = pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: ", [1])
     if volver == 1:
         estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas)
    
