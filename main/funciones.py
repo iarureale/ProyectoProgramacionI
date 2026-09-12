@@ -12,7 +12,6 @@ def pedir_opcion_valida(mensaje, opciones_validas):
 
     return int(opcion)
 
-
 def grilla():
     """
     Establecemos las filas (horarios) y columnas (escenarios) con su respectivo valor para
@@ -131,7 +130,6 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
 
     escenario, horario = validar_horario_escenario(lineup, horario, escenario)
 
-
     lineup[horario-1][escenario-1] = codigo
 
     print(f'El artista con código {codigo} fue asignado correctamente al horario {horario} y al escenario {escenario}.')
@@ -190,7 +188,7 @@ def confirmacion_compra(ent):
     Retorna True si el usuario confirma la compra (ingresa 1), o False si decide
     cancelarla (ingresa 2).
     """
-    
+
     confirmar = pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingrese 1. De lo contrario, ingrese 2 para salir: \n', [1, 2])
     if confirmar == 1:
         return True
@@ -240,8 +238,6 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
 
     return tot, venta_tot, vendidas_gen, vendidas_vip, True
 
-
-
 def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios):
     """
     Recibe el codigo o nombre buscado, las listas de codigos y nombres, la matriz y las tuplas de escenarios y horarios.
@@ -266,7 +262,6 @@ def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horari
 
     return nombre_encontrado, escenario_encontrado, horario_encontrado
 
-
 def calcular_disponibilidad_general(tot, capacidad):
     """
     Recibe la cantida total de entradas vendidas y la capacidad correspondiente.
@@ -290,7 +285,6 @@ def validar_codigo(codigo):
         return False
     return True
 
-
 def cambiar_artista(lineup, codigos, indice, codigo_nuevo):
     """
     Recibe la matriz lineup, la lista de codigos, el indice del artista a modificar y el nuevo codigo a asignar.
@@ -303,7 +297,6 @@ def cambiar_artista(lineup, codigos, indice, codigo_nuevo):
         for columna in range(len(lineup[fila])):
             if lineup[fila][columna] == codigo_viejo:
                 lineup[fila][columna] = codigo_nuevo
-
 
 def buscar_posicion_en_lineup(lineup, codigo):
     """

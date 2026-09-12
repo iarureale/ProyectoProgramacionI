@@ -1,9 +1,5 @@
 import funciones
 
-
-
-
-
 def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados):
     """
     Recibe la matriz lineup, las listas de artistas y codigos, y los acumuladores de venta.
@@ -41,7 +37,6 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
         print("="*60)
         print('Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
         print("="*60)
-
 
 def consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados):
     """
@@ -81,7 +76,6 @@ def consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vend
         consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
     elif opcion == 5:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
-
 
 def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios, escenarios_rankeados):
     """
@@ -159,7 +153,6 @@ def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot
     elif opcion == 2:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
 
-
 def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados):
     """
     Recibe la matriz lineup, las listas de artistas y codigos, los acumuladores de venta y las tuplas de horarios y escenarios.
@@ -207,7 +200,6 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
             if modificar_artista == '2':
                 modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
                 return
-
 
         indice = codigos.index(modificar_artista)
         print('Ingresar el número del dato a modificar:\n1. Modificar código del artista\n2. Cambiar nombre del artista\n3. Cambiar horario\n4. Cambiar escenario')
@@ -261,11 +253,9 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
             volver = funciones.pedir_opcion_valida("Volver al menu anterior (1): ", [1])
             if volver == 1:
                 modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
-          
-  
+
     elif opcion == 3:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
-
 
 def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios):
     """
@@ -336,7 +326,6 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
         return
 
-
 def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas, escenarios_rankeados):
     """
     Recibe las estructuras de programacion del festival, los acumuladores de venta, la capacidad general y la configuracion de entradas.
@@ -370,5 +359,3 @@ def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
     volver = funciones.pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: ", [1])
     if volver == 1:
         estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas, escenarios_rankeados)
-   
-    
