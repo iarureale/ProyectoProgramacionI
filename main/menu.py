@@ -255,8 +255,12 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
 
 def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos):
     print("\nMENU: Comprar entradas")
-    print("\n1. Comprar entradas\n2. Chequear disponibilidad\n3. Salir\n")
+    disponibilidad = funciones.calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
+    if disponibilidad < 20:
+        print("AVISO".center(20, "-"))
+        print(f"Quedan menos del 20% de las entradas. ¡Consigue la tuya rápido!")
 
+    print("\n1. Comprar entradas\n2. Chequear disponibilidad\n3. Salir\n")
     opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3])
 
     if opcion == 1:
@@ -270,20 +274,21 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         if tipo == 1:
             tot, venta_tot, vendidas_gen, vendidas_vip = funciones.comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
             print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
-            pedir_opcion_valida("\nIngresar 1 para volver al menu principal: \n", [1])
+            pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: \n", [1])
             menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos)
         elif tipo == 2:
             tot, venta_tot, vendidas_gen, vendidas_vip = funciones.comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
             print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
-            pedir_opcion_valida("\nIngresar 1 para volver al menu principal: \n", [1])
+            pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: \n", [1])
             menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos)
-        
+            
     elif opcion == 2:
         disponibilidad = funciones.calcular_disponibilidad_general(tot, capacidad_general)
         print(f'\nTodavía queda el {disponibilidad:.2f}% de las entradas generales\n')
-        pedir_opcion_valida("\nIngresar 3 para volver al menu principal: \n", [3])
-
-    menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
+        pedir_opcion_valida("\nIngresar 3 para volver al menu anterior: \n", [3])
+        menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos)
+    elif opcion == 3:
+        menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
 
 
 def consultar_venta(tot, capacidad_general, lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendidas_vip):
