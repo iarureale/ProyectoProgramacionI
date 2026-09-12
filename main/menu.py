@@ -298,7 +298,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         print(f"[AVISO] Las entradas generales se han agotado!")
     if disponibilidad_vip == 0:
         print("ADVERTENCIA".center(20, "-"))
-        print(f"Las entradas vip se han agotado!")
+        print(f"Las entradas VIP se han agotado!")
 
     print("\n1. Comprar entradas\n2. Chequear disponibilidad\n3. Salir\n")
     opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3])
@@ -330,12 +330,13 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         
         elif tipo == 2:
             if disponibilidad_vip == 0:
-                print(f"\nLas entradas vips se han agotado!")
+                print(f"\n[AVISO] Las entradas VIP se han agotado!")
                 pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: \n", [1])
                 menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip)
                 return
             tot, venta_tot, vendidas_gen, vendidas_vip = funciones.comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
-            print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
+            print("OPERACIÓN EXITOSA!".center(40, '='))
+            print("La compra se realizó correctamente.".center(40))
             pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: \n", [1])
             menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip)
             return
