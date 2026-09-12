@@ -118,8 +118,6 @@ def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendid
                         print(f"\nArtista: {nombre}")
                         print(f"Escenario: {escenario}")
                         print(f"Horario: {horario}")
-                    else:
-                        print(f"\nEl artista {nombre} todavía no tiene ni escenario ni horario asignado.")
 
                     funciones.pedir_opcion_valida("\nIngresar 1 para volver al menú anterior: ", [1])
                     menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios, escenarios_rankeados)
@@ -158,7 +156,7 @@ def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot
         funciones.pedir_opcion_valida("\nPara volver al menu anterior ingresar 1: ", [1])
         consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
 
-    if opcion == 2:
+    elif opcion == 2:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
 
 
