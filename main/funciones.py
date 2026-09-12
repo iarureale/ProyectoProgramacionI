@@ -70,7 +70,7 @@ def validar_escenario(escenario, lineup, horario):
     """
     while lineup[horario-1][escenario-1] != '.':
             print(f'[AVISO] El horario {horario} y el escenario {escenario} ya tienen un artista asignado')
-            escenario = int(input("Ingresar escenario: "))
+            escenario = pedir_opcion_valida("Ingresar escenario: ", [1, 2, 3, 4, 5])
     return escenario
 
 def validar_horario(horario, lineup, escenario):
@@ -80,8 +80,8 @@ def validar_horario(horario, lineup, escenario):
     solicita un nuevo horario hasta encontrar uno disponible.
     """
     while lineup[horario-1][escenario-1] != '.':
-            print(f'[AVISO] El horario {horario} y elescenario {escenario} ya tienen un artista asignado')
-            horario = int(input("Ingresar horario: "))
+            print(f'[AVISO] El horario {horario} y el escenario {escenario} ya tienen un artista asignado')
+            horario = pedir_opcion_valida("Ingresar horario: ", [1, 2, 3, 4, 5, 6, 7, 8])
     return horario
 
 def validar_horario_escenario(lineup, horario, escenario):
@@ -89,15 +89,11 @@ def validar_horario_escenario(lineup, horario, escenario):
     Recibe la matriz lineup, y el horario/escenario propuestos.
     Retorna la tupla (escenario, horario) validada: solicita nuevos valores mientras esten fuera de rango o mientras la combinacion ya tenga un artista asignado.
     """
-    while horario < 1 or horario > len(lineup) or escenario < 1 or escenario > len(lineup[0]):
-        print(f'[ERROR] Horario o escenario inválido. El Horario debe ser entre 1 y {len(lineup)}, y el escenario entre 1 y {len(lineup[0])}.')
-        horario = int(input("Elegir horario: "))
-        escenario = int(input("Ingresar escenario: "))
 
     while lineup[horario-1][escenario-1] != '.':
         print(f'[AVISO] El horario {horario} y el escenario {escenario} ya tienen un artista asignado')
-        horario = int(input("Elegir horario: "))
-        escenario = int(input("Ingresar escenario: "))
+        horario = pedir_opcion_valida("Ingresar horario: ", [1, 2, 3, 4, 5, 6, 7, 8])
+        escenario = pedir_opcion_valida("Ingresar escenario: ", [1, 2, 3, 4, 5])
 
     return escenario, horario
 
@@ -125,8 +121,8 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
 
     nombre_artistas.append(nombre_artistico)
 
-    horario = int(input("Elegir horario: "))
-    escenario = int(input("Ingresar escenario: "))
+    horario = pedir_opcion_valida("Ingresar horario: ", [1, 2, 3, 4, 5, 6, 7, 8])
+    escenario = pedir_opcion_valida("Ingresar escenario: ", [1, 2, 3, 4, 5])
 
     escenario, horario = validar_horario_escenario(lineup, horario, escenario)
 
