@@ -129,11 +129,16 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
     Devuelve los acumuladores actualizados y ademas se agrega la operacion al registro de compras
     """
     print("\nIngresar entradas a comprar:\n")
+    if tipo == 1:
+        stock_restante = entradas[0][1] - vendidas_gen
+    else:
+        stock_restante = entradas[1][1] - vendidas_vip
 
+    limite = min(max_operacion, stock_restante) 
     entradas_a_comprar = int(input())
-    while entradas_a_comprar > max_operacion:
-        print('\nLa cantidad ingresada supera la permitida por compra. Se permiten 6 por usuario\n')
-        entradas_a_comprar = int(input('Ingresar entradas a comprar: '))
+    while entradas_a_comprar > limite:
+        print("ERROR. No se pudo realizar la compra")
+        entradas_a_comprar = int(input())
 
     importe = entradas_a_comprar * entradas[tipo - 1][0]
     tot += entradas_a_comprar
