@@ -1,3 +1,18 @@
+def pedir_opcion_valida(mensaje, opciones_validas):
+    """
+    Recibe el mensaje a mostrar y la lista de opciones validas (ej: [1, 2, 3]).
+    Retorna la opcion ingresada como entero, solicitandola nuevamente mientras
+    no sea un numero dentro de las opciones validas.
+    """
+    opcion = input(mensaje)
+
+    while not opcion.isdigit() or int(opcion) not in opciones_validas:
+        print('\n[ERROR] Opcion inválida. Por favor, seleccione una opción disponible.')
+        opcion = input(mensaje)
+
+    return int(opcion)
+
+
 def grilla():
     """
     Establecemos las filas (horarios) y columnas (escenarios) con su respectivo valor para
@@ -9,6 +24,27 @@ def grilla():
     lineup = [['.' for c in range(escenarios)] for f in range(horarios)]
 
     return lineup
+
+def encuesta_escenario(escenarios, escenarios_rankeados):
+    for i in range(len(escenarios)):
+        print(f'{i+1}. {escenarios[i]}')
+
+    votar = pedir_opcion_valida("\nVotar el escenario por el cual estas mas emocionado/a por ir: ", [1, 2, 3, 4, 5])
+    escenarios_rankeados[votar-1] = escenarios_rankeados[votar-1] + 1
+
+def mostrar_ranking(escenarios, escenarios_rankeados):
+    """
+    Recibe la tupla de escenarios y la lista de votos acumulados.
+    """
+    ranking = []
+    for i in range(len(escenarios)):
+        ranking.append((escenarios[i], escenarios_rankeados[i]))
+
+    ranking.sort(key=lambda x: x[1], reverse=True) #Recupere el elemento 2 de la tupla en vez de implementar una función para hacerlo
+
+    for i in range(len(ranking)):
+        nombre, votos = ranking[i]
+        print(f'{i+1}. {nombre} — {votos} voto(s)')
 
 def artista_ya_ingresado(codigo, codigos):
     """
