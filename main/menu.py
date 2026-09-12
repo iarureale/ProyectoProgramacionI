@@ -141,8 +141,7 @@ def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendid
     else:
         print("\n[AVISO] Todavía no hay artistas registrados en el Overpalooza\nPor favor, intente nuevamente más adelante.\n")
         pedir_opcion_valida("\nIngresar 1 para volver al menú anterior: ", [1])
-        menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
-
+        menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
 def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip):
     """
     Recibe la matriz lineup, las tuplas de horarios y escenarios, las listas de artistas y códigos, y los acumuladores de venta.
