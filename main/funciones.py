@@ -163,7 +163,7 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
     entradas_a_comprar = int(entrada_usuario)
 
     if entradas_a_comprar > limite:
-        print(f"[ERROR] No hay suficiente stock disponible. Puede comprar como máximo {limite} entradas en esta operación.")
+        print(f"[ERROR] Puede comprar como máximo {limite} entradas en esta operación.")
         return tot, venta_tot, vendidas_gen, vendidas_vip, False
 
     importe = entradas_a_comprar * entradas[tipo - 1][0]
