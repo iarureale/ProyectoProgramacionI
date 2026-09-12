@@ -289,7 +289,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         print(f"Las entradas generales se han agotado!")
     elif disponibilidad_vip == 0 and disponibilidad_gen > 0: 
         print("AVISO".center(20, "-"))
-        print(f"Las entradas vip se han agotado!")
+        print(f"Las entradas VIP se han agotado!")
 
     print("\n1. Comprar entradas\n2. Chequear disponibilidad\n3. Salir\n")
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3])
@@ -320,7 +320,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         
         elif tipo == 2:
             if disponibilidad_vip == 0:
-                print(f"\nLas entradas vips se han agotado!")
+                print(f"\nLas entradas VIP se han agotado!")
             else:
                 tot, venta_tot, vendidas_gen, vendidas_vip, exito = funciones.comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
                 if exito:

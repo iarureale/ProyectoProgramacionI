@@ -177,10 +177,15 @@ def imprimir_grilla_con_nombres(lineup, horarios, escenarios, codigos, nombre_ar
     imprimir_grilla(copia, horarios, escenarios)
 
 def confirmacion_compra(ent):
-    confirmar = int(input(f'Estas por comprar {ent} entradas. Ingresar 1 para confirmar o 2 para salir.'))
+    """
+    Recibe la cantidad de entradas a comprar (ent).
+    Retorna True si el usuario confirma la compra (ingresa 1), o False si decide
+    cancelarla (ingresa 2).
+    """
+    confirmar = int(input(f'[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingrese 1. De lo contrario, ingrese 2 para salir: \n'))
     while confirmar not in [1, 2]:
-        print("ERROR. Elegir una opción valida.")
-        confirmar = int(input(f'\nEstas por comprar {ent} entradas. Ingresar 1 para confirmar o 2 para salir: \n'))
+        print("[ERROR] Elegir una opción valida.")
+        confirmar = int(input(f'\n[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingrese 1. De lo contrario, ingrese 2 para salir: \n'))
     if confirmar == 1:
         return True
     else:
