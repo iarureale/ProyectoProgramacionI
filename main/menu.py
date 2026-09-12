@@ -92,9 +92,8 @@ def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendid
     print("\nMENU: Buscar artista\n")
     if codigos:
         print('\n1. Ingresar artista a buscar \n2. Salir\n')
-
         opcion = pedir_opcion_valida("Ingresar: ", [1, 2])
-
+        funciones.imprimir_artistas_ordenados(nombre_artistas)
         if opcion == 1:
             buscado = (input("\nIngresar código o nombre del artista a buscar, (2) para salir: ")).strip().lower()
 

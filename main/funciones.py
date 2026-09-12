@@ -216,3 +216,8 @@ def buscar_posicion_en_lineup(lineup, codigo):
             if lineup[f][c] == codigo:
                 return f + 1, c + 1
     return None, None
+
+def imprimir_artistas_ordenados(nombre_artistas):
+    artistas_ordenados = sorted(nombre_artistas, key=str.lower) # Usamos key ya que sorted no distingue bien mayúsculas y minúsculas.
+    for a in range(len(artistas_ordenados)):
+        print(f"★ {artistas_ordenados[a]}")
