@@ -26,10 +26,15 @@ def grilla():
     return lineup
 
 def encuesta_escenario(escenarios, escenarios_rankeados):
+    """
+    Recibe la tupla de escenarios y la lista escenarios_rankeados (acumulador de votos).
+    No retorna un valor; muestra los escenarios disponibles, registra el voto del usuario
+    y actualiza el contador correspondiente en escenarios_rankeados.
+    """
     for i in range(len(escenarios)):
         print(f'{i+1}. {escenarios[i]}')
 
-    votar = pedir_opcion_valida("\nVotar el escenario por el cual estas mas emocionado/a por ir: ", [1, 2, 3, 4, 5])
+    votar = pedir_opcion_valida("\nVotá el escenario por el cual estas mas emocionado/a por ir: ", [1, 2, 3, 4, 5])
     escenarios_rankeados[votar-1] = escenarios_rankeados[votar-1] + 1
 
 def mostrar_ranking(escenarios, escenarios_rankeados):
