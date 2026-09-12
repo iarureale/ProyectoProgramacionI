@@ -90,43 +90,46 @@ def consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vend
 
 def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios):
     print("\nMENU: Buscar artista\n")
-    print('\n1. Ingresar artista a buscar \n2. Salir\n')
+    if codigos:
+        print('\n1. Ingresar artista a buscar \n2. Salir\n')
 
-    opcion = pedir_opcion_valida("Ingresar: ", [1, 2])
+        opcion = pedir_opcion_valida("Ingresar: ", [1, 2])
 
-    if opcion == 1:
-        buscado = (input("\nIngresar código o nombre del artista a buscar, (2) para salir: ")).strip()
-
-        if buscado == "2":
-            menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
-
-        else:
-            while buscado not in nombre_artistas and buscado not in codigos and buscado != "2":
-                print("ERROR. ingresar un código o nombre válido.")
-                opcion_a = pedir_opcion_valida("(1) Para intentarlo nuevamente, (2) para salir: ", [1, 2])
-
-                if opcion_a == 1:
-                    buscado = (input("\nIngresar código o nombre del artista a buscar: ")).strip()
-                else:
-                    buscado = "2"
+        if opcion == 1:
+            buscado = (input("\nIngresar código o nombre del artista a buscar, (2) para salir: ")).strip()
 
             if buscado == "2":
                 menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
+
             else:
-                nombre, escenario, horario = funciones.buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios)
+                while buscado not in nombre_artistas and buscado not in codigos and buscado != "2":
+                    print("ERROR. ingresar un código o nombre válido.")
+                    opcion_a = pedir_opcion_valida("(1) Para intentarlo nuevamente, (2) para salir: ", [1, 2])
 
-                if escenario != ".":
-                    print(f"\nArtista: {nombre}")
-                    print(f"Escenario: {escenario}")
-                    print(f"Horario: {horario}")
+                    if opcion_a == 1:
+                        buscado = (input("\nIngresar código o nombre del artista a buscar: ")).strip()
+                    else:
+                        buscado = "2"
+
+                if buscado == "2":
+                    menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
                 else:
-                    print(f"\nEl artista {nombre} todavía no tiene ni escenario ni horario asignado.")
+                    nombre, escenario, horario = funciones.buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios)
 
-                pedir_opcion_valida("\nIngresar 1 para volver al menú anterior:", [1])
-                menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
+                    if escenario != ".":
+                        print(f"\nArtista: {nombre}")
+                        print(f"Escenario: {escenario}")
+                        print(f"Horario: {horario}")
+                    else:
+                        print(f"\nEl artista {nombre} todavía no tiene ni escenario ni horario asignado.")
 
+                    pedir_opcion_valida("\nIngresar 1 para volver al menú anterior:", [1])
+                    menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
+
+        else:
+            menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
     else:
-        menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
+        print("\n¡Lo sentimos!\nTodavía no hay artistas asignados en el Overpalooza\n¡Vuelve pronto!\n")
 
 def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip):
     print("\nMENU: Consultar grilla")
