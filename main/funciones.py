@@ -135,10 +135,17 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
         stock_restante = entradas[1][1] - vendidas_vip
 
     limite = min(max_operacion, stock_restante) 
-    entradas_a_comprar = int(input())
-    while entradas_a_comprar > limite:
-        print("ERROR. No se pudo realizar la compra")
-        entradas_a_comprar = int(input())
+
+    entrada_usuario = input()
+    while not entrada_usuario.isdigit():
+        print("ERROR. Tenés que ingresar un número.")
+        entrada_usuario = input()
+
+    entradas_a_comprar = int(entrada_usuario)
+
+    if entradas_a_comprar > limite:
+        print(f"ERROR. No hay suficiente stock. Podés comprar como máximo {limite} entradas en esta operación.")
+        return tot, venta_tot, vendidas_gen, vendidas_vip, False
 
     importe = entradas_a_comprar * entradas[tipo - 1][0]
     tot += entradas_a_comprar
@@ -150,7 +157,7 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
         vendidas_vip += entradas_a_comprar
 
 
-    return tot, venta_tot, vendidas_gen, vendidas_vip
+    return tot, venta_tot, vendidas_gen, vendidas_vip, True
 
 def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios):
     cods = [c.strip().lower() for c in codigos] # Para ignorar los espacios y las mayúsculas en los elementos dentro de la lista.
