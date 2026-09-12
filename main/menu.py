@@ -216,7 +216,7 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
         elif modificar_datos == 3:
             horario_viejo, escenario_viejo = funciones.buscar_posicion_en_lineup(lineup, modificar_artista)
 
-            horario_nuevo = int(input("Ingresar el horario nuevo: "))
+            horario_nuevo = pedir_opcion_valida("Ingresar el horario nuevo: ", [1, 2, 3, 4, 5, 6, 7, 8])
             horario_nuevo = funciones.validar_horario(horario_nuevo, lineup, escenario_viejo)
 
             lineup[horario_viejo-1][escenario_viejo-1] = '.'
@@ -229,7 +229,7 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
         elif modificar_datos == 4:
             horario_viejo, escenario_viejo = funciones.buscar_posicion_en_lineup(lineup, modificar_artista)
         
-            escenario_nuevo = int(input("Ingresar el escenario nuevo: "))
+            escenario_nuevo = pedir_opcion_valida("Ingresar el escenario nuevo: ", [1, 2, 3, 4, 5])
             escenario_nuevo = funciones.validar_escenario(escenario_nuevo, lineup, horario_viejo)
         
             lineup[horario_viejo-1][escenario_viejo-1] = '.'
