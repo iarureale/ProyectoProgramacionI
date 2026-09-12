@@ -20,42 +20,61 @@ def artista_ya_ingresado(codigo, codigos):
     return False
 
 def validar_escenario(escenario, lineup, horario):
+    """
+    Recibe el escenario elegido, la matriz lineup y el horario ya definido.
+    Retorna un escenario valido: si la combinacion horario/escenario ya esta ocupada,
+    solicita un nuevo escenario hasta encontrar uno disponible.
+    """
     while lineup[horario-1][escenario-1] != '.':
-            print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
+            print(f'[AVISO] El horario {horario} y el escenario {escenario} ya tienen un artista asignado')
             escenario = int(input("Ingresar escenario: "))
     return escenario
 
 def validar_horario(horario, lineup, escenario):
+    """
+    Recibe el horario elegido, la matriz lineup y el escenario ya definido.
+    Retorna un horario valido: si la combinacion horario/escenario ya esta ocupada,
+    solicita un nuevo horario hasta encontrar uno disponible.
+    """
     while lineup[horario-1][escenario-1] != '.':
-            print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
+            print(f'[AVISO] El horario {horario} y elescenario {escenario} ya tienen un artista asignado')
             horario = int(input("Ingresar horario: "))
     return horario
 
 def validar_horario_escenario(lineup, horario, escenario):
+    """
+    Recibe la matriz lineup, y el horario/escenario propuestos.
+    Retorna la tupla (escenario, horario) validada: solicita nuevos valores mientras esten fuera de rango o mientras la combinacion ya tenga un artista asignado.
+    """
     while horario < 1 or horario > len(lineup) or escenario < 1 or escenario > len(lineup[0]):
-        print(f'Horario o escenario inválido. Horario debe ser entre 1 y {len(lineup)}, escenario entre 1 y {len(lineup[0])}')
+        print(f'[ERROR] Horario o escenario inválido. El Horario debe ser entre 1 y {len(lineup)}, y el escenario entre 1 y {len(lineup[0])}.')
         horario = int(input("Elegir horario: "))
         escenario = int(input("Ingresar escenario: "))
 
     while lineup[horario-1][escenario-1] != '.':
-        print(f'El horario {horario} y escenario {escenario} ya tiene un artista asignado')
+        print(f'[AVISO] El horario {horario} y el escenario {escenario} ya tienen un artista asignado')
         horario = int(input("Elegir horario: "))
         escenario = int(input("Ingresar escenario: "))
 
     return escenario, horario
 
 def ingresar_artista(lineup, nombre_artistas, codigos):
+    """
+    Recibe la matriz lineup y las listas de nombres y codigos de artistas.
+    No retorna un valor; solicita por teclado el codigo, nombre, horario y escenario del nuevo artista,
+    valida los datos y actualiza la matriz y las listas correspondientes.
+    """
     if len(codigos) >= 30:
-        print("No se pueden ingresar más artistas, ya se alcanzó el límite de 30")
+        print("[AVISO] No se pueden ingresar más artistas: ya se alcanzó el límite de 30.")
         return
     
     codigo = input("Ingresar codigo del artista a insertar: ").upper()
     while not validar_codigo(codigo):
-        print("ERROR. Ingresé un código válido. ('A-XX')")
+        print("[ERROR] Código inválido. Por favor, ingresé un código con el formato 'A-XX'.")
         codigo = input("Ingresar codigo del artista a insertar: ").upper()
 
     while artista_ya_ingresado(codigo, codigos):
-        print(f'{codigo} ya esta ingresado en el lineup, Ingresar uno no ingresado')
+        print(f'[AVISO] El código {codigo} ya está ingresado en el lineup. Por favor, ingrese uno distinto.')
         codigo = input("Ingresar artista a insertar: ").upper()
 
     codigos.append(codigo)
@@ -71,7 +90,7 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
 
     lineup[horario-1][escenario-1] = codigo
 
-    print(f'Artista con código {codigo} asignado al horario {horario} y escenario {escenario} exitosamente.')
+    print(f'El artista con código {codigo} fue asignado correctamente al horario {horario} y al escenario {escenario}.')
 
 def imprimir_grilla(lineup, horarios, escenarios):
     """
@@ -128,7 +147,7 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
     Validad cantidad maxima por operacion y disponibilidad de las mismas antes de confirmar.
     Devuelve los acumuladores actualizados y ademas se agrega la operacion al registro de compras
     """
-    print("\nIngresar entradas a comprar:\n")
+    print("\nIngresar la cantidad de entradas a comprar:\n")
     if tipo == 1:
         stock_restante = entradas[0][1] - vendidas_gen
     else:
@@ -138,13 +157,13 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
 
     entrada_usuario = input()
     while not entrada_usuario.isdigit():
-        print("ERROR. Tenés que ingresar un número.")
+        print("[ERROR] No fue posible realizar la compra. La cantidad ingresada no es un número válido.")
         entrada_usuario = input()
 
     entradas_a_comprar = int(entrada_usuario)
 
     if entradas_a_comprar > limite:
-        print(f"ERROR. No hay suficiente stock. Podés comprar como máximo {limite} entradas en esta operación.")
+        print(f"[ERROR] No hay suficiente stock disponible. Puede comprar como máximo {limite} entradas en esta operación.")
         return tot, venta_tot, vendidas_gen, vendidas_vip, False
 
     importe = entradas_a_comprar * entradas[tipo - 1][0]
@@ -160,6 +179,10 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
     return tot, venta_tot, vendidas_gen, vendidas_vip, True
 
 def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios):
+    """
+    Recibe el codigo o nombre buscado, las listas de codigos y nombres, la matriz y las tuplas de escenarios y horarios.
+    Retorna una tupla (nombre, escenario, horario) del artista encontrado.
+    """
     cods = [c.strip().lower() for c in codigos] # Para ignorar los espacios y las mayúsculas en los elementos dentro de la lista.
     nombres = [n.strip().lower() for n in nombre_artistas]
 
@@ -181,6 +204,10 @@ def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horari
 
 
 def calcular_disponibilidad_general(tot, capacidad):
+    """
+    Recibe la cantida total de entradas vendidas y la capacidad correspondiente.
+    Retorna el porcentaje de disponibilidad restante sobre esa capacidad.
+    """
     porcentaje_vendido = (tot/capacidad) *100
     capacidad_general = 100 - porcentaje_vendido
     return capacidad_general
@@ -201,6 +228,10 @@ def validar_codigo(codigo):
 
 
 def cambiar_artista(lineup, codigos, indice, codigo_nuevo):
+    """
+    Recibe la matriz lineup, la lista de codigos, el indice del artista a modificar y el nuevo codigo a asignar.
+    No retorna un valor; actualiza el codigo del artista en la lista y en la matriz.
+    """
     codigo_viejo = codigos[indice]
     codigos[indice] = codigo_nuevo
 
@@ -222,6 +253,10 @@ def buscar_posicion_en_lineup(lineup, codigo):
     return None, None
 
 def imprimir_artistas_ordenados(nombre_artistas):
+    """
+    Recibe la lista de nombres de artistas.
+    No retorna un valor; nos muestra en pantalla los nombres ordenados alfabeticamente.
+    """
     artistas_ordenados = sorted(nombre_artistas, key=str.lower) # Usamos key ya que sorted no distingue bien mayúsculas y minúsculas.
     for a in range(len(artistas_ordenados)):
         print(f"★ {artistas_ordenados[a]}")
