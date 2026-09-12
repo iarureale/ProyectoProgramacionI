@@ -192,6 +192,10 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
             print("ERROR. Ingresé un código válido. ('A-XX')")
             modificar_artista = input("Ingresar codigo del artista a modificar: ").upper()
 
+            while modificar_artista not in codigos:
+                print('El codigo ingresado no esta dentro de nuestra base de datos! porfavor ingresar un codigo valido.\n')
+                modificar_artista = input("Ingresar codigo del artista a modificar: ").upper()
+
         indice = codigos.index(modificar_artista)
         print('Ingresar numero del dato a modificar:\n1.Modificar codigo del artista\n2.Cambiar nombre del artista\n3.Cambiar horario\n4.Cambiar escenario')
 
