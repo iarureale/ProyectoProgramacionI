@@ -334,7 +334,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
             if exito:
                 print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
                 if disponibilidad_vip == 0:
-                    print(f"\nLas entradas vips se han agotado!")
+                    print(f"\nLas entradas VIP se han agotado!")
                     pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: \n", [1])
                     menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip)
                     return
