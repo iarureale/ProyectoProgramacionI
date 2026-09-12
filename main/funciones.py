@@ -187,10 +187,8 @@ def confirmacion_compra(ent):
     Retorna True si el usuario confirma la compra (ingresa 1), o False si decide
     cancelarla (ingresa 2).
     """
-    confirmar = int(input(f'[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingrese 1. De lo contrario, ingrese 2 para salir: \n'))
-    while confirmar not in [1, 2]:
-        print("[ERROR] Elegir una opción valida.")
-        confirmar = int(input(f'\n[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingrese 1. De lo contrario, ingrese 2 para salir: \n'))
+    
+    confirmar = pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingrese 1. De lo contrario, ingrese 2 para salir: \n', [1, 2])
     if confirmar == 1:
         return True
     else:
