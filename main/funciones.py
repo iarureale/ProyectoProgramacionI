@@ -140,6 +140,15 @@ def imprimir_grilla_con_nombres(lineup, horarios, escenarios, codigos, nombre_ar
 
     imprimir_grilla(copia, horarios, escenarios)
 
+def confirmacion_compra(ent):
+    confirmar = int(input(f'Estas por comprar {ent} entradas. Ingresar 1 para confirmar o 2 para salir.'))
+    while confirmar not in [1, 2]:
+        print("ERROR. Elegir una opción valida.")
+        confirmar = int(input(f'\nEstas por comprar {ent} entradas. Ingresar 1 para confirmar o 2 para salir: \n'))
+    if confirmar == 1:
+        return True
+    else:
+        return False
 
 def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion):
     """
@@ -156,7 +165,7 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
     limite = min(max_operacion, stock_restante) 
 
     entrada_usuario = input()
-    while not entrada_usuario.isdigit():
+    while not entrada_usuario.isdigit() or int(entrada_usuario) <= 0:
         print("[ERROR] No fue posible realizar la compra. La cantidad ingresada no es un número válido.")
         entrada_usuario = input()
 
@@ -165,6 +174,12 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
     if entradas_a_comprar > limite:
         print(f"[ERROR] Puede comprar como máximo {limite} entradas en esta operación.")
         return tot, venta_tot, vendidas_gen, vendidas_vip, False
+
+    confirmar = confirmacion_compra(entradas_a_comprar)
+
+    if not confirmar:
+        return tot, venta_tot, vendidas_gen, vendidas_vip, False
+
 
     importe = entradas_a_comprar * entradas[tipo - 1][0]
     tot += entradas_a_comprar
@@ -177,6 +192,8 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
 
 
     return tot, venta_tot, vendidas_gen, vendidas_vip, True
+
+
 
 def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios):
     """
