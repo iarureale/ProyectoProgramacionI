@@ -155,46 +155,25 @@ def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip,
 
     return tot, venta_tot, vendidas_gen, vendidas_vip
 
-def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horario):
-    """
-    Busca un artista por código o por nombre en las listas paralelas y luego en la grilla.
-    Utilizando variables bandera como condición en los ciclos while para cortar la búsqueda. 
-    Si no encuentra al artista, retorna (".")
-    """
-    buscado_limpio = buscado.strip().lower()
-    indice_encontrado = -1
-    encontrado = False
+def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios):
+    cods = [c.strip().lower() for c in codigos] # Para ignorar los espacios y las mayúsculas en los elementos dentro de la lista.
+    nombres = [n.strip().lower() for n in nombre_artistas]
 
-    i = 0
-    while i < len(codigos) and not encontrado:
-        if codigos[i].lower() == buscado_limpio or nombre_artistas[i].lower() == buscado_limpio:
-            indice_encontrado = i
-            encontrado = True 
-        i += 1
+    if buscado in cods:
+        indice = cods.index(buscado)
+    elif buscado in nombres:
+        indice = nombres.index(buscado)
 
-    if indice_encontrado == -1:
-        print(f"No se encontró ningún artista con ese código o nombre. Vuelva a intentarlo.")
-        return
+    nombre_encontrado = nombre_artistas[indice]
+    codigo_encontrado = codigos[indice]
 
-    codigo_oficial = codigos[indice_encontrado]
-    nombre_oficial = nombre_artistas[indice_encontrado]
+    for f in range(len(lineup)):
+        for c in range(len(lineup[f])):
+            if lineup[f][c] == codigo_encontrado:
+                escenario_encontrado = escenarios[c]
+                horario_encontrado = horarios[f]
 
-    asignado = False
-    escenario_asignado = "."
-    horario_asignado = "."
-
-    f = 0
-    while f < len(lineup) and not asignado:
-        c = 0
-        while c < len(lineup[f]) and not asignado:
-            if lineup[f][c] == codigo_oficial:
-                escenario_asignado = escenario[c]
-                horario_asignado = horario[f]
-                asignado = True
-            c += 1
-        f += 1
-
-    return nombre_oficial, escenario_asignado, horario_asignado
+    return nombre_encontrado, escenario_encontrado, horario_encontrado
 
 
 def calcular_disponibilidad_general(tot, capacidad):

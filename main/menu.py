@@ -35,7 +35,7 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
     if opcion == 1:
         consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
     elif opcion == 2:
-        buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
+        menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
     elif opcion == 3:
         consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
     elif opcion == 4:
@@ -88,35 +88,45 @@ def consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vend
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
 
 
-def buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip):
-    print("\nMENU: Buscar artista")
+def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios):
+    print("\nMENU: Buscar artista\n")
     print('\n1. Ingresar artista a buscar \n2. Salir\n')
 
     opcion = pedir_opcion_valida("Ingresar: ", [1, 2])
 
-    if opcion  == 1:
-        buscado = (input("\nIngresar código o nombre del artista a buscar: ")).strip()
-        while len(buscado) == 0:
-            print("ERROR. ingresar un código o nombre válido.")
-            buscado = (input("\nIngresar código o nombre del artista a buscar: ")).strip()
+    if opcion == 1:
+        buscado = (input("\nIngresar código o nombre del artista a buscar, (2) para salir: ")).strip()
 
-        nombre, escenario, horario = funciones.buscar_artista(buscado, codigos, nombre_artistas, lineup, escenario, horario)
+        if buscado == "2":
+            menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
 
-        if nombre != "":
-            if escenario != "":
-                print(f"\nArtista: {nombre}")
-                print(f"Escenario: {escenario}")
-                print(f"Horario: {horario}")
-            else:
-                print(f"\nEl artista {nombre} todavía no tiene ni escenario ni horario asignado.")
         else:
-            print(f"\nNo se encontró ningún artista con ese código o nombre.")
+            while buscado not in nombre_artistas and buscado not in codigos and buscado != "2":
+                print("ERROR. ingresar un código o nombre válido.")
+                opcion_a = pedir_opcion_valida("(1) Para intentarlo nuevamente, (2) para salir: ", [1, 2])
 
-        pedir_opcion_valida("\nIngresar 1 para volver al menú anterior:", [1])
+                if opcion_a == 1:
+                    buscado = (input("\nIngresar código o nombre del artista a buscar: ")).strip()
+                else:
+                    buscado = "2"
 
-    if opcion == 2:
+            if buscado == "2":
+                menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
+            else:
+                nombre, escenario, horario = funciones.buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios)
+
+                if escenario != ".":
+                    print(f"\nArtista: {nombre}")
+                    print(f"Escenario: {escenario}")
+                    print(f"Horario: {horario}")
+                else:
+                    print(f"\nEl artista {nombre} todavía no tiene ni escenario ni horario asignado.")
+
+                pedir_opcion_valida("\nIngresar 1 para volver al menú anterior:", [1])
+                menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios)
+
+    else:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip)
-
 
 def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip):
     print("\nMENU: Consultar grilla")
