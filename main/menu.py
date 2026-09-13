@@ -354,7 +354,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
             limite = funciones.calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_operacion)
             cantidad = pedir_cantidad_entradas(limite)
 
-            confirmar = funciones.pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {cantidad} entradas. Para confirmar su compra, ingresá (1), o (2) para salir: ',[1, 2])
+            confirmar = funciones.pedir_opcion_valida(f'\n[ATENCION] Estas por comprar 1 entrada(s). Para confirmar su compra, ingrese (1). De lo contrario, ingrese (2) para salir: ',[1, 2])
 
             if confirmar == 1:
                 importe = funciones.calcular_importe_compra(tipo, entradas, cantidad)
