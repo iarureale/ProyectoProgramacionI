@@ -129,7 +129,7 @@ def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendid
         else:
             menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
     else:
-        print("\n[AVISO] Todavía no hay artistas registrados en el Overpalooza\nPor favor, intente nuevamente más adelante.\n")
+        print("\n[AVISO] Todavía no hay artistas registrados en el Overpalooza.\nPor favor, intente nuevamente más adelante.\n")
         funciones.pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
 
@@ -228,7 +228,7 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
         registrar_artistas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
     elif opcion == 2:
         print("✦" + "═" * 44 + "✦")
-        print(f"✦{' MENU: Modificar artista '.center(44, '═')}✦")
+        print(f"✦{' MENÚ: Modificar artista '.center(44, '═')}✦")
         print("✦" + "═" * 44 + "✦")
         if not codigos:
             print("[AVISO] Todavía no se ha registrado ningún artista.\n")
@@ -256,7 +256,7 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
                     funciones.cambiar_artista(lineup, codigos, indice, codigo_nuevo)
                     print(f"El código del artista {nombre_artistas[indice]} fue actualizado a {codigo_nuevo}.")
 
-                    volver = funciones.pedir_opcion_valida("ingresar (1) para volver al menú anterior: ", [1])
+                    volver = funciones.pedir_opcion_valida("Ingresar (1) para volver al menú anterior: ", [1])
                     if volver == 1:
                         modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
 
