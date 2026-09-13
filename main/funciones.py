@@ -93,7 +93,7 @@ def validar_horario_escenario(lineup, horario, escenario):
     """
 
     while lineup[horario-1][escenario-1] != '.':
-        print(f'[AVISO] El horario {horario} y el escenario {escenario} ya tienen un artista asignado')
+        print(f'[AVISO] El horario {horario} y el escenario {escenario} ya tienen un artista asignado.')
         horario = pedir_opcion_valida("Ingresar horario: ", [1, 2, 3, 4, 5, 6, 7, 8])
         escenario = pedir_opcion_valida("Ingresar escenario: ", [1, 2, 3, 4, 5])
 
@@ -128,10 +128,10 @@ def ingresar_artista(lineup, nombre_artistas, codigos, horarios, escenarios):
         codigo = ingresar_codigo()
 
     codigos.append(codigo)
-    nombre_artistico = input("Ingresar nombre del artista registrado: ")
+    nombre_artistico = input("Ingresar nombre del artista: ")
     while nombre_artistico == "" or nombre_artistico.isspace():
-        print("El nombre no puede quedar vacío ni contener únicamente espacios en blanco.")
-        nombre_artistico = input("Ingresar nombre del artista registrado: ")
+        print("[ERROR] El nombre no puede quedar vacío ni contener únicamente espacios en blanco.")
+        nombre_artistico = input("Ingresar nombre del artista: ")
 
     nombre_artistas.append(nombre_artistico)
 
