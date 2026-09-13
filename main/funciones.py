@@ -42,6 +42,8 @@ def encuesta_escenario(escenarios, escenarios_rankeados):
 def mostrar_ranking(escenarios, escenarios_rankeados):
     """
     Recibe la tupla de escenarios y la lista de votos acumulados.
+    No retorna un valor; crea una lista de tuplas con cada escenario y su puntaje,
+    la ordena de mayor a menor según los votos y muestra el ranking por pantalla.
     """
     ranking = []
     for i in range(len(escenarios)):
