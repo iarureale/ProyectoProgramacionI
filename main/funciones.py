@@ -105,9 +105,9 @@ def ingresar_codigo():
     return codigo
 
 
-def ingresar_artista(lineup, nombre_artistas, codigos):
+def ingresar_artista(lineup, nombre_artistas, codigos, horarios, escenarios):
     """
-    Recibe la matriz lineup y las listas de nombres y codigos de artistas.
+    Recibe la matriz lineup, las listas de nombres y codigos de artistas, y las tuplas de horarios y escenarios.
     No retorna un valor; solicita por teclado el codigo, nombre, horario y escenario del nuevo artista,
     valida los datos y actualiza la matriz y las listas correspondientes.
     """
@@ -129,7 +129,14 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
 
     nombre_artistas.append(nombre_artistico)
 
+    print("\nHorarios disponibles:")
+    for i in range(len(horarios)):
+        print(f'{i+1}. {horarios[i]}')
     horario = pedir_opcion_valida("Ingresar horario: ", [1, 2, 3, 4, 5, 6, 7, 8])
+
+    print("\nEscenarios disponibles:")
+    for i in range(len(escenarios)):
+        print(f'{i+1}. {escenarios[i]}')
     escenario = pedir_opcion_valida("Ingresar escenario: ", [1, 2, 3, 4, 5])
 
     escenario, horario = validar_horario_escenario(lineup, horario, escenario)

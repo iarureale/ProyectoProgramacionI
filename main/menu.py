@@ -163,7 +163,7 @@ def registrar_artistas(lineup, nombre_artistas, codigos, tot, venta_tot, vendida
         print("[AVISO] No se pueden ingresar más artistas: ya se alcanzó el límite de 30 artistas registrados.")
         modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
     else:
-        funciones.ingresar_artista(lineup, nombre_artistas, codigos)
+        funciones.ingresar_artista(lineup, nombre_artistas, codigos, horarios, escenarios)
         print("\nPara continuar ingresando artistas, presione (1). Para detener el registro, presione (2).")
         volver = funciones.pedir_opcion_valida('Ingresar:', [1, 2])
 
