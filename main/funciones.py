@@ -123,6 +123,9 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
 
     codigos.append(codigo)
     nombre_artistico = input("Ingresar nombre del artista ingresado: ")
+    while nombre_artistico == "" or nombre_artistico.isspace():
+        print("No se puede dejar el nombre en blanco ni con solo espacios.")
+        nombre_artistico = input("Ingresar nombre del artista: ")
 
     nombre_artistas.append(nombre_artistico)
 
