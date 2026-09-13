@@ -16,8 +16,15 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
 
     max_operacion = 6
 
-    print("\nBienvenido al OVERPALOOZA!\n")
-    print('1. Consultar información del festival \n2. Buscar artista\n3. Consultar grilla \n4. Comprar entradas \n5. Modificar programación\n6. Estadísticas e informes\n7. Salir\n')
+    print("✦   ★   ✦   ★   ✦   ★   ✦   ★")
+    print("   B I E N V E N I D O   A L")
+    print("     O V E R P A L O O Z A")
+    print("✦   ★   ✦   ★   ✦   ★   ✦   ★")
+    print()
+    print(" ✦ MENÚ PRINCIPAL ✦")
+    print("=" * 20)
+    print('1. Consultar información del festival \n2. Buscar artista\n3. Consultar grilla \n4. Comprar entradas \n5. Modificar programación\n6. Estadísticas e informes\n7. Salir')
+    print("=" * 20)
 
     opcion = funciones.pedir_opcion_valida("Elegir opcion (7 para finalizar): ", [1, 2, 3, 4, 5, 6, 7])
 
@@ -43,8 +50,10 @@ def consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vend
     Recibe la matriz lineup, las listas de artistas y codigos, y los acumuladores de venta.
     No retorna un valor, muestra el submenú de información general del festival y la informacion correspondiente a la opción elegida por el usuario.
     """
-    print("\nMENÚ: Consultar información")
-    print('\n1. SPONSORS \n2. INGRESO Y APERTURA \n3. OBJETOS NO PERMITIDOS \n4. REDES SOCIALES \n5. Salir\n')
+    print("✦" + "═" * 44 + "✦")
+    print(f"✦{' MENÚ: Consultar información '.center(44, '═')}✦ ")
+    print("│ 1. SPONSORS \n│ 2. INGRESO Y APERTURA \n│ 3. OBJETOS NO PERMITIDOS \n│ 4. REDES SOCIALES \n│ 5. Salir")
+    print("✦" + "═" * 44 + "✦")
 
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5])
     if opcion == 1:
@@ -58,7 +67,7 @@ def consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vend
         consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
     elif opcion == 2:
         print("INGRESO Y APERTURA".center(35, "="))
-        print("Las puertas del OVERPALOOZA se abrirán a las 11:00AM para el ingreso del público. \n¡Te esperamos!\n")
+        print("│ Las puertas del OVERPALOOZA se abrirán a las 11:00AM para el ingreso del público. \n│ ¡Te esperamos!\n")
         opcion = funciones.pedir_opcion_valida("Ingrese (1) para volver al menú principal: ", [1])
         consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
     elif opcion == 3:
@@ -82,9 +91,12 @@ def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendid
     Recibe la matriz lineup, las listas de artistas y codigos, los acumuladores de venta y las tuplas de escenarios y horarios.
     No retorna un valor; permite buscar un artista por código o nombre, mostrando su información correspondiente, y permite volver al menú principal.
     """                                           
-    print("\nMENÚ: Buscar artista\n")
+    print("✦" + "═" * 44 + "✦")
+    print(f"✦{' MENÚ: Buscar artista '.center(44, '═')}✦")
+    print("✦" + "═" * 44 + "✦")
     if codigos:
-        print('\n1. Ingresar artista a buscar \n2. Salir\n')
+        print("│ 1. Ingresar artista a buscar \n│ 2. Salir\n")
+        print("✦" + "═" * 44 + "✦")
         opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2])
         if opcion == 1:
             funciones.imprimir_artistas_ordenados(nombre_artistas)
@@ -126,19 +138,22 @@ def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot
     Recibe la matriz lineup, las tuplas de horarios y escenarios, las listas de artistas y códigos, y los acumuladores de venta.
     No retorna un valor; muestra la grilla de programacion del festival por código y por nombre de artista, y permite volver al menú principal.
     """
-    print("\nMENÚ: Consultar grilla")
-    print('\n1. Ver lineup\n2. Salir\n')
+    print("✦" + "═" * 44 + "✦")
+    print(f"✦{' MENÚ: Consultar grilla '.center(44, '═')}✦")
+    print("✦" + "═" * 44 + "✦")
+    print('\n1. Ver lineup\n2. Salir')
+    print("✦" + "═" * 44 + "✦")
 
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2])
 
     if opcion == 1:
-        print('\nLINEUP ACTUAL\n')
+        print("✦" + "═" * 44 + "✦")
+        print(f"✦{' LINEUP ACTUAL '.center(44, '═')}✦")
+        print("✦" + "═" * 44 + "✦")
 
         print("\nLINEUP POR CÓDIGO\n")
         funciones.imprimir_grilla(lineup, horarios, escenarios)
-        print('\n\n')
-
-        print('=' * 63)
+        print('\n')
 
         print("\n\nLINEUP POR NOMBRE\n")
 
@@ -198,16 +213,23 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
     Recibe la matriz lineup, las listas de artistas y codigos, los acumuladores de venta y las tuplas de horarios y escenarios.
     No retorna un valor; permite registrar nuevos artistas o modificar los datos de un artista ya registrado (código, nombre, horario o escenario), y permite volver al menú principal.
     """
-    print("\nMENÚ: Modificar programación")
-    print('\n1. Registrar artista\n2. Modificar artista\n3. Salir\n')
+    print("✦" + "═" * 44 + "✦")
+    print(f"✦{' MENÚ: Modificar programación '.center(44, '═')}✦")
+    print("✦" + "═" * 44 + "✦")
+    print("│ 1. Registrar artista\n│ 2. Modificar artista\n│ 3. Salir")
+    print("✦" + "═" * 44 + "✦")
 
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3])
 
     if opcion == 1:
-        print("MENÚ: Registrar artista")
+        print("✦" + "═" * 44 + "✦")
+        print(f"✦{' MENÚ: Registrar artista '.center(44, '═')}✦")
+        print("✦" + "═" * 44 + "✦")
         registrar_artistas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
     elif opcion == 2:
-        print("MENU: Modificar artista\n")
+        print("✦" + "═" * 44 + "✦")
+        print(f"✦{' MENU: Modificar artista '.center(44, '═')}✦")
+        print("✦" + "═" * 44 + "✦")
         if not codigos:
             print("[AVISO] Todavía no se ha registrado ningún artista.\n")
             funciones.pedir_opcion_valida("Ingresar (1) para volver al menú anterior: ", [1])
@@ -298,9 +320,9 @@ def pedir_cantidad_entradas(limite):
     return cantidad
 
 def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios):
-    print("=" * 30)
-    print("MENU: Comprar entradas".center(30, "-"))
-    print("=" * 30)
+    print("✦" + "═" * 44 + "✦")
+    print(f"✦{' MENÚ: Comprar entradas '.center(44, '═')}✦")
+    print("✦" + "═" * 44 + "✦")
     disponibilidad = funciones.calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
     disponibilidad_gen = funciones.calcular_disponibilidad_general(vendidas_gen, general[1])
     disponibilidad_vip = funciones.calcular_disponibilidad_general(vendidas_vip, vip[1])
@@ -362,7 +384,9 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
                     vendidas_gen += cantidad
                 else:
                     vendidas_vip += cantidad
-                print("¡TU COMPRA HA SIDO EXITOSA!".center(40, '='))
+                print("✦" + "═" * 44 + "✦")
+                print(f"✦{' ¡TU COMPRA HA SIDO EXITOSA! '.center(44, '═')}✦")
+                print("✦" + "═" * 44 + "✦")
                 funciones.encuesta_escenario(escenarios, escenarios_rankeados)
 
         funciones.pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
@@ -384,7 +408,11 @@ def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
     Recibe las estructuras de programacion del festival, los acumuladores de venta, la capacidad general y la configuracion de entradas.
     No retorna un valor; muestra los distintos informes y estadisticas del sistema segun la opcion elegida.
     """
-    print("\n1. Ranking mejores escenarios por votación\n2. Información de entradas\n3. Recaudación total\n4. Porcentaje de ocupación\n5. Escenarios con más y menos artistas asignados\n6. Salir\n")
+    print("✦" + "═" * 44 + "✦")
+    print(f"✦{' MENÚ: Estadisticas e informes '.center(44, '═')}✦")
+    print("✦" + "═" * 44 + "✦")
+    print("│ 1. Ranking mejores escenarios por votación\n│ 2. Información de entradas\n│ 3. Recaudación total\n│ 4. Porcentaje de ocupación\n│ 5. Escenarios con más y menos artistas asignados\n│ 6. Salir")
+    print("✦" + "═" * 44 + "✦")
 
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6])
 
