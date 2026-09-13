@@ -1,53 +1,69 @@
-🎵 Overpalooza
+ 🎵 Overpalooza
 
-Proyecto desarrollado en **Python** para la materia **Algoritmos y Estructuras de Datos I**.
+Proyecto integrador desarrollado en **Python** para la materia **Algoritmos y Estructuras de Datos I**.
 
 📌 Descripción
 
-**Overpalooza** es un sistema para gestionar un festival de música. Cuenta con dos menús:
+**Overpalooza** es un sistema de gestión para un festival de música, con dos áreas independientes que comparten el dominio del festival pero usan estructuras de datos propias:
 
-* **Usuario:** permite consultar información del festival, buscar artistas, consultar la grilla y comprar entradas.
-* **Administrador:** permite gestionar artistas y la programación, consultar entradas vendidas y obtener estadísticas económicas.
+* **Programación del festival:** carga de artistas, asignación a escenarios y franjas horarias, y consulta de la grilla.
+* **Venta de entradas:** comercialización de entradas General y VIP, control de disponibilidad y cálculo de indicadores económicos.
 
-🎫 Entradas
+El sistema se maneja a través de un único menú principal (no hay login ni distinción de roles).
 
-El sistema cuenta con dos tipos de entradas:
+## 🎤 Programación del festival
 
-* **General:** $100.000 — máximo 80 entradas.
-* **VIP:** $250.000 — máximo 20 entradas.
+* Hasta 30 artistas, identificados por un código único con formato `A-` + dos dígitos (ej: `A-01`).
+* 5 escenarios fijos: `McStage`, `PStage`, `FIATStage`, `FlowStage`, `SanStage`.
+* Grilla hora a hora de 13:00 a 20:00 (8 franjas horarias).
+* La programación se representa con una matriz `lineup[horario][escenario]`, donde cada celda guarda el código del artista asignado (o `""` si está libre).
+* Antes de asignar o modificar un artista en la grilla se valida, en orden: que el código exista y no esté repetido, que el escenario exista, que el horario sea válido, que el artista no esté ya programado en otro lugar, y que la combinación escenario/horario esté libre.
 
-Cada usuario puede comprar hasta **6 entradas por operación**.
+## 🎫 Entradas
 
-## 🎤 Festival
+| Tipo    | Precio    | Cupo máximo | Máx. por operación |
+|---------|-----------|-------------|---------------------|
+| General | $100.000  | 80          | 6                   |
+| VIP     | $250.000  | 20          | 6                   |
 
-* 30 artistas.
-* 5 escenarios.
-* Horarios de 13:00 a 01:00.
-* Programación organizada mediante una matriz de **horario, escenario y artista**.
+* Capacidad total del festival: 100 entradas (80 General + 20 VIP).
+* El límite de compra por operación es dinámico: es el menor entre 6 y el stock restante de esa categoría.
+* Antes de confirmar una compra se valida disponibilidad y que la cantidad sea un número entero positivo.
+* No se almacenan datos personales del comprador ni datos de pago; solo se registran tipo de entrada, cantidad e importe.
+* El sistema detecta entradas agotadas (General o VIP en 0) y avisa cuando queda menos del 20% de entradas disponibles en total.
 
-## 🔐 Administrador
+## 🔎 Búsquedas, ordenamientos y rankings
 
-El acceso al menú de administrador está protegido mediante una contraseña hardcodeada:
+* Búsqueda de artista por código o por nombre, mostrando nombre, escenario y horario asignado.
+* Listado de artistas ordenado alfabéticamente (`sorted()`).
+* Encuesta al momento de comprar: el usuario vota cuál escenario tiene el mejor lineup (1 al 5). El ranking se arma con una lista paralela a escenarios y se ordena con `.sort()` y `lambda`.
+* Uso de listas por comprensión para construir la matriz de `lineup`.
 
-```text
-admin
+## 📊 Informes
+
+1. Grilla completa del festival (escenarios × horarios × artistas).
+2. Entradas vendidas por tipo (General / VIP).
+3. Recaudación total y por tipo de entrada.
+4. Porcentaje de entradas vendidas sobre la capacidad total.
+5. Informe de entradas agotadas o con baja disponibilidad.
+
+## 📋 Menú principal
+
+```
+1. Consultar información del festival
+2. Buscar artista
+3. Consultar grilla
+4. Comprar entradas
+5. Modificar programación
+6. Estadísticas e informes
+7. Salir
 ```
 
-Desde este menú se pueden cargar y eliminar artistas, asignar escenarios y horarios, modificar la programación y consultar estadísticas y recaudación.
+## ⚙️ Restricciones de implementación
 
-📊 Estadísticas
-
-El sistema permite calcular:
-
-* Porcentaje de entradas vendidas.
-* Recaudación total.
-* Cantidad y recaudación de entradas VIP.
-* Cantidad y recaudación de entradas Generales.
-* Rankings económicos.
-
-⚙️ Validaciones
-
-El sistema valida los datos ingresados durante la compra y evita errores como datos vacíos, documentos inválidos, mails incorrectos y compras superiores a 6 entradas.
+* No se utiliza `while True` ni `try/except`.
+* No hay bases de datos, archivos, envío de mails, aplicación web ni logins.
+* Quedan fuera del alcance: pagos reales, almacenamiento de tarjetas, entradas digitales/QR, devoluciones, control de ingreso al predio y múltiples días de festival.
 
 ▶️ Ejecución
 
@@ -57,11 +73,11 @@ Clonar el repositorio:
 git clone https://github.com/iarureale/ProyectoProgramacionI.git
 ```
 
-Luego ejecutar el archivo principal del proyecto con Python.
+Luego ejecutar `main/main.py` con Python.
 
 👥 Integrantes
 
-**Programación I**
+**Algoritmos y Estructuras de Datos I**
 
 * Iara Reale
 * Macarena Prieto
