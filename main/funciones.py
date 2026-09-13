@@ -112,7 +112,7 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
     valida los datos y actualiza la matriz y las listas correspondientes.
     """
     if len(codigos) >= 30:
-        print("[AVISO] No se pueden ingresar más artistas: ya se alcanzó el límite de 30.")
+        print("[AVISO] No se pueden ingresar más artistas: ya se alcanzó el límite de 30 artistas registrados.")
         return
     
     codigo = ingresar_codigo()
@@ -122,10 +122,10 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
         codigo = ingresar_codigo()
 
     codigos.append(codigo)
-    nombre_artistico = input("Ingresar nombre del artista ingresado: ")
+    nombre_artistico = input("Ingresar nombre del artista registrado: ")
     while nombre_artistico == "" or nombre_artistico.isspace():
         print("El nombre no puede quedar vacío ni contener únicamente espacios en blanco.")
-        nombre_artistico = input("Ingresar nombre del artista: ")
+        nombre_artistico = input("Ingresar nombre del artista registrado: ")
 
     nombre_artistas.append(nombre_artistico)
 
@@ -193,7 +193,7 @@ def confirmacion_compra(ent):
     cancelarla (ingresa 2).
     """
 
-    confirmar = pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingresá 1, o 2 para salir: \n', [1, 2])
+    confirmar = pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingresá (1), o (2) para salir: \n', [1, 2])
     if confirmar == 1:
         return True
     else:
