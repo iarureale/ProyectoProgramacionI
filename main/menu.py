@@ -292,7 +292,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         print("\nLas entradas están agotadas! Muchas gracias por apoyar OVERPALOOZA")
     if disponibilidad <= 20 and disponibilidad > 0:
         print("AVISO".center(20, "-"))
-        print("Quedan menos del 20% de las entradas. ¡Consigue la tuya rápido!")
+        print("Queda menos del 20% de las entradas. ¡Consigue la tuya rápido!")
     if disponibilidad_gen == 0 and disponibilidad_vip > 0:
         print("Las entradas generales se han agotado!")
     elif disponibilidad_vip == 0 and disponibilidad_gen > 0:
@@ -334,7 +334,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
 
     elif opcion == 2:
-        print(f'\nTodavía queda el {disponibilidad:.2f}% de las entradas generales\n')
+        print(f'\nTodavía queda el {disponibilidad:.2f}% de las entradas\n')
         funciones.pedir_opcion_valida("\nIngresar 3 para volver al menu anterior: \n", [3])
         menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
 

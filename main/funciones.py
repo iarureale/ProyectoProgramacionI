@@ -33,7 +33,7 @@ def encuesta_escenario(escenarios, escenarios_rankeados):
     for i in range(len(escenarios)):
         print(f'{i+1}. {escenarios[i]}')
 
-    votar = pedir_opcion_valida("\nVotá el escenario por el cual estas mas emocionado/a por ir: ", [1, 2, 3, 4, 5])
+    votar = pedir_opcion_valida("\nVotá el escenario por el escenario que más te gustaria ir: ", [1, 2, 3, 4, 5])
     escenarios_rankeados[votar-1] = escenarios_rankeados[votar-1] + 1
 
     print("¡VOTO REGISTRADO!".center(40, "★"))
@@ -98,10 +98,10 @@ def validar_horario_escenario(lineup, horario, escenario):
     return escenario, horario
 
 def ingresar_codigo():
-    codigo = input("Ingresar codigo del artista a insertar: ").upper()
+    codigo = input("Ingresar codigo del artista a registrar: ").upper()
     while not validar_codigo(codigo):
-        print("[ERROR] Código inválido. Por favor, ingresé un código con el formato 'A-XX'.")
-        codigo = input("Ingresar codigo del artista a insertar: ").upper()
+        print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
+        codigo = input("Ingresar codigo del artista a registrar: ").upper()
     return codigo
 
 
@@ -190,7 +190,7 @@ def confirmacion_compra(ent):
     cancelarla (ingresa 2).
     """
 
-    confirmar = pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingrese 1. De lo contrario, ingrese 2 para salir: \n', [1, 2])
+    confirmar = pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {ent} entradas. Para confirmar su compra, ingresá 1, o 2 para salir: \n', [1, 2])
     if confirmar == 1:
         return True
     else:
