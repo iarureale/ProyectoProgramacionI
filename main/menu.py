@@ -26,7 +26,7 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
     print('1. Consultar información del festival \n2. Buscar artista\n3. Consultar grilla \n4. Comprar entradas \n5. Modificar programación\n6. Estadísticas e informes\n7. Salir')
     print("=" * 20)
 
-    opcion = funciones.pedir_opcion_valida("Elegir opcion (7 para finalizar): ", [1, 2, 3, 4, 5, 6, 7])
+    opcion = funciones.pedir_opcion_valida("Elegir opción (7 para finalizar): ", [1, 2, 3, 4, 5, 6, 7])
 
     if opcion == 1:
         consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
@@ -193,7 +193,7 @@ def elegir_artista_a_modificar(lineup, nombre_artistas, codigos, tot, venta_tot,
     decidió salir (ingresando '2').
     """
     if modificar_artista is None:
-        modificar_artista = input("Ingresar codigo del artista a modificar, o (2) para salir: ").upper()
+        modificar_artista = input("Ingresar código del artista a modificar, o (2) para salir: ").upper()
 
     if modificar_artista == '2':
         modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
@@ -205,7 +205,7 @@ def elegir_artista_a_modificar(lineup, nombre_artistas, codigos, tot, venta_tot,
             print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
         else:
             print('[ERROR] El código ingresado no se encuentra registrado. Por favor, ingrese un código válido.\n')
-        nuevo_codigo = input("Ingresar codigo del artista a modificar: ").upper()
+        nuevo_codigo = input("Ingresar código del artista a modificar: ").upper()
         return elegir_artista_a_modificar(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados, nuevo_codigo)
 
 def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados):
