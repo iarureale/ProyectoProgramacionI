@@ -33,7 +33,7 @@ def encuesta_escenario(escenarios, escenarios_rankeados):
     for i in range(len(escenarios)):
         print(f'{i+1}. {escenarios[i]}')
 
-    votar = pedir_opcion_valida("\nVotá el escenario por el escenario que más te gustaria ir: ", [1, 2, 3, 4, 5])
+    votar = pedir_opcion_valida("\nVotá el escenario por el que más te entusiasma ir: ", [1, 2, 3, 4, 5])
     escenarios_rankeados[votar-1] = escenarios_rankeados[votar-1] + 1
 
     print("¡VOTO REGISTRADO!".center(40, "★"))
