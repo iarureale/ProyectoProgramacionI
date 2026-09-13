@@ -297,7 +297,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         print("Las entradas generales se han agotado!")
     elif disponibilidad_vip == 0 and disponibilidad_gen > 0:
         print("AVISO".center(20, "-"))
-        print("Las entradas VIP se han agotado!")
+        print("¡Las entradas VIP se han agotado!")
 
     print("\n1. Comprar entradas\n2. Chequear disponibilidad\n3. Salir\n")
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3])
@@ -307,27 +307,27 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
             print("\nLas entradas están agotadas! Muchas gracias por apoyar OVERPALOOZA")
         else:
             print(f'\nGeneral: ${entradas[0][0]} \nVIP: ${entradas[1][0]}')
-            print("\nQue tipo de entradas queres comprar?")
+            print("\n¿Que tipo de entradas queres comprar?")
             print("1. General\n2. VIP\n")
             tipo = funciones.pedir_opcion_valida("Ingresar: ", [1, 2])
 
             if tipo == 1:
                 if disponibilidad_gen == 0:
-                    print("\nLas entradas generales se han agotado!")
+                    print("\n¡Las entradas generales se han agotado!")
                 else:
                     tot, venta_tot, vendidas_gen, vendidas_vip, exito = funciones.comprar_entradas(
                         tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
                     if exito:
-                        print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
+                        print("¡TU COMPRA HA SIDO EXITOSA!".center(40, '='))
                         funciones.encuesta_escenario(escenarios, escenarios_rankeados)
             elif tipo == 2:
                 if disponibilidad_vip == 0:
-                    print("\nLas entradas VIP se han agotado!")
+                    print("\n¡Las entradas VIP se han agotado!")
                 else:
                     tot, venta_tot, vendidas_gen, vendidas_vip, exito = funciones.comprar_entradas(
                         tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
                     if exito:
-                        print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
+                        print("¡TU COMPRA HA SIDO EXITOSA!".center(40, '='))
                         funciones.encuesta_escenario(escenarios, escenarios_rankeados)
 
         funciones.pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: \n", [1])
