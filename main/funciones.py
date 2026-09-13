@@ -294,7 +294,7 @@ def imprimir_artistas_ordenados(nombre_artistas):
     """
     artistas_ordenados = sorted(nombre_artistas, key=str.lower) # Usamos key ya que sorted no distingue bien mayúsculas y minúsculas.
     for a in range(len(artistas_ordenados)):
-        print(f"★ {artistas_ordenados[a]}")
+        print(f"★  {artistas_ordenados[a]}")
 
 def chequear_artista(lineup, modificar):
     '''
