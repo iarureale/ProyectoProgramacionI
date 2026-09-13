@@ -98,6 +98,10 @@ def validar_horario_escenario(lineup, horario, escenario):
     return escenario, horario
 
 def ingresar_codigo():
+    """
+    Solicita por teclado el código del artista y valida que cumpla con el formato 'A-XX'.
+    Retorna el código validado en mayúsculas.
+    """
     codigo = input("Ingresar codigo del artista a registrar: ").upper()
     while not validar_codigo(codigo):
         print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
