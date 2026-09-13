@@ -97,6 +97,14 @@ def validar_horario_escenario(lineup, horario, escenario):
 
     return escenario, horario
 
+def ingresar_codigo():
+    codigo = input("Ingresar codigo del artista a insertar: ").upper()
+    while not validar_codigo(codigo):
+        print("[ERROR] Código inválido. Por favor, ingresé un código con el formato 'A-XX'.")
+        codigo = input("Ingresar codigo del artista a insertar: ").upper()
+    return codigo
+
+
 def ingresar_artista(lineup, nombre_artistas, codigos):
     """
     Recibe la matriz lineup y las listas de nombres y codigos de artistas.
@@ -107,14 +115,11 @@ def ingresar_artista(lineup, nombre_artistas, codigos):
         print("[AVISO] No se pueden ingresar más artistas: ya se alcanzó el límite de 30.")
         return
     
-    codigo = input("Ingresar codigo del artista a insertar: ").upper()
-    while not validar_codigo(codigo):
-        print("[ERROR] Código inválido. Por favor, ingresé un código con el formato 'A-XX'.")
-        codigo = input("Ingresar codigo del artista a insertar: ").upper()
+    codigo = ingresar_codigo()
 
     while artista_ya_ingresado(codigo, codigos):
         print(f'[AVISO] El código {codigo} ya está ingresado en el lineup. Por favor, ingrese uno distinto.')
-        codigo = input("Ingresar artista a insertar: ").upper()
+        codigo = ingresar_codigo()
 
     codigos.append(codigo)
     nombre_artistico = input("Ingresar nombre del artista ingresado: ")
