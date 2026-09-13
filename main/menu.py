@@ -320,6 +320,11 @@ def pedir_cantidad_entradas(limite):
     return cantidad
 
 def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios):
+    """
+    Recibe los acumuladores de venta, las configuraciones de entradas, la capacidad total, el límite de compra por operación y las estructuras de artistas y escenarios.
+    No retorna un valor; gestiona la compra de entradas General y VIP, chequea la disponibilidad 
+    restante y llama a la encuesta de escenarios tras una operación exitosa.
+    """
     print("✦" + "═" * 44 + "✦")
     print(f"✦{' MENÚ: Comprar entradas '.center(44, '═')}✦")
     print("✦" + "═" * 44 + "✦")
