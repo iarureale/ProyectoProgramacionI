@@ -280,7 +280,7 @@ def pedir_cantidad_entradas(limite):
     Pide por teclado la cantidad de entradas a comprar, validando formato y límite.
     Retorna la cantidad válida ingresada.
     """
-    print("\nIngrese la cantidad de entradas a comprar.")
+    print("\nIngrese la cantidad de entradas que desea comprar.")
     entrada_usuario = input("Ingresar: ")
     while not funciones.es_cantidad_valida(entrada_usuario):
         print("[ERROR] No fue posible realizar la compra. La cantidad ingresada no es un número válido.")
