@@ -341,3 +341,30 @@ def chequear_artista(lineup, modificar):
         return False
     else:
         return True
+
+def contar_artistas_escenario(lineup, escenarios):
+    """
+    Recibe la matriz lineup y la tupla de escenarios.
+    Retorna una lista con la cantidad de artistas asignados a cada escenario (mismo orden que escenarios).
+    """
+    conteo = [0] * len(escenarios)
+
+    for f in range(len(lineup)):
+        for c in range(len(lineup[f])):
+            if lineup[f][c] != ".":
+                conteo[c] += 1
+    return conteo
+
+def escenario_extremo(escenarios, conteo):
+    """
+    Recibe la tupla de escenarios y la lista de conteo.
+    Retorna: valor_max, lista de escenarios empatados en el máximo,
+             valor_min, lista de escenarios empatados en el mínimo.
+    """
+    valor_max = max(conteo)
+    valor_min = min(conteo)
+
+    escenarios_max = [escenarios[i] for i in range(len(escenarios)) if conteo[i] == valor_max]
+    escenarios_min = [escenarios[i] for i in range(len(escenarios)) if conteo[i] == valor_min]
+
+    return valor_max, escenarios_max, valor_min, escenarios_min

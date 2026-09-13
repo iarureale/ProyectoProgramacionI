@@ -35,7 +35,7 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
         estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas, escenarios_rankeados)
     elif opcion == 7:
         print("="*60)
-        print('Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
+        print('¡Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
         print("="*60)
 
 def consultar_informacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados):
@@ -346,17 +346,23 @@ def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
     Recibe las estructuras de programacion del festival, los acumuladores de venta, la capacidad general y la configuracion de entradas.
     No retorna un valor; muestra los distintos informes y estadisticas del sistema segun la opcion elegida.
     """
-    print("\n1. Ranking mejores escenarios por votación\n2. Información de entradas\n3. Recaudación total\n4. Porcentaje de ocupación\n5. Salir\n")
+    print("\n1. Ranking mejores escenarios por votación\n2. Información de entradas\n3. Recaudación total\n4. Porcentaje de ocupación\n5. Escenarios con más y menos artistas asignados\n6. Salir\n")
 
-    opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5])
+    opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6])
 
-    if opcion == 5:
+    if opcion == 6:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
     else:
         if opcion == 1:
+            print("=" * 50)
+            print("RANKING DE MEJORES ESCENARIOS POR VOTACIÓN".center(50, "-"))
+            print("=" * 50, "\n")
             print("Los mejores escenarios elegidos por votación son:")
             funciones.mostrar_ranking(escenarios, escenarios_rankeados)
         elif opcion == 2:
+            print("=" * 50)
+            print("INFORMACIÓN DE ENTRADAS".center(50, "-"))
+            print("=" * 50, "\n")
             precio_general = entradas[0][0]
             precio_vip = entradas[1][0]
             rec_gen = vendidas_gen * precio_general
@@ -364,10 +370,31 @@ def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
             print(f"General vendidas: {vendidas_gen}\nRecaudación General: ${rec_gen}")
             print(f'VIP vendidas: {vendidas_vip}\nRecaudación VIP: ${rec_vip}\n')
         elif opcion == 3:
-            print(f"Recaudación total: ${venta_tot}")
+            print("=" * 50)
+            print("RECAUDACION TOTAL".center(50, "-"))
+            print("=" * 50, "\n")
+            print(f"La recaudación total es de: ${venta_tot}")
         elif opcion == 4:
+            print("=" * 50)
+            print("PORCENTAJE DE OCUPACIÓN".center(50, "-"))
+            print("=" * 50, "\n")
             porcentaje = 100 - funciones.calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
             print(f"Porcentaje de ocupación: {porcentaje:.2f}%")
+        elif opcion == 5:
+            print("=" * 50)
+            print("ESCENARIOS CON MÁS Y MENOS ARTISTAS ASIGNADOS".center(50, "-"))
+            print("=" * 50, "\n")
+
+            conteo = funciones.contar_artistas_escenario(lineup, escenarios)
+            valor_max, escenarios_max, valor_min, escenarios_min = funciones.escenario_extremo(escenarios, conteo)
+
+            print(f"Escenario/s con más artistas ({valor_max} artistas):")
+            for nombre in escenarios_max:
+                print(f"✦ {nombre}")
+
+            print(f"\nEscenario/s con menos artistas ({valor_min} artistas):")
+            for nombre in escenarios_min:
+                print(f"✦ {nombre}")
 
         volver = funciones.pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
         if volver == 1:
