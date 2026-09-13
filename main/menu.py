@@ -262,6 +262,9 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
 
                 elif modificar_datos == 2:
                     nombre = input("Ingresar el nombre nuevo: ")
+                    while nombre == "" or nombre.isspace():
+                        print("[ERROR] El nombre no puede quedar vacío ni contener únicamente espacios en blanco.")
+                        nombre = input("Ingresar el nombre nuevo: ")
                     nombre_artistas[indice] = nombre
                     print(f"El nombre del artista {codigos[indice]} fue actualizado a {nombre}.")
                     volver = funciones.pedir_opcion_valida("ingresar (1) para volver al menú anterior: ", [1])
