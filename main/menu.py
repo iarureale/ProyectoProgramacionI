@@ -307,7 +307,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
     disponibilidad_gen = funciones.calcular_disponibilidad_general(vendidas_gen, general[1])
     disponibilidad_vip = funciones.calcular_disponibilidad_general(vendidas_vip, vip[1])
 
-    if disponibilidad == 0:
+    if disponibilidad <= 0:
         print("=" * 50)
         print("¡Las entradas están agotadas!".center(50,"-"))
         print("Muchas gracias por apoyar OVERPALOOZA".center(50,"-"))
@@ -318,11 +318,11 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         print("=" * 50, "\n")
         print("Quedan menos del 20% de las entradas".center(50,"-"))
         print("¡Consigue la tuya rápido!".center(50,"-"),"\n")
-    if disponibilidad_gen == 0 and disponibilidad_vip > 0:
+    if disponibilidad_gen <= 0 and disponibilidad_vip > 0:
         print("=" * 50, "\n")
         print("¡Las entradas generales se han agotado!".center(50,"-"),"\n")
         print("=" * 50)
-    elif disponibilidad_vip == 0 and disponibilidad_gen > 0:
+    elif disponibilidad_vip <= 0 and disponibilidad_gen > 0:
         print("=" * 50, "\n")
         print("¡Las entradas VIP se han agotado!".center(50,"-"),"\n")
         print("=" * 50)
@@ -345,7 +345,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
             disponibilidad_tipo = disponibilidad_vip
             nombre_tipo = "vip"
 
-        if disponibilidad_tipo == 0:
+        if disponibilidad_tipo <= 0:
             print("\n", "=" * 50, "\n")
             print(f"Las entradas {nombre_tipo} se han agotado!".center(50,"-"),"\n")
             print("=" * 50)
