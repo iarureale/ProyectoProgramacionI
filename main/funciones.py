@@ -7,7 +7,7 @@ def pedir_opcion_valida(mensaje, opciones_validas):
     opcion = input(mensaje)
 
     while not opcion.isdigit() or int(opcion) not in opciones_validas:
-        print('\n[ERROR] Opcion inválida. Por favor, seleccione una opción disponible.')
+        print('\n[ERROR] Opción inválida. Por favor, seleccione una opción disponible.')
         opcion = input(mensaje)
 
     return int(opcion)
@@ -107,7 +107,7 @@ def ingresar_codigo():
     codigo = input("Ingresar codigo del artista a registrar: ").upper()
     while not validar_codigo(codigo):
         print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
-        codigo = input("Ingresar codigo del artista a registrar: ").upper()
+        codigo = input("Ingresar código del artista a registrar: ").upper()
     return codigo
 
 
@@ -317,7 +317,7 @@ def chequear_artista(lineup, modificar):
             libres += 1
 
     if libres == 0:
-        print("Todos los horarios del escenario están ocupados.")
+        print("\n[AVISO]Todos los horarios del escenario están ocupados.")
         return False
     else:
         return True
