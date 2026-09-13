@@ -264,7 +264,7 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
                     nombre = input("Ingresar el nombre nuevo: ")
                     nombre_artistas[indice] = nombre
                     print(f"El nombre del artista {codigos[indice]} fue actualizado a {nombre}.")
-                    volver = funciones.pedir_opcion_valida("ingresar (1) para volver al menú anterior: ", [1])
+                    volver = funciones.pedir_opcion_valida("Ingresar (1) para volver al menú anterior: ", [1])
                     if volver == 1:
                         modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
                 elif modificar_datos == 3:
@@ -277,7 +277,7 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
                         lineup[horario_viejo-1][escenario_viejo-1] = '.'
                         lineup[horario_nuevo-1][escenario_viejo-1] = modificar_artista
                         print(f"El artista {modificar_artista} fue reasignado al horario {horario_nuevo}.")
-                    volver = funciones.pedir_opcion_valida("ingresar (1) para volver al menú anterior: ", [1])
+                    volver = funciones.pedir_opcion_valida("Ingresar (1) para volver al menú anterior: ", [1])
                     if volver == 1:
                         modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
                 elif modificar_datos == 4:
@@ -290,7 +290,7 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
                     lineup[horario_viejo-1][escenario_nuevo-1] = modificar_artista
                     print(f"El artista {modificar_artista} fue reasignado al escenario {escenario_nuevo}.")
 
-                    volver = funciones.pedir_opcion_valida("ingresar (1) para volver al menú anterior: ", [1])
+                    volver = funciones.pedir_opcion_valida("Ingresar (1) para volver al menú anterior: ", [1])
                     if volver == 1:
                         modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
 
@@ -372,14 +372,14 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
 
         if disponibilidad_tipo <= 0:
             print(f"{'=' * 50}\n")
-            print(f"Las entradas {nombre_tipo} se han agotado!".center(50,"-"))
+            print(f"¡Las entradas {nombre_tipo} se han agotado!".center(50,"-"))
             print(f"\n{'=' * 50}")
 
         else:
             limite = funciones.calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_operacion)
             cantidad = pedir_cantidad_entradas(limite)
 
-            confirmar = funciones.pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {cantidad} entrada(s). Para confirmar su compra, ingrese (1). De lo contrario, ingrese (2) para salir: ',[1, 2])
+            confirmar = funciones.pedir_opcion_valida(f'\n[ATENCION] Estás por comprar {cantidad} entrada(s). Para confirmar su compra, ingrese (1). De lo contrario, ingrese (2) para salir: ',[1, 2])
 
             if confirmar == 1:
                 importe = funciones.calcular_importe_compra(tipo, entradas, cantidad)
@@ -414,7 +414,7 @@ def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
     No retorna un valor; muestra los distintos informes y estadisticas del sistema segun la opcion elegida.
     """
     print("✦" + "═" * 44 + "✦")
-    print(f"✦{' MENÚ: Estadisticas e informes '.center(44, '═')}✦")
+    print(f"✦{' MENÚ: Estadísticas e informes '.center(44, '═')}✦")
     print("✦" + "═" * 44 + "✦")
     print("│ 1. Ranking mejores escenarios por votación\n│ 2. Información de entradas\n│ 3. Recaudación total\n│ 4. Porcentaje de ocupación\n│ 5. Escenarios con más y menos artistas asignados\n│ 6. Salir")
     print("✦" + "═" * 44 + "✦")
@@ -442,7 +442,7 @@ def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
             print(f'VIP vendidas: {vendidas_vip}\nRecaudación VIP: ${rec_vip}\n')
         elif opcion == 3:
             print("=" * 50)
-            print("RECAUDACION TOTAL".center(50, "-"))
+            print("RECAUDACIÓN TOTAL".center(50, "-"))
             print("=" * 50, "\n")
             print(f"La recaudación total es de: ${venta_tot}")
         elif opcion == 4:
