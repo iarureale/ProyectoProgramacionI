@@ -420,11 +420,11 @@ def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
                 if valor_max == valor_min:
                     print(f"¡Qué coincidencia! Todos los escenarios cuentan con la misma cantidad de artistas asignados ({valor_max} artista(s) cada uno).")
                 else:
-                    print(f"Escenario/s con más artistas ({valor_max} artista(s):")
+                    print(f"Escenario/s con más artistas ({valor_max} artista(s)):")
                     for nombre in escenarios_max:
                         print(f"✦ {nombre}")
 
-                    print(f"\nEscenario/s con menos artistas ({valor_min} artista(s):")
+                    print(f"\nEscenario/s con menos artistas ({valor_min} artista(s)):")
                     for nombre in escenarios_min:
                         print(f"✦ {nombre}")
 
