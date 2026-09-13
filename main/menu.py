@@ -309,20 +309,20 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         print("=" * 50)
         print("¡Las entradas están agotadas!".center(50,"-"))
         print("Muchas gracias por apoyar OVERPALOOZA".center(50,"-"))
-        print("=" * 50, "\n")
+        print("=" * 50)
     if disponibilidad <= 20 and disponibilidad > 0:
         print("=" * 50)
         print("AVISO".center(50, "-"))
-        print("=" * 50, "\n")
+        print("=" * 50)
         print("Quedan menos del 20% de las entradas".center(50,"-"))
-        print("¡Consigue la tuya rápido!".center(50,"-"),"\n")
+        print("¡Consigue la tuya rápido!".center(50,"-"))
     if disponibilidad_gen <= 0 and disponibilidad_vip > 0:
-        print("=" * 50, "\n")
-        print("¡Las entradas generales se han agotado!".center(50,"-"),"\n")
+        print("=" * 50)
+        print("¡Las entradas generales se han agotado!".center(50,"-"))
         print("=" * 50)
     elif disponibilidad_vip <= 0 and disponibilidad_gen > 0:
-        print("=" * 50, "\n")
-        print("¡Las entradas VIP se han agotado!".center(50,"-"),"\n")
+        print("=" * 50)
+        print("¡Las entradas VIP se han agotado!".center(50,"-"))
         print("=" * 50)
 
     print("\n1. Comprar entradas\n2. Chequear disponibilidad\n3. Salir\n")
@@ -344,9 +344,9 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
             nombre_tipo = "vip"
 
         if disponibilidad_tipo <= 0:
-            print("\n", "=" * 50, "\n")
-            print(f"Las entradas {nombre_tipo} se han agotado!".center(50,"-"),"\n")
-            print("=" * 50)
+            print(f"{'=' * 50}\n")
+            print(f"Las entradas {nombre_tipo} se han agotado!".center(50,"-"))
+            print(f"\n{'=' * 50}")
 
         else:
             limite = funciones.calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_operacion)
