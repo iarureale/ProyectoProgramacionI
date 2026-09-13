@@ -107,11 +107,9 @@ def menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendid
                     menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios, escenarios_rankeados)
                 else:
                     nombre, escenario, horario = funciones.buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios)
-
-                    if escenario != ".":
-                        print(f"\nArtista: {nombre}")
-                        print(f"Escenario: {escenario}")
-                        print(f"Horario: {horario}")
+                    print(f"\nArtista: {nombre}")
+                    print(f"Escenario: {escenario}")
+                    print(f"Horario: {horario}")
 
                     funciones.pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
                     menu_buscar_artista(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios, horarios, escenarios_rankeados)
@@ -375,7 +373,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         print("DISPONIBILIDAD".center(50, "-"))
         print("=" * 50)
         print(f'\nTodavía queda el {disponibilidad:.2f}% de las entradas.')
-        funciones.pedir_opcion_valida("\nIngresar (3) para volver al menu anterior: ", [3])
+        funciones.pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
         menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
 
     elif opcion == 3:
