@@ -314,3 +314,22 @@ def imprimir_artistas_ordenados(nombre_artistas):
     for a in range(len(artistas_ordenados)):
         print(f"★ {artistas_ordenados[a]}")
 
+def chequear_artista(lineup, modificar):
+    '''
+    Recorre toda la matriz para encontrar el escenario del artista y despues recorre los horarios para verificar si hay lugar libre.
+    Retorna una bandera booleana si hay lugar libre.
+    '''
+    for f in range(len(lineup)):
+        for c in range(len(lineup[f])):
+            if lineup[f][c] == modificar:
+                escenario = c
+    libres = 0
+    for f in range(len(lineup)):
+        if lineup[f][escenario] == '.':
+            libres += 1
+
+    if libres == 0:
+        print("Todos los horarios del escenario estan ocupados.")
+        return False
+    else:
+        return True

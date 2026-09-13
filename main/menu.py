@@ -153,6 +153,48 @@ def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot
     elif opcion == 2:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
 
+def registrar_artistas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados, registrados=0):
+    """
+    Recibe las mismas estructuras que modificar_programacion, mas un contador de artistas
+    registrados en esta tanda (arranca en 0).
+    No retorna un valor.
+    """
+    if registrados >= 30:
+        print("[AVISO] No se pueden ingresar más artistas: ya se alcanzó el límite de 30.")
+        modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
+    else:
+        funciones.ingresar_artista(lineup, nombre_artistas, codigos)
+        print("\nPara continuar ingresando artistas, presione 1. Para detener el registro, presione 3.")
+        volver = funciones.pedir_opcion_valida('Ingresar:', [1, 3])
+
+        if volver == 3:
+            modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
+        else:
+            registrar_artistas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados, registrados + 1)
+
+def elegir_artista_a_modificar(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados, modificar_artista=None):
+    """
+    Recibe las mismas estructuras que modificar_programacion, mas el código ya tipeado (o None
+    la primera vez, en cuyo caso se pide por teclado).
+    Retorna el código válido y ya registrado que ingresó el usuario, o None si el usuario
+    decidió salir (ingresando '2').
+    """
+    if modificar_artista is None:
+        modificar_artista = input("Ingresar codigo del artista a modificar (2 para salir): ").upper()
+
+    if modificar_artista == '2':
+        modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
+        return None
+    elif funciones.validar_codigo(modificar_artista) and modificar_artista in codigos:
+        return modificar_artista
+    else:
+        if not funciones.validar_codigo(modificar_artista):
+            print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
+        else:
+            print('[ERROR] El código ingresado no se encuentra registrado. Por favor, ingrese un código válido.\n')
+        nuevo_codigo = input("Ingresar codigo del artista a modificar: ").upper()
+        return elegir_artista_a_modificar(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados, nuevo_codigo)
+
 def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados):
     """
     Recibe la matriz lineup, las listas de artistas y codigos, los acumuladores de venta y las tuplas de horarios y escenarios.
@@ -162,97 +204,75 @@ def modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, ven
     print('\n1. Registrar artista\n2. Modificar artista\n3. Salir\n')
 
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3])
-    registrados = 0
 
     if opcion == 1:
         print("MENÚ: Registrar artista")
-        while registrados < 30:
-            funciones.ingresar_artista(lineup, nombre_artistas, codigos)
-            registrados +=1
-            print("\nPara continuar ingresando artistas, presione 1. Para detener el registro, presione 3.")
-            volver = funciones.pedir_opcion_valida('Ingresar:', [1, 3])
-
-            if volver == 3:
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
-                return
+        registrar_artistas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
     elif opcion == 2:
         print("MENU: Modificar artista\n")
         if not codigos:
             print("[AVISO] Todavía no se ha registrado ningún artista.\n")
             funciones.pedir_opcion_valida("Volver al menu principal (1): ", [1])
             modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
-            return
-        for i in range(len(codigos)):
-            print(f'Artista {i+1}: {codigos[i]} - {nombre_artistas[i]}\n')
-        modificar_artista = input("Ingresar codigo del artista a modificar (2 para salir): ").upper()
+        else:
+            for i in range(len(codigos)):
+                print(f'Artista {i+1}: {codigos[i]} - {nombre_artistas[i]}\n')
 
+            modificar_artista = elegir_artista_a_modificar(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
 
+            if modificar_artista is not None:
+                indice = codigos.index(modificar_artista)
+                print('Ingresar el número del dato a modificar:\n1. Modificar código del artista\n2. Cambiar nombre del artista\n3. Cambiar horario\n4. Cambiar escenario')
 
-        while not funciones.validar_codigo(modificar_artista) or modificar_artista not in codigos:
-            if modificar_artista == '2':
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
-                return
-            elif not funciones.validar_codigo(modificar_artista):
-                print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
-            else:
-                print('[ERROR] El código ingresado no se encuentra registrado. Por favor, ingrese un código válido.\n')
-            modificar_artista = input("Ingresar codigo del artista a modificar: ").upper()
-            if modificar_artista == '2':
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
-                return
+                modificar_datos = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4])
+                if modificar_datos == 1:
+                    codigo_nuevo = (input("Ingresar codigo nuevo: ")).upper()
+                    while not funciones.validar_codigo(codigo_nuevo) or funciones.artista_ya_ingresado(codigo_nuevo, codigos):
+                        if not funciones.validar_codigo(codigo_nuevo):
+                            print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
+                        else:
+                            print(f"[ERROR] El código {codigo_nuevo} ya está en uso por otro artista.")
+                        codigo_nuevo = input("Ingresar codigo nuevo: ").upper()
+                    funciones.cambiar_artista(lineup, codigos, indice, codigo_nuevo)
+                    print(f"El código del artista {nombre_artistas[indice]} fue actualizado a {codigo_nuevo}.")
 
-        indice = codigos.index(modificar_artista)
-        print('Ingresar el número del dato a modificar:\n1. Modificar código del artista\n2. Cambiar nombre del artista\n3. Cambiar horario\n4. Cambiar escenario')
+                    volver = funciones.pedir_opcion_valida("Volver al menu anterior (1): ", [1])
+                    if volver == 1:
+                        modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
 
-        modificar_datos = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4])
-        if modificar_datos == 1:
-            codigo_nuevo = (input("Ingresar codigo nuevo: ")).upper()
-            while not funciones.validar_codigo(codigo_nuevo) or funciones.artista_ya_ingresado(codigo_nuevo, codigos):
-                if not funciones.validar_codigo(codigo_nuevo):
-                    print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
-                else:
-                    print(f"[ERROR] El código {codigo_nuevo} ya está en uso por otro artista.")
-                codigo_nuevo = input("Ingresar codigo nuevo: ").upper()
-            funciones.cambiar_artista(lineup, codigos, indice, codigo_nuevo)
-            print(f"El código del artista {nombre_artistas[indice]} fue actualizado a {codigo_nuevo}.")
+                elif modificar_datos == 2:
+                    nombre = input("Ingresar el nombre nuevo: ")
+                    nombre_artistas[indice] = nombre
+                    print(f"El nombre del artista {codigos[indice]} fue actualizado a {nombre}.")
+                    volver = funciones.pedir_opcion_valida("Volver al menu anterior (1): ", [1])
+                    if volver == 1:
+                        modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
+                elif modificar_datos == 3:
+                    horario_viejo, escenario_viejo = funciones.buscar_posicion_en_lineup(lineup, modificar_artista)
+                    verificacion = funciones.chequear_artista(lineup, modificar_artista)
+                    if verificacion:
+                        horario_nuevo = funciones.pedir_opcion_valida("Ingresar el horario nuevo: ", [1, 2, 3, 4, 5, 6, 7, 8])
+                        horario_nuevo = funciones.validar_horario(horario_nuevo, lineup, escenario_viejo)
 
-            volver = funciones.pedir_opcion_valida("Volver al menu anterior (1): ", [1])
-            if volver == 1:
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
+                        lineup[horario_viejo-1][escenario_viejo-1] = '.'
+                        lineup[horario_nuevo-1][escenario_viejo-1] = modificar_artista
+                        print(f"El artista {modificar_artista} fue reasignado al horario {horario_nuevo}.")
+                    volver = funciones.pedir_opcion_valida("Volver al menu anterior (1): ", [1])
+                    if volver == 1:
+                        modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
+                elif modificar_datos == 4:
+                    horario_viejo, escenario_viejo = funciones.buscar_posicion_en_lineup(lineup, modificar_artista)
 
-        elif modificar_datos == 2:
-            nombre = input("Ingresar el nombre nuevo: ")
-            nombre_artistas[indice] = nombre
-            print(f"El nombre del artista {codigos[indice]} fue actualizado a {nombre}.")
-            volver =funciones.pedir_opcion_valida("Volver al menu anterior (1): ", [1])
-            if volver == 1:
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
-        elif modificar_datos == 3:
-            horario_viejo, escenario_viejo = funciones.buscar_posicion_en_lineup(lineup, modificar_artista)
+                    escenario_nuevo = funciones.pedir_opcion_valida("Ingresar el escenario nuevo: ", [1, 2, 3, 4, 5])
+                    escenario_nuevo = funciones.validar_escenario(escenario_nuevo, lineup, horario_viejo)
 
-            horario_nuevo = funciones.pedir_opcion_valida("Ingresar el horario nuevo: ", [1, 2, 3, 4, 5, 6, 7, 8])
-            horario_nuevo = funciones.validar_horario(horario_nuevo, lineup, escenario_viejo)
+                    lineup[horario_viejo-1][escenario_viejo-1] = '.'
+                    lineup[horario_viejo-1][escenario_nuevo-1] = modificar_artista
+                    print(f"El artista {modificar_artista} fue reasignado al escenario {escenario_nuevo}.")
 
-            lineup[horario_viejo-1][escenario_viejo-1] = '.'
-            lineup[horario_nuevo-1][escenario_viejo-1] = modificar_artista
-            print(f"El artista {modificar_artista} fue reasignado al horario {horario_nuevo}.")
-
-            volver = funciones.pedir_opcion_valida("Volver al menu anterior (1): ", [1])
-            if volver == 1:
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
-        elif modificar_datos == 4:
-            horario_viejo, escenario_viejo = funciones.buscar_posicion_en_lineup(lineup, modificar_artista)
-        
-            escenario_nuevo = funciones.pedir_opcion_valida("Ingresar el escenario nuevo: ", [1, 2, 3, 4, 5])
-            escenario_nuevo = funciones.validar_escenario(escenario_nuevo, lineup, horario_viejo)
-        
-            lineup[horario_viejo-1][escenario_viejo-1] = '.'
-            lineup[horario_viejo-1][escenario_nuevo-1] = modificar_artista
-            print(f"El artista {modificar_artista} fue reasignado al escenario {escenario_nuevo}.")
-        
-            volver = funciones.pedir_opcion_valida("Volver al menu anterior (1): ", [1])
-            if volver == 1:
-                modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
+                    volver = funciones.pedir_opcion_valida("Volver al menu anterior (1): ", [1])
+                    if volver == 1:
+                        modificar_programacion(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados)
 
     elif opcion == 3:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
@@ -263,21 +283,21 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
     el maximo por operacion y las estructuras de programacion del festival.
     No retorna un valor; gestiona la compra de entradas General y VIP y muestra la disponibilidad restante, permitiendo volver al menú principal.
     """
-
     print("\nMENU: Comprar entradas")
     disponibilidad = funciones.calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
     disponibilidad_gen = funciones.calcular_disponibilidad_general(vendidas_gen, general[1])
     disponibilidad_vip = funciones.calcular_disponibilidad_general(vendidas_vip, vip[1])
+
     if disponibilidad == 0:
-        print(("\nLas entradas están agotadas! Muchas gracias por apoyar OVERPALOOZA"))
-    if disponibilidad <=20 and disponibilidad > 0:
+        print("\nLas entradas están agotadas! Muchas gracias por apoyar OVERPALOOZA")
+    if disponibilidad <= 20 and disponibilidad > 0:
         print("AVISO".center(20, "-"))
-        print(f"Quedan menos del 20% de las entradas. ¡Consigue la tuya rápido!")
+        print("Quedan menos del 20% de las entradas. ¡Consigue la tuya rápido!")
     if disponibilidad_gen == 0 and disponibilidad_vip > 0:
-        print(f"Las entradas generales se han agotado!")
-    elif disponibilidad_vip == 0 and disponibilidad_gen > 0: 
+        print("Las entradas generales se han agotado!")
+    elif disponibilidad_vip == 0 and disponibilidad_gen > 0:
         print("AVISO".center(20, "-"))
-        print(f"Las entradas VIP se han agotado!")
+        print("Las entradas VIP se han agotado!")
 
     print("\n1. Comprar entradas\n2. Chequear disponibilidad\n3. Salir\n")
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3])
@@ -285,46 +305,41 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
     if opcion == 1:
         if disponibilidad <= 0:
             print("\nLas entradas están agotadas! Muchas gracias por apoyar OVERPALOOZA")
-            funciones.pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: \n", [1])
-            menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
-            return
-        print(f'\nGeneral: ${entradas[0][0]} \nVIP: ${entradas[1][0]}')
-        print("\nQue tipo de entradas queres comprar?")
-        print("1. General\n2. VIP\n")
+        else:
+            print(f'\nGeneral: ${entradas[0][0]} \nVIP: ${entradas[1][0]}')
+            print("\nQue tipo de entradas queres comprar?")
+            print("1. General\n2. VIP\n")
+            tipo = funciones.pedir_opcion_valida("Ingresar: ", [1, 2])
 
-        tipo = funciones.pedir_opcion_valida("Ingresar: ", [1, 2])
+            if tipo == 1:
+                if disponibilidad_gen == 0:
+                    print("\nLas entradas generales se han agotado!")
+                else:
+                    tot, venta_tot, vendidas_gen, vendidas_vip, exito = funciones.comprar_entradas(
+                        tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
+                    if exito:
+                        print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
+                        funciones.encuesta_escenario(escenarios, escenarios_rankeados)
+            elif tipo == 2:
+                if disponibilidad_vip == 0:
+                    print("\nLas entradas VIP se han agotado!")
+                else:
+                    tot, venta_tot, vendidas_gen, vendidas_vip, exito = funciones.comprar_entradas(
+                        tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
+                    if exito:
+                        print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
+                        funciones.encuesta_escenario(escenarios, escenarios_rankeados)
 
-        if tipo == 1:
-            if disponibilidad_gen == 0:
-                print(f"\nLas entradas generales se han agotado!")
-            else:
-                tot, venta_tot, vendidas_gen, vendidas_vip, exito = funciones.comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
-                if exito:
-                    print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
-                    funciones.encuesta_escenario(escenarios, escenarios_rankeados)
-            funciones.pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: \n", [1])
-            menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
-            return
-        
-        elif tipo == 2:
-            if disponibilidad_vip == 0:
-                print(f"\nLas entradas VIP se han agotado!")
-            else:
-                tot, venta_tot, vendidas_gen, vendidas_vip, exito = funciones.comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion)
-                if exito:
-                    print("TU COMPRA HA SIDO EXITOSA!".center(40, '='))
-                    funciones.encuesta_escenario(escenarios, escenarios_rankeados)
-            funciones.pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: \n", [1])
-            menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
-            return
+        funciones.pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: \n", [1])
+        menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
+
     elif opcion == 2:
         print(f'\nTodavía queda el {disponibilidad:.2f}% de las entradas generales\n')
         funciones.pedir_opcion_valida("\nIngresar 3 para volver al menu anterior: \n", [3])
         menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
-        return
+
     elif opcion == 3:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
-        return
 
 def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas, escenarios_rankeados):
     """
@@ -335,27 +350,28 @@ def estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
 
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5])
 
-    if opcion == 1:
-        print("Los mejores escenarios por votación fueron:")
-
-        funciones.mostrar_ranking(escenarios, escenarios_rankeados)
-
-    elif opcion == 2:
-        precio_general = entradas[0][0]
-        precio_vip = entradas[1][0]
-        rec_gen = vendidas_gen * precio_general
-        rec_vip = vendidas_vip * precio_vip
-        print(f"General vendidas: {vendidas_gen}\nRecaudación General: ${rec_gen}")
-        print(f'VIP vendidas: {vendidas_vip}\nRecaudación VIP: ${rec_vip}\n')
-    elif opcion == 3:
-        print(f"Recaudación total: ${venta_tot}")
-    elif opcion == 4:
-        porcentaje = 100 - funciones.calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
-        print(f"Porcentaje de ocupación: {porcentaje:.2f}%")
-    elif opcion == 5:
+    if opcion == 5:
         menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
-        return
+    else:
+        if opcion == 1:
+            print("Los mejores escenarios por votación fueron:")
+            funciones.mostrar_ranking(escenarios, escenarios_rankeados)
+        elif opcion == 2:
+            precio_general = entradas[0][0]
+            precio_vip = entradas[1][0]
+            rec_gen = vendidas_gen * precio_general
+            rec_vip = vendidas_vip * precio_vip
+            print(f"General vendidas: {vendidas_gen}\nRecaudación General: ${rec_gen}")
+            print(f'VIP vendidas: {vendidas_vip}\nRecaudación VIP: ${rec_vip}\n')
+        elif opcion == 3:
+            print(f"Recaudación total: ${venta_tot}")
+        elif opcion == 4:
+            porcentaje = 100 - funciones.calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
+            print(f"Porcentaje de ocupación: {porcentaje:.2f}%")
 
-    volver = funciones.pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: ", [1])
-    if volver == 1:
-        estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas, escenarios_rankeados)
+        volver = funciones.pedir_opcion_valida("\nIngresar 1 para volver al menu anterior: ", [1])
+        if volver == 1:
+            estadisticas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas, escenarios_rankeados)
+
+
+
