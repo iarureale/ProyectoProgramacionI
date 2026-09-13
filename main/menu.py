@@ -168,9 +168,9 @@ def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos, tot
 
 def registrar_artistas(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, escenarios_rankeados, registrados=0):
     """
-    Recibe las mismas estructuras que modificar_programacion, mas un contador de artistas
-    registrados en esta tanda (arranca en 0).
-    No retorna un valor.
+    Recibe las mismas estructuras que modificar_programacion. 
+    No retorna un valor; permite la carga consecutiva de artistas controlando no superar el límite
+    máximo de 30, y vuelve al menú de programación al finalizar la carga.
     """
     if registrados >= 30:
         print("[AVISO] No se pueden ingresar más artistas: ya se alcanzó el límite de 30 artistas registrados.")
