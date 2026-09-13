@@ -193,61 +193,28 @@ def imprimir_grilla_con_nombres(lineup, horarios, escenarios, codigos, nombre_ar
 
     imprimir_grilla(copia, horarios, escenarios)
 
-def confirmacion_compra(ent):
+def calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_operacion):
     """
-    Recibe la cantidad de entradas a comprar (ent).
-    Retorna True si el usuario confirma la compra (ingresa 1), o False si decide
-    cancelarla (ingresa 2).
+    Recibe el tipo de entrada, la configuración de entradas y lo vendido hasta ahora.
+    Retorna la cantidad máxima permitida en esta operación.
     """
+    vendidas = vendidas_gen if tipo == 1 else vendidas_vip
+    stock_restante = entradas[tipo - 1][1] - vendidas
+    return min(max_operacion, stock_restante)
 
-    confirmar = pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {ent} entrada(s). Para confirmar su compra, ingrese (1). De lo contrario, ingrese (2) para salir: ', [1, 2])
-    if confirmar == 1:
-        return True
-    else:
-        return False
-
-def comprar_entradas(tot, venta_tot, entradas, tipo, vendidas_gen, vendidas_vip, max_operacion):
+def calcular_importe_compra(tipo, entradas, cantidad):
     """
-    Registra una compra de entradas de tipo: General y VIP.
-    Validad cantidad maxima por operacion y disponibilidad de las mismas antes de confirmar.
-    Devuelve los acumuladores actualizados y ademas se agrega la operacion al registro de compras
+    Recibe el tipo de entrada, la configuración de entradas y la cantidad a comprar.
+    Retorna el importe total de la compra.
     """
-    print("\nIngresar la cantidad de entradas a comprar:\n")
-    if tipo == 1:
-        stock_restante = entradas[0][1] - vendidas_gen
-    else:
-        stock_restante = entradas[1][1] - vendidas_vip
+    return cantidad * entradas[tipo - 1][0]
 
-    limite = min(max_operacion, stock_restante) 
-
-    entrada_usuario = input()
-    while not entrada_usuario.isdigit() or int(entrada_usuario) <= 0:
-        print("[ERROR] No fue posible realizar la compra. La cantidad ingresada no es un número válido.")
-        entrada_usuario = input()
-
-    entradas_a_comprar = int(entrada_usuario)
-
-    if entradas_a_comprar > limite:
-        print(f"[ERROR] Puede comprar como máximo {limite} entradas en esta operación.")
-        return tot, venta_tot, vendidas_gen, vendidas_vip, False
-
-    confirmar = confirmacion_compra(entradas_a_comprar)
-
-    if not confirmar:
-        return tot, venta_tot, vendidas_gen, vendidas_vip, False
-
-
-    importe = entradas_a_comprar * entradas[tipo - 1][0]
-    tot += entradas_a_comprar
-    venta_tot += importe
-
-    if tipo == 1:
-        vendidas_gen += entradas_a_comprar
-    else:
-        vendidas_vip += entradas_a_comprar
-
-
-    return tot, venta_tot, vendidas_gen, vendidas_vip, True
+def es_cantidad_valida(texto):
+    """
+    Recibe el texto ingresado por el usuario.
+    Retorna True si representa un número entero positivo.
+    """
+    return texto.isdigit() and int(texto) > 0
 
 def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios):
     """
