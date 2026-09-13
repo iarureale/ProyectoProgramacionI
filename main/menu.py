@@ -282,7 +282,7 @@ def pedir_cantidad_entradas(limite):
     Pide por teclado la cantidad de entradas a comprar, validando formato y límite.
     Retorna la cantidad válida ingresada.
     """
-    print("\nIngresar la cantidad de entradas a comprar:\n")
+    print("\nIngrese la cantidad de entradas a comprar.")
     entrada_usuario = input("Ingresar: ")
     while not funciones.es_cantidad_valida(entrada_usuario):
         print("[ERROR] No fue posible realizar la compra. La cantidad ingresada no es un número válido.")
@@ -300,67 +300,82 @@ def pedir_cantidad_entradas(limite):
     return cantidad
 
 def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios):
-
-    print("\nMENU: Comprar entradas")
+    print("=" * 30)
+    print("MENU: Comprar entradas".center(30, "-"))
+    print("=" * 30)
     disponibilidad = funciones.calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
     disponibilidad_gen = funciones.calcular_disponibilidad_general(vendidas_gen, general[1])
     disponibilidad_vip = funciones.calcular_disponibilidad_general(vendidas_vip, vip[1])
 
     if disponibilidad == 0:
-        print("\nLas entradas están agotadas! Muchas gracias por apoyar OVERPALOOZA")
+        print("=" * 50)
+        print("¡Las entradas están agotadas!".center(50,"-"))
+        print("Muchas gracias por apoyar OVERPALOOZA".center(50,"-"))
+        print("=" * 50, "\n")
     if disponibilidad <= 20 and disponibilidad > 0:
-        print("AVISO".center(20, "-"))
-        print("Queda menos del 20% de las entradas. ¡Consigue la tuya rápido!")
+        print("=" * 50)
+        print("AVISO".center(50, "-"))
+        print("=" * 50, "\n")
+        print("Quedan menos del 20% de las entradas".center(50,"-"))
+        print("¡Consigue la tuya rápido!".center(50,"-"),"\n")
     if disponibilidad_gen == 0 and disponibilidad_vip > 0:
-        print("Las entradas generales se han agotado!")
+        print("=" * 50, "\n")
+        print("¡Las entradas generales se han agotado!".center(50,"-"),"\n")
+        print("=" * 50)
     elif disponibilidad_vip == 0 and disponibilidad_gen > 0:
-        print("AVISO".center(20, "-"))
-        print("¡Las entradas VIP se han agotado!")
+        print("=" * 50, "\n")
+        print("¡Las entradas VIP se han agotado!".center(50,"-"),"\n")
+        print("=" * 50)
 
     print("\n1. Comprar entradas\n2. Chequear disponibilidad\n3. Salir\n")
     opcion = funciones.pedir_opcion_valida("Ingresar: ", [1, 2, 3])
 
     if opcion == 1:
-        if disponibilidad <= 0:
-            print("\nLas entradas están agotadas! Muchas gracias por apoyar OVERPALOOZA")
+        print("=" * 50)
+        print("◆ PRECIOS ◆".center(50, "-"))
+        print(f'│ General: ${entradas[0][0]} \n│ VIP: ${entradas[1][0]}')
+        print("\n¿Qué tipo de entradas querés comprar?")
+        print("1. General\n2. VIP\n")
+        tipo = funciones.pedir_opcion_valida("Ingresar: ", [1, 2])
+
+        if tipo == 1:
+            disponibilidad_tipo = disponibilidad_gen
+            nombre_tipo = "generales"
         else:
-            print(f'\nGeneral: ${entradas[0][0]} \nVIP: ${entradas[1][0]}')
-            print("\n¿Que tipo de entradas queres comprar?")
-            print("1. General\n2. VIP\n")
-            tipo = funciones.pedir_opcion_valida("Ingresar: ", [1, 2])
+            disponibilidad_tipo = disponibilidad_vip
+            nombre_tipo = "vip"
 
-            if tipo == 1:
-                disponibilidad_tipo = funciones.calcular_disponibilidad_general(vendidas_gen, general[1])
-                nombre_tipo = "generales"
-            else:
-                disponibilidad_tipo = funciones.calcular_disponibilidad_general(vendidas_vip, vip[1])
-                nombre_tipo = "vip"
+        if disponibilidad_tipo == 0:
+            print("\n", "=" * 50, "\n")
+            print(f"Las entradas {nombre_tipo} se han agotado!".center(50,"-"),"\n")
+            print("=" * 50)
 
-            if disponibilidad_tipo == 0:
-                print(f"\nLas entradas {nombre_tipo} se han agotado!")
-            else:
-                limite = funciones.calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_operacion)
-                cantidad = pedir_cantidad_entradas(limite)
+        else:
+            limite = funciones.calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_operacion)
+            cantidad = pedir_cantidad_entradas(limite)
 
-                confirmar = funciones.pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {cantidad} entradas. Para confirmar su compra, ingresá (1), o (2) para salir: ',[1, 2])
+            confirmar = funciones.pedir_opcion_valida(f'\n[ATENCION] Estas por comprar {cantidad} entradas. Para confirmar su compra, ingresá (1), o (2) para salir: ',[1, 2])
 
-                if confirmar == 1:
-                    importe = funciones.calcular_importe_compra(tipo, entradas, cantidad)
-                    tot += cantidad
-                    venta_tot += importe
-                    if tipo == 1:
-                        vendidas_gen += cantidad
-                    else:
-                        vendidas_vip += cantidad
-                    print("¡TU COMPRA HA SIDO EXITOSA!".center(40, '='))
-                    funciones.encuesta_escenario(escenarios, escenarios_rankeados)
+            if confirmar == 1:
+                importe = funciones.calcular_importe_compra(tipo, entradas, cantidad)
+                tot += cantidad
+                venta_tot += importe
+                if tipo == 1:
+                    vendidas_gen += cantidad
+                else:
+                    vendidas_vip += cantidad
+                print("¡TU COMPRA HA SIDO EXITOSA!".center(40, '='))
+                funciones.encuesta_escenario(escenarios, escenarios_rankeados)
 
-            funciones.pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: \n", [1])
-            menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
+        funciones.pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+        menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
 
     elif opcion == 2:
-        print(f'\nTodavía queda el {disponibilidad:.2f}% de las entradas\n')
-        funciones.pedir_opcion_valida("\nIngresar (3) para volver al menu anterior: \n", [3])
+        print("=" * 50)
+        print("DISPONIBILIDAD".center(50, "-"))
+        print("=" * 50)
+        print(f'\nTodavía queda el {disponibilidad:.2f}% de las entradas.')
+        funciones.pedir_opcion_valida("\nIngresar (3) para volver al menu anterior: ", [3])
         menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, lineup, nombre_artistas, codigos, general, vip, escenarios_rankeados, escenarios)
 
     elif opcion == 3:

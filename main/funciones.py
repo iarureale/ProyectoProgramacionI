@@ -172,7 +172,7 @@ def imprimir_grilla(lineup, horarios, escenarios):
     for f in range(len(lineup)):
         print(f"{horarios[f]:<{ancho_horarios}}|", end="") 
         for c in range(len(lineup[f])):
-            valor = lineup[f][c] if lineup[f][c] != '.' else '.'
+            valor = lineup[f][c]
             print(f"{valor:<{ancho}}|", end="")
         print()
 
