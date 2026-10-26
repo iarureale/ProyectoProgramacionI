@@ -1,6 +1,9 @@
-main/.DS_Store
-.DS_Store
-orientadores/.DS_Store
-
+# Cache de Python
 __pycache__/
 *.pyc
+
+# macOS
+.DS_Store
+
+# Archivo de pruebas
+prueba.py
