@@ -1,3 +1,5 @@
+from re import fullmatch
+
 def pedir_opcion_valida(mensaje, opciones_validas):
     """
     Recibe el mensaje a mostrar y la lista de opciones validas (ej: [1, 2, 3]).
@@ -348,3 +350,68 @@ def escenario_extremo(escenarios, conteo):
     escenarios_min = [escenarios[i] for i in range(len(escenarios)) if conteo[i] == valor_min]
 
     return valor_max, escenarios_max, valor_min, escenarios_min
+
+
+def validacion_nombre():
+    while True:
+        nombre = input("Ingresar nombre de la cuenta (4 a 15 caracteres: letras, numeros o _): ").strip()
+        if fullmatch(r"[A-Za-z0-9_]{4,15}", nombre):
+            return nombre
+        print("ERROR. Formato invalido.")
+
+def validacion_contrasena():
+    contrasena = input("Ingresar contraseña. Debe contener un numero y 4 caracteres: ")
+
+    while len(contrasena) < 4 or not any(c.isdigit() for c in contrasena) or ";" in contrasena: #Recorre la string en busca de numeros
+        if ';' in contrasena:
+            print("No puede contener ;")
+            contrasena = input("Ingresar contraseña. Debe contener un numero y 4 caracteres: ")
+        else:
+            print("ERROR formato invalido.")
+            contrasena = input("Ingresar contraseña. Debe contener un numero y 4 caracteres: ")
+    return contrasena
+
+def validacion_mail():
+    patron = r"^[\w.+-]+@[\w-]+(\.[\w-]+)+$"
+
+    mail = input("Ingresá tu mail: ").strip()
+
+    while not fullmatch(patron, mail):
+        print("Mail inválido, intentá de nuevo.")
+        mail = input("Ingresá tu mail: ").strip()
+
+    return mail
+
+def repitencia_usuarios(nombre, mail):
+    try:
+        with open("login.txt", "rt", encoding="utf-8") as arch:
+            for linea in arch:
+                campos = linea.strip().split(";")
+                if len(campos) == 4 and (campos[0] == nombre or campos[2] == mail):
+                    return True
+    except FileNotFoundError:
+        print("ERROR: no se encontro login.txt")
+    except OSError:
+        print("Error al leer el archivo")
+    return False
+
+def registrar_cuenta(nombre, contrasena, mail):
+    try:
+        with open("login.txt", "at", encoding="utf-8") as arch:
+            arch.write(f"{nombre};{contrasena};{mail};Usuario\n")
+        print("Usuario agregado con exito!")
+    except OSError:
+        print("Error al acceder al archivo")
+
+def buscar_usuarios(nombre, contrasena):
+    try:
+        with open("login.txt", "rt", encoding="utf-8") as arch:
+            for linea in arch:
+                campos = linea.strip().split(";")
+                if len(campos) == 4 and (campos[0] == nombre and campos[1] == contrasena):
+                    return campos[3]
+    except FileNotFoundError:
+        print("ERROR: no se encontro login.txt")
+    except OSError:
+        print("Error al leer el archivo")
+    return False

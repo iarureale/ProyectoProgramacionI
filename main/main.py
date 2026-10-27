@@ -1,8 +1,8 @@
-import menu
-import funciones
+from menu import menu_principal
+from funciones import grilla
 
 def main():
-    lineup = funciones.grilla()
+    lineup = grilla()
     codigos = []
     nombre_artistas = []
     tot = 0
@@ -10,7 +10,7 @@ def main():
     vendidas_gen = 0
     vendidas_vip = 0
     escenarios_rankeados = [0, 0, 0, 0, 0]
-    menu.menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
+    menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados)
 
 main()
 

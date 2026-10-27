@@ -1,0 +1,31 @@
+{
+    "escenarios": [
+        "McStage",
+        "PStage",
+        "FIATStage",
+        "FlowStage",
+        "SanStage"
+    ],
+    "horarios": [
+        "13:00",
+        "14:00",
+        "15:00",
+        "16:00",
+        "17:00",
+        "18:00",
+        "19:00",
+        "20:00"
+    ],
+    "entradas": {
+        "General": {
+            "precio": 100000,
+            "cupo_maximo": 80,
+            "max_operacion": 6
+        },
+        "VIP": {
+            "precio": 250000,
+            "cupo_maximo": 20,
+            "max_operacion": 6
+        }
+    }
+}
