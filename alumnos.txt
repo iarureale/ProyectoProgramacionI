@@ -1,0 +1,5 @@
+978678; leonel; 1
+101010; enzo; fernandez; 4
+32523; iara; reale; 3
+47457; solana; cosenza; 8
+12111; tomas; aranda; 3
