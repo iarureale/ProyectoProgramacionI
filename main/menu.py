@@ -1,18 +1,15 @@
 from funciones import *
 
-def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados):
+def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, config):
     """
     Recibe la matriz lineup, las listas de artistas y codigos, y los acumuladores de venta.
     No retorna un valor, muestra el menu principal del sistema y llama a las funciones correspondientes según la opción elegida por el usuario.
     """
-    horarios = ('13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00')
-    escenarios = ('McStage', 'PStage', 'FIATStage', 'FlowStage', 'SanStage')
+    escenarios = config["escenarios"]
+    horarios = config["horarios"]
+    entradas = config["entradas"]
 
-    general = (100000, 80) 
-    vip = (250000, 20) 
-    entradas = [general, vip] 
-
-    capacidad_general = general[1] + vip[1] # Entradas en total (80 + 20 = 100)
+    capacidad_general = config["entradas"]["General"]["cupo_maximo"] + config["entradas"]["VIP"]["cupo_maximo"] # Entradas en total (80 + 20 = 100)
 
     max_operacion = 6
     while True:
@@ -35,11 +32,11 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
             rol = buscar_usuarios(nombre, contrasena)
             if rol == 'Admin':
                 print("\nCuenta de Admin encontrada! Login exitoso\n")
-                menu_admin(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados, horarios, escenarios, capacidad_general, entradas)
+                menu_admin(lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas)
 
             elif rol == "Usuario": 
                 print("\nCuenta de Usuario encontrada! Login exitoso\n")
-                menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados, horarios, escenarios, capacidad_general, entradas, max_operacion, general, vip)
+                menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas)
 
             else:
                 print("ERROR, CUENTA NO ENCONTRADA.")
@@ -61,7 +58,7 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
             print("="*60)
             break
 
-def menu_admin(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados, horarios, escenarios, capacidad_general, entradas):
+def menu_admin(lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas):
     while True:
         print("\nMENU ADMIN\n")
 
@@ -74,14 +71,14 @@ def menu_admin(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, v
         elif opcion == 2:
             modificar_programacion(lineup, nombre_artistas, codigos, horarios, escenarios)
         elif opcion == 3:
-            estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capacidad_general, entradas, escenarios_rankeados)
+            estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capacidad_general, entradas)
         elif opcion == 4:
             print("="*60)
             print('¡Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
             print("="*60)
             break
 
-def menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, escenarios_rankeados, horarios, escenarios, capacidad_general, entradas, max_operacion, general, vip):
+def menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip,  horarios, escenarios, capacidad_general, entradas):
     while True:
         print("\nMENU Usuario\n")
 
@@ -96,9 +93,9 @@ def menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
             consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos)
         elif opcion == 4:
             # Recibe y pisa los valores viejos!!
-            tot, venta_tot, vendidas_gen, vendidas_vip = menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, general, vip, escenarios_rankeados, escenarios)
+            tot, venta_tot, vendidas_gen, vendidas_vip = menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, entradas, escenarios)
         elif opcion == 5:
-            estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capacidad_general, entradas, escenarios_rankeados)
+            estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capacidad_general, entradas)
         elif opcion == 6:
             print("="*60)
             print('¡Gracias por asistir al OVERPALOOZA!'.center(60, '-'))

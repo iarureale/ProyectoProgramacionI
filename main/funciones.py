@@ -378,8 +378,9 @@ def buscar_usuarios(nombre, contrasena):
     return False
 
 def leer_archivo():
+    config = None
     try:
-        with open("configuracion.json", 'r', encoding='utf-8') as arch:
+        with open("configuracion.json", 'rt', encoding='utf-8') as arch:
             config = load(arch)
     except OSError:
         print("ERROR. No se pudo leer el archivo")
