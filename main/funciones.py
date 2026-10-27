@@ -27,37 +27,6 @@ def grilla():
 
     return lineup
 
-def encuesta_escenario(escenarios, escenarios_rankeados):
-    """
-    Recibe la tupla de escenarios y la lista escenarios_rankeados (acumulador de votos).
-    No retorna un valor; muestra los escenarios disponibles, registra el voto del usuario
-    y actualiza el contador correspondiente en escenarios_rankeados.
-    """
-    for i in range(len(escenarios)):
-        print(f'{i+1}. {escenarios[i]}')
-
-    votar = pedir_opcion_valida("\nVotá el escenario por el que más te entusiasma ir: ", [1, 2, 3, 4, 5])
-    escenarios_rankeados[votar-1] = escenarios_rankeados[votar-1] + 1
-
-    print("¡VOTO REGISTRADO!".center(40, "★"))
-    print(f"Gracias por votar a {escenarios[votar-1]}.".center(40))
-
-def mostrar_ranking(escenarios, escenarios_rankeados):
-    """
-    Recibe la tupla de escenarios y la lista de votos acumulados.
-    No retorna un valor; crea una lista de tuplas con cada escenario y su puntaje,
-    la ordena de mayor a menor según los votos y muestra el ranking por pantalla.
-    """
-    ranking = []
-    for i in range(len(escenarios)):
-        ranking.append((escenarios[i], escenarios_rankeados[i]))
-
-    ranking.sort(key=lambda x: x[1], reverse=True) #Recupere el elemento 2 de la tupla en vez de implementar una función para hacerlo
-
-    for i in range(len(ranking)):
-        nombre, votos = ranking[i]
-        print(f'{i+1}. {nombre} — {votos} voto(s)')
-
 def artista_ya_ingresado(codigo, codigos):
     """
     Recorre toda la matriz en busca del artista. Retorna true si lo encuentra.
@@ -337,20 +306,6 @@ def contar_artistas_escenario(lineup, escenarios):
             if lineup[f][c] != ".":
                 conteo[c] += 1
     return conteo
-
-def escenario_extremo(escenarios, conteo):
-    """
-    Recibe la tupla de escenarios y la lista de conteo.
-    Retorna: valor_max, lista de escenarios empatados en el máximo,
-             valor_min, lista de escenarios empatados en el mínimo.
-    """
-    valor_max = max(conteo)
-    valor_min = min(conteo)
-
-    escenarios_max = [escenarios[i] for i in range(len(escenarios)) if conteo[i] == valor_max]
-    escenarios_min = [escenarios[i] for i in range(len(escenarios)) if conteo[i] == valor_min]
-
-    return valor_max, escenarios_max, valor_min, escenarios_min
 
 '''
 

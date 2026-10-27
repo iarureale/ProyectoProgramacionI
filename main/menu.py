@@ -442,7 +442,6 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
                     print("✦" + "═" * 44 + "✦")
                     print(f"✦{' ¡TU COMPRA HA SIDO EXITOSA! '.center(44, '═')}✦")
                     print("✦" + "═" * 44 + "✦")
-                    encuesta_escenario(escenarios, escenarios_rankeados)
 
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
         
@@ -466,7 +465,7 @@ def estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capa
         print("✦" + "═" * 44 + "✦")
         print(f"✦{' MENÚ: Estadísticas e informes '.center(44, '═')}✦")
         print("✦" + "═" * 44 + "✦")
-        print("│ 1. Ranking mejores escenarios por votación\n│ 2. Información de entradas\n│ 3. Recaudación total\n│ 4. Porcentaje de ocupación\n│ 5. Escenarios con más y menos artistas asignados\n│ 6. Salir")
+        print("│ 1. Entradas generales\n│ 2. Entradas VIP\n│ 3. Recaudación total\n│ 4. Porcentaje de ocupación\n│ 5. Total de artistas asignados\n│ 6. Celdas asignadas / libres\n│ 7. Ingresos fallidos de ingreso\n│ 8. Salir")
         print("✦" + "═" * 44 + "✦")
 
         opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6])
@@ -476,25 +475,19 @@ def estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capa
         else:
             if opcion == 1:
                 print("=" * 50)
-                print("RANKING DE MEJORES ESCENARIOS POR VOTACIÓN".center(50, "-"))
+                print("ENTRADAS GENERALES".center(50, "-"))
                 print("=" * 50, "\n")
-                print("Los mejores escenarios elegidos por votación son:")
-                mostrar_ranking(escenarios, escenarios_rankeados)
+
                 pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
             elif opcion == 2:
                 print("=" * 50)
-                print("INFORMACIÓN DE ENTRADAS".center(50, "-"))
+                print("ENTRADAS VIP".center(50, "-"))
                 print("=" * 50, "\n")
-                precio_general = entradas[0][0]
-                precio_vip = entradas[1][0]
-                rec_gen = vendidas_gen * precio_general
-                rec_vip = vendidas_vip * precio_vip
-                print(f"General vendidas: {vendidas_gen}\nRecaudación General: ${rec_gen}")
-                print(f'VIP vendidas: {vendidas_vip}\nRecaudación VIP: ${rec_vip}\n')
+
                 pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
             elif opcion == 3:
                 print("=" * 50)
-                print("RECAUDACIÓN TOTAL".center(50, "-"))
+                print("RECAUDACIÓN TOTAL ACUMULADA".center(50, "-"))
                 print("=" * 50, "\n")
                 print(f"La recaudación total es de: ${venta_tot}")
                 pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
@@ -507,26 +500,19 @@ def estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capa
                 pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
             elif opcion == 5:
                 print("=" * 50)
-                print("ESCENARIOS CON MÁS Y MENOS ARTISTAS ASIGNADOS".center(50, "-"))
+                print("TOTAL DE ARTISTAS ASIGNADOS EN EL SISTEMA".center(50, "-"))
                 print("=" * 50, "\n")
-
-                conteo = contar_artistas_escenario(lineup, escenarios)
-
-                if sum(conteo) == 0:
-                    print("[ADVERTENCIA] Para poder calcular este informe, tiene que haber al menos un artista asignado al lineup.")
-                else:
-                    valor_max, escenarios_max, valor_min, escenarios_min = escenario_extremo(escenarios, conteo)
-
-                    if valor_max == valor_min:
-                        print(f"¡Qué coincidencia! Todos los escenarios cuentan con la misma cantidad de artistas asignados ({valor_max} artista(s) cada uno).")
-                    else:
-                        print(f"Escenario/s con más artistas ({valor_max} artista(s)):")
-                        for nombre in escenarios_max:
-                            print(f"✦ {nombre}")
-
-                        print(f"\nEscenario/s con menos artistas ({valor_min} artista(s)):")
-                        for nombre in escenarios_min:
-                            print(f"✦ {nombre}")
+            
+            elif opcion == 6:
+                print("=" * 50)
+                print("ESCENARIOS ASIGNADOS / ESCENARIOS LIBRES".center(50, "-"))
+                print("=" * 50, "\n")
+                
+            elif opcion == 7:
+                print("=" * 50)
+                print("INTENTOS FALLIDOS DE INGRESO".center(50, "-"))
+                print("=" * 50, "\n")
+                
                 pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
 
