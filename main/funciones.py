@@ -1,4 +1,5 @@
 from re import fullmatch
+from json import load
 
 def pedir_opcion_valida(mensaje, opciones_validas):
     """
@@ -351,6 +352,11 @@ def escenario_extremo(escenarios, conteo):
 
     return valor_max, escenarios_max, valor_min, escenarios_min
 
+'''
+
+FUNCIONES AGREGADAS EN LA SEGUNDA ETAPA
+
+'''
 
 def validacion_nombre():
     while True:
@@ -415,3 +421,11 @@ def buscar_usuarios(nombre, contrasena):
     except OSError:
         print("Error al leer el archivo")
     return False
+
+def leer_archivo():
+    try:
+        with open("configuracion.json", 'r', encoding='utf-8') as arch:
+            config = load(arch)
+    except OSError:
+        print("ERROR. No se pudo leer el archivo")
+    return config
