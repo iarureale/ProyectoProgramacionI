@@ -11,8 +11,10 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
 
     capacidad_general = config["entradas"]["General"]["cupo_maximo"] + config["entradas"]["VIP"]["cupo_maximo"] # Entradas en total (80 + 20 = 100)
 
-    intentos = 0
+    max_operacion = config["entradas"]['General']['max_operacion']
 
+    intentos = 0
+    
     while True:
         print("✦   ★   ✦   ★   ✦   ★   ✦   ★")
         print("   B I E N V E N I D O   A L")
@@ -38,7 +40,7 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
 
             elif rol == "Usuario": 
                 print("\nCuenta de Usuario encontrada! Login exitoso\n")
-                menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas)
+                menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, max_operacion, entradas)
 
             else:
                 intentos += 1
@@ -84,7 +86,7 @@ def menu_admin(lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendid
             print("="*60)
             break
 
-def menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip,  horarios, escenarios, capacidad_general, entradas):
+def menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip,  horarios, escenarios, capacidad_general, max_operacion, entradas):
     while True:
         print("\nMENU Usuario\n")
 
@@ -99,7 +101,7 @@ def menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
             consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos)
         elif opcion == 4:
             # Recibe y pisa los valores viejos!!
-            tot, venta_tot, vendidas_gen, vendidas_vip = menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, entradas, escenarios)
+            tot, venta_tot, vendidas_gen, vendidas_vip = menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, entradas, escenarios)
         elif opcion == 5:
             estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capacidad_general, entradas)
         elif opcion == 6:
