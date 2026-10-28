@@ -11,7 +11,8 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
 
     capacidad_general = config["entradas"]["General"]["cupo_maximo"] + config["entradas"]["VIP"]["cupo_maximo"] # Entradas en total (80 + 20 = 100)
 
-    max_operacion = 6
+    intentos = 0
+
     while True:
         print("✦   ★   ✦   ★   ✦   ★   ✦   ★")
         print("   B I E N V E N I D O   A L")
@@ -26,6 +27,7 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
         tipo_ingreso = pedir_opcion_valida("Ingresar:", [1, 2, 3])
 
         if tipo_ingreso == 1:
+
             nombre = validacion_nombre()
             contrasena = input("Ingresar contraseña: ")
 
@@ -39,6 +41,10 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
                 menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas)
 
             else:
+                intentos += 1
+                if intentos >= 3:
+                    print("Se han superado los intentos de ingreso. Por favor, intente nuevamente más tarde.")
+                    break
                 print("ERROR, CUENTA NO ENCONTRADA.")
 
         elif tipo_ingreso == 2:
