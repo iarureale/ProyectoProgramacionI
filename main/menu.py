@@ -14,7 +14,7 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
     max_operacion = config["entradas"]['General']['max_operacion']
 
     intentos = 0
-    
+
     while True:
         print("✦   ★   ✦   ★   ✦   ★   ✦   ★")
         print("   B I E N V E N I D O   A L")
@@ -30,10 +30,10 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
 
         if tipo_ingreso == 1:
 
-            nombre = validacion_nombre()
+            nombre = input("Ingresar nombre de usuario: ")
             contrasena = input("Ingresar contraseña: ")
 
-            rol = buscar_usuarios(nombre, contrasena)
+            rol, causa = buscar_usuarios(nombre, contrasena)
             if rol == 'Admin':
                 print("\nCuenta de Admin encontrada! Login exitoso\n")
                 menu_admin(lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas)
@@ -44,10 +44,13 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
 
             else:
                 intentos += 1
+                print("ERROR, CUENTA NO ENCONTRADA.")
+                intento_fallido(nombre, causa)
+
                 if intentos >= 3:
                     print("Se han superado los intentos de ingreso. Por favor, intente nuevamente más tarde.")
                     break
-                print("ERROR, CUENTA NO ENCONTRADA.")
+
 
         elif tipo_ingreso == 2:
             print("Bienvenido a la creación de cuentas!")

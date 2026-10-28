@@ -1,6 +1,7 @@
+import json
 from re import fullmatch
 from json import load
-
+from datetime import datetime
 def pedir_opcion_valida(mensaje, opciones_validas):
     """
     Recibe el mensaje a mostrar y la lista de opciones validas (ej: [1, 2, 3]).
@@ -365,12 +366,20 @@ def registrar_cuenta(nombre, contrasena, mail):
         print("Error al acceder al archivo")
 
 def buscar_usuarios(nombre, contrasena):
+    causa = ("Usuario no encontrado.", "Usuario con formato incorrecto.",  "Los campos no coinciden.")
     try:
         with open("login.txt", "rt", encoding="utf-8") as arch:
-            for linea in arch:
+            lineas = arch.readlines()
+            for linea in lineas[1:]:  #IGNORO LA PRIMERA LINEA PQ SINO ME TIRA SIEMPRE USUARIO NO ENCONTRADO
                 campos = linea.strip().split(";")
                 if len(campos) == 4 and (campos[0] == nombre and campos[1] == contrasena):
-                    return campos[3]
+                    return campos[3], None
+                elif len(campos) == 4 and (nombre not in campos[0]):
+                    return None, causa[0]
+                elif len(campos) == 4 and not fullmatch(r"[A-Za-z0-9_]{4,15}", nombre):
+                    return None, causa[1]
+                elif len(campos) == 4 and (campos[0] == nombre and campos[1] != contrasena):
+                    return None, causa[2]
     except FileNotFoundError:
         print("ERROR: no se encontro login.txt")
     except OSError:
@@ -385,3 +394,22 @@ def leer_archivo():
     except OSError:
         print("ERROR. No se pudo leer el archivo")
     return config
+
+def intento_fallido(nombre, causa):
+
+    ingreso_fallido ={
+    "user_ingresado": nombre,
+    "fecha": datetime.now().strftime("%d-%m-%Y"),
+    "causa": causa
+    }
+    try:
+        with open("intentos_fallidos.json", "rt", encoding="utf-8") as arch:
+            intentos = json.load(arch)
+    except:
+        intentos = []
+    intentos.append(ingreso_fallido)
+    try:
+        with open("intentos_fallidos.json", "wt", encoding="utf-8") as arch:
+            json.dump(intentos, arch, indent=4, ensure_ascii=False)
+    except OSError:
+        print("Error al guardar el archivo")
