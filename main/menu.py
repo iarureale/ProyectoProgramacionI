@@ -1,6 +1,6 @@
 from funciones import *
 
-def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, config):
+def menu_principal(lineup, nombre_artistas, codigos, config):
     """
     Recibe la matriz lineup, las listas de artistas y codigos, y los acumuladores de venta.
     No retorna un valor, muestra el menu principal del sistema y llama a las funciones correspondientes según la opción elegida por el usuario.
@@ -36,11 +36,10 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
             rol, causa = buscar_usuarios(nombre, contrasena)
             if rol == 'Admin':
                 print("\nCuenta de Admin encontrada! Login exitoso\n")
-                menu_admin(lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas)
-
+                menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, entradas)
             elif rol == "Usuario": 
                 print("\nCuenta de Usuario encontrada! Login exitoso\n")
-                menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, max_operacion, entradas)
+                menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, max_operacion, entradas)
 
             else:
                 intentos += 1
@@ -69,7 +68,7 @@ def menu_principal(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_ge
             print("="*60)
             break
 
-def menu_admin(lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendidas_vip, horarios, escenarios, capacidad_general, entradas):
+def menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, entradas):
     while True:
         print("\nMENU ADMIN\n")
 
@@ -82,14 +81,14 @@ def menu_admin(lineup, nombre_artistas, codigos, venta_tot, vendidas_gen, vendid
         elif opcion == 2:
             modificar_programacion(lineup, nombre_artistas, codigos, horarios, escenarios)
         elif opcion == 3:
-            estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capacidad_general, entradas)
+            estadisticas(lineup, escenarios, capacidad_general, entradas)
         elif opcion == 4:
             print("="*60)
             print('¡Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
             print("="*60)
             break
 
-def menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen, vendidas_vip,  horarios, escenarios, capacidad_general, max_operacion, entradas):
+def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, max_operacion, entradas):
     while True:
         print("\nMENU Usuario\n")
 
@@ -103,10 +102,9 @@ def menu_usuario(lineup, nombre_artistas, codigos, tot, venta_tot, vendidas_gen,
         elif opcion == 3:
             consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos)
         elif opcion == 4:
-            # Recibe y pisa los valores viejos!!
-            tot, venta_tot, vendidas_gen, vendidas_vip = menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, entradas, escenarios)
+            menu_comprar_entradas(entradas, capacidad_general, max_operacion)
         elif opcion == 5:
-            estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capacidad_general, entradas)
+            estadisticas(lineup, escenarios, capacidad_general, entradas)
         elif opcion == 6:
             print("="*60)
             print('¡Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
@@ -376,26 +374,27 @@ def pedir_cantidad_entradas(limite):
 
     return cantidad
 
-def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, capacidad_general, max_operacion, general, vip, escenarios_rankeados, escenarios):
+def menu_comprar_entradas(entradas, capacidad_general, max_operacion):
     """
     Recibe los acumuladores de venta, las configuraciones de entradas, la capacidad total, el límite de compra por operación y las estructuras de artistas y escenarios.
     No retorna un valor; gestiona la compra de entradas General y VIP, chequea la disponibilidad 
     restante y llama a la encuesta de escenarios tras una operación exitosa.
     """
     while True:
+        tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total()
         print("✦" + "═" * 44 + "✦")
         print(f"✦{' MENÚ: Comprar entradas '.center(44, '═')}✦")
         print("✦" + "═" * 44 + "✦")
         disponibilidad = calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
-        disponibilidad_gen = calcular_disponibilidad_general(vendidas_gen, general[1])
-        disponibilidad_vip = calcular_disponibilidad_general(vendidas_vip, vip[1])
+        disponibilidad_gen = calcular_disponibilidad_general(vendidas_gen, entradas["General"]["cupo_maximo"])
+        disponibilidad_vip = calcular_disponibilidad_general(vendidas_vip, entradas["VIP"]["cupo_maximo"])
 
         if disponibilidad <= 0:
             print("=" * 50)
             print("¡Las entradas están agotadas!".center(50,"-"))
             print("Muchas gracias por apoyar OVERPALOOZA".center(50,"-"))
             print("=" * 50)
-        if disponibilidad <= 20 and disponibilidad > 0:
+        if disponibilidad < 20 and disponibilidad > 0:
             print("=" * 50)
             print("AVISO".center(50, "-"))
             print("=" * 50)
@@ -416,7 +415,7 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
         if opcion == 1:
             print("=" * 50)
             print("◆ PRECIOS ◆".center(50, "-"))
-            print(f'│ General: ${entradas[0][0]} \n│ VIP: ${entradas[1][0]}')
+            print(f'│ General: ${entradas["General"]["precio"]} \n│ VIP: ${entradas["VIP"]["precio"]}')
             print("\n¿Qué tipo de entradas querés comprar?")
             print("1. General\n2. VIP\n")
             tipo = pedir_opcion_valida("Ingresar: ", [1, 2])
@@ -440,16 +439,14 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
                 confirmar = pedir_opcion_valida(f'\n[ATENCION] Estás por comprar {cantidad} entrada(s). Para confirmar su compra, ingrese (1). De lo contrario, ingrese (2) para salir: ',[1, 2])
 
                 if confirmar == 1:
-                    importe = calcular_importe_compra(tipo, entradas, cantidad)
-                    tot += cantidad
-                    venta_tot += importe
-                    if tipo == 1:
-                        vendidas_gen += cantidad
-                    else:
-                        vendidas_vip += cantidad
-                    print("✦" + "═" * 44 + "✦")
-                    print(f"✦{' ¡TU COMPRA HA SIDO EXITOSA! '.center(44, '═')}✦")
-                    print("✦" + "═" * 44 + "✦")
+                    guardada = procesar_compra(tipo, cantidad, entradas["General"]["precio"], entradas["VIP"]["precio"])
+
+                    if guardada:
+                        print("✦" + "═" * 44 + "✦")
+                        print(f"✦{' ¡TU COMPRA HA SIDO EXITOSA! '.center(44, '═')}✦")
+                        print("✦" + "═" * 44 + "✦")
+                else:
+                    break
 
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
         
@@ -464,21 +461,22 @@ def menu_comprar_entradas(tot, venta_tot, entradas, vendidas_gen, vendidas_vip, 
             break
     return tot, venta_tot, vendidas_gen, vendidas_vip
 
-def estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capacidad_general, entradas, escenarios_rankeados):
+def estadisticas(lineup, escenarios, capacidad_general, entradas):
     """
     Recibe las estructuras de programacion del festival, los acumuladores de venta, la capacidad general y la configuracion de entradas.
     No retorna un valor; muestra los distintos informes y estadisticas del sistema segun la opcion elegida.
     """
     while True:
+        tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total()
         print("✦" + "═" * 44 + "✦")
         print(f"✦{' MENÚ: Estadísticas e informes '.center(44, '═')}✦")
         print("✦" + "═" * 44 + "✦")
         print("│ 1. Entradas generales\n│ 2. Entradas VIP\n│ 3. Recaudación total\n│ 4. Porcentaje de ocupación\n│ 5. Total de artistas asignados\n│ 6. Celdas asignadas / libres\n│ 7. Ingresos fallidos de ingreso\n│ 8. Salir")
         print("✦" + "═" * 44 + "✦")
 
-        opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6])
+        opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6,7 ,8])
 
-        if opcion == 6:
+        if opcion == 8:
             break
         else:
             if opcion == 1:
@@ -522,6 +520,5 @@ def estadisticas(lineup, venta_tot, vendidas_gen, vendidas_vip, escenarios, capa
                 print("=" * 50, "\n")
                 
                 pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
-
 
 

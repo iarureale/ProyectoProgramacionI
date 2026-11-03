@@ -2,6 +2,7 @@ import json
 from re import fullmatch
 from json import load
 from datetime import datetime
+import random
 def pedir_opcion_valida(mensaje, opciones_validas):
     """
     Recibe el mensaje a mostrar y la lista de opciones validas (ej: [1, 2, 3]).
@@ -178,15 +179,10 @@ def calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_opera
     Retorna la cantidad máxima permitida en esta operación.
     """
     vendidas = vendidas_gen if tipo == 1 else vendidas_vip
-    stock_restante = entradas[tipo - 1][1] - vendidas
+    nombre = "General" if tipo == 1 else "VIP"
+    stock_restante = entradas[nombre]["cupo_maximo"] - vendidas
     return min(max_operacion, stock_restante)
 
-def calcular_importe_compra(tipo, entradas, cantidad):
-    """
-    Recibe el tipo de entrada, la configuración de entradas y la cantidad a comprar.
-    Retorna el importe total de la compra.
-    """
-    return cantidad * entradas[tipo - 1][0]
 
 def es_cantidad_valida(texto):
     """
@@ -367,24 +363,22 @@ def registrar_cuenta(nombre, contrasena, mail):
 
 def buscar_usuarios(nombre, contrasena):
     causa = ("Usuario no encontrado.", "Usuario con formato incorrecto.",  "Los campos no coinciden.")
+    if not fullmatch(r"[A-Za-z0-9_]{4,15}", nombre):
+        return None, causa[1]
     try:
         with open("login.txt", "rt", encoding="utf-8") as arch:
             lineas = arch.readlines()
             for linea in lineas[1:]:  #IGNORO LA PRIMERA LINEA PQ SINO ME TIRA SIEMPRE USUARIO NO ENCONTRADO
                 campos = linea.strip().split(";")
-                if len(campos) == 4 and (campos[0] == nombre and campos[1] == contrasena):
-                    return campos[3], None
-                elif len(campos) == 4 and (nombre not in campos[0]):
-                    return None, causa[0]
-                elif len(campos) == 4 and not fullmatch(r"[A-Za-z0-9_]{4,15}", nombre):
-                    return None, causa[1]
-                elif len(campos) == 4 and (campos[0] == nombre and campos[1] != contrasena):
+                if len(campos) == 4 and campos[0] == nombre:
+                    if campos[1] == contrasena:
+                        return campos[3], None
                     return None, causa[2]
     except FileNotFoundError:
         print("ERROR: no se encontro login.txt")
     except OSError:
         print("Error al leer el archivo")
-    return False
+    return None, causa[0]
 
 def leer_archivo():
     config = None
@@ -413,3 +407,78 @@ def intento_fallido(nombre, causa):
             json.dump(intentos, arch, indent=4, ensure_ascii=False)
     except OSError:
         print("Error al guardar el archivo")
+
+
+def calcular_total():
+    total = 0
+    monto_total = 0
+    tot_vip = 0
+    tot_gen = 0
+    with open("compras.csv", mode='rt') as arch:
+        arch.readline()
+        for lineas in arch:
+            campos = lineas.strip().split(';')
+            total += int(campos[6])
+            monto_total += float(campos[7])
+            if campos[5] == 'general':
+                tot_gen += int(campos[6])
+            else:
+                tot_vip += int(campos[6])
+
+    return total, monto_total, tot_gen, tot_vip
+
+
+def chequear_id():
+    id = random.randint(1000,9999)
+    repetido = True
+    with open('compras.csv', mode='rt') as arch:
+        while repetido:
+            repetido = False
+            arch.seek(0) #Nos permite volver al principio sin abrir varias veces un archivo
+            for lineas in arch:
+                campos = lineas.strip().split(';')
+                if campos[0] == str(id):
+                    repetido = True
+                    id = random.randint(1000,9999)
+                    break
+    return id
+
+
+def validar_dni():
+    while True:
+        dni = input("Ingresar DNI del responsable de la entrada: ").strip()
+        if not dni.isdigit():
+            print('Solo se permiten numeros al ingresar el DNI.')
+        elif len(dni) < 7 or len(dni) > 8:
+            print('FORMATO INVALIDO del dni, ingresar nuevamente')
+        else:
+            break
+    return dni
+
+
+def procesar_compra(tipo_entrada, cantidad, precio_general, precio_vip):
+    #id;fecha;nombre_completo;mail;dni;tipo_entrada;cantidad;monto_final
+    id = chequear_id()
+    fecha = datetime.today().strftime("%d-%m-%Y")
+    nombre_completo = input("Ingresar nombre del responsable de la entrada: ").strip()
+    while nombre_completo == "" or ";" in nombre_completo:
+            print("[ERROR] El nombre no puede estar vacío ni contener ';'.")
+            nombre_completo = input("Ingresar nombre del responsable de la entrada: ").strip()
+    mail = validacion_mail()
+    dni = validar_dni()
+
+    if tipo_entrada == 1:
+        tipo= 'general'
+        monto_final = cantidad * precio_general
+    elif tipo_entrada == 2:
+        tipo = 'vip'
+        monto_final = cantidad * precio_vip
+    try:
+        with open('compras.csv', mode='at') as arch:
+            arch.write(f"{id};{fecha};{nombre_completo};{mail};{dni};{tipo};{cantidad};{monto_final}\n")
+        return True
+    except OSError:
+        print("El archivo no existe, porfavor revisar.")
+        return False
+
+
