@@ -36,9 +36,11 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
             rol, causa = buscar_usuarios(nombre, contrasena)
             if rol == 'Admin':
                 print("\nCuenta de Admin encontrada! Login exitoso\n")
+                intentos = 0 #SE REINICIA EL CONTEO UNA VEZ QUE HAY UN LOGIN EXITOSO
                 menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, entradas)
             elif rol == "Usuario": 
                 print("\nCuenta de Usuario encontrada! Login exitoso\n")
+                intentos = 0 #SE REINICIA EL CONTEO UNA VEZ QUE HAY UN LOGIN EXITOSO
                 menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, max_operacion, entradas)
 
             else:
