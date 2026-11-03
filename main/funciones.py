@@ -315,17 +315,17 @@ def validacion_nombre():
         nombre = input("Ingresar nombre de la cuenta (4 a 15 caracteres: letras, numeros o _): ").strip()
         if fullmatch(r"[A-Za-z0-9_]{4,15}", nombre):
             return nombre
-        print("ERROR. Formato invalido.")
+        print("[ERROR] El nombre de usuario debe tener entre 4 y 15 caracteres: letras, números o guion bajo (_).")
 
 def validacion_contrasena():
     contrasena = input("Ingresar contraseña. Debe contener un numero y 4 caracteres: ")
 
     while len(contrasena) < 4 or not any(c.isdigit() for c in contrasena) or ";" in contrasena: #Recorre la string en busca de numeros
         if ';' in contrasena:
-            print("No puede contener ;")
+            print("[ERROR] La contraseña no puede contener el carácter ';'.")
             contrasena = input("Ingresar contraseña. Debe contener un numero y 4 caracteres: ")
         else:
-            print("ERROR formato invalido.")
+            print("[ERROR] La contraseña debe tener al menos 4 caracteres e incluir al menos un número.")
             contrasena = input("Ingresar contraseña. Debe contener un numero y 4 caracteres: ")
     return contrasena
 
@@ -335,7 +335,7 @@ def validacion_mail():
     mail = input("Ingresá tu mail: ").strip()
 
     while not fullmatch(patron, mail):
-        print("Mail inválido, intentá de nuevo.")
+        print("[ERROR] El mail debe tener el formato usuario@dominio.com (ej: nombre@gmail.com).")
         mail = input("Ingresá tu mail: ").strip()
 
     return mail
@@ -397,13 +397,13 @@ def intento_fallido(nombre, causa):
     "causa": causa
     }
     try:
-        with open("intentos_fallidos.json", "rt", encoding="utf-8") as arch:
+        with open("logs.json", "rt", encoding="utf-8") as arch:
             intentos = json.load(arch)
     except:
         intentos = []
     intentos.append(ingreso_fallido)
     try:
-        with open("intentos_fallidos.json", "wt", encoding="utf-8") as arch:
+        with open("logs.json", "wt", encoding="utf-8") as arch:
             json.dump(intentos, arch, indent=4, ensure_ascii=False)
     except OSError:
         print("Error al guardar el archivo")
@@ -447,13 +447,9 @@ def chequear_id():
 def validar_dni():
     while True:
         dni = input("Ingresar DNI del responsable de la entrada: ").strip()
-        if not dni.isdigit():
-            print('Solo se permiten numeros al ingresar el DNI.')
-        elif len(dni) < 7 or len(dni) > 8:
-            print('FORMATO INVALIDO del dni, ingresar nuevamente')
-        else:
-            break
-    return dni
+        if fullmatch(r"\d{7,8}", dni):
+            return dni
+        print("[ERROR] El DNI debe tener 7 u 8 dígitos, solo números y sin puntos (ej: 12345678).")
 
 
 def procesar_compra(tipo_entrada, cantidad, precio_general, precio_vip):

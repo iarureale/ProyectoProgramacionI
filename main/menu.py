@@ -43,7 +43,12 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
 
             else:
                 intentos += 1
-                print("ERROR, CUENTA NO ENCONTRADA.")
+                if causa == "Usuario con formato incorrecto.":
+                    print("[ERROR] El usuario debe tener entre 4 y 15 caracteres: letras, números o guion bajo (_).")
+                elif causa == "Los campos no coinciden.":
+                    print("[ERROR] Usuario o contraseña incorrectos.")
+                else:
+                    print("[ERROR] El usuario ingresado no existe.")
                 intento_fallido(nombre, causa)
 
                 if intentos >= 3:
@@ -360,7 +365,7 @@ def pedir_cantidad_entradas(limite):
     print("\nIngrese la cantidad de entradas que desea comprar.")
     entrada_usuario = input("Ingresar: ")
     while not es_cantidad_valida(entrada_usuario):
-        print("[ERROR] No fue posible realizar la compra. La cantidad ingresada no es un número válido.")
+        print("[ERROR] La cantidad debe ser un número entero positivo (ej: 2).")
         entrada_usuario = input("Ingresar: ")
 
     cantidad = int(entrada_usuario)
@@ -368,7 +373,7 @@ def pedir_cantidad_entradas(limite):
         print(f"[ERROR] Puede comprar como máximo {limite} entradas en esta operación.")
         entrada_usuario = input("Ingresar:")
         while not es_cantidad_valida(entrada_usuario):
-            print("[ERROR] No fue posible realizar la compra. La cantidad ingresada no es un número válido.")
+            print("[ERROR] La cantidad debe ser un número entero positivo (ej: 2).")
             entrada_usuario = input("Ingresar: ")
         cantidad = int(entrada_usuario)
 
