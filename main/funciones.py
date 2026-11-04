@@ -411,22 +411,25 @@ def intento_fallido(nombre, causa):
 
 
 def calcular_total():
-    total = 0
-    monto_total = 0
-    tot_vip = 0
-    tot_gen = 0
-    with open("compras.csv", mode='rt') as arch:
-        arch.readline()
-        for lineas in arch:
-            campos = lineas.strip().split(';')
-            total += int(campos[6])
-            monto_total += float(campos[7])
-            if campos[5] == 'general':
-                tot_gen += int(campos[6])
-            else:
-                tot_vip += int(campos[6])
+    ventas = {"general": {"cantidad": 0, "monto": 0},
+              "vip": {"cantidad": 0, "monto": 0}}
+    try:
+        with open("compras.csv", mode='rt') as arch:
+            arch.readline()
+            for lineas in arch:
+                campos = lineas.strip().split(';')
+                try:
+                    ventas[campos[5]]["cantidad"] += int(campos[6])
+                    ventas[campos[5]]["monto"] += float(campos[7])
+                except (IndexError, ValueError, KeyError):
+                    print(f"[AVISO] Fila con formato incorrecto: {lineas.strip()}")
+    except FileNotFoundError:
+        pass
 
-    return total, monto_total, tot_gen, tot_vip
+    tot_gen = ventas["general"]["cantidad"]
+    tot_vip = ventas["vip"]["cantidad"]
+    monto_total = ventas["general"]["monto"] + ventas["vip"]["monto"]
+    return tot_gen + tot_vip, monto_total, tot_gen, tot_vip
 
 
 def chequear_id():
