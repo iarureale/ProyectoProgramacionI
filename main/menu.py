@@ -109,7 +109,7 @@ def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacid
         elif opcion == 3:
             consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos)
         elif opcion == 4:
-            menu_comprar_entradas(entradas, capacidad_general, max_operacion)
+            menu_comprar_entradas(entradas, capacidad_general)
         elif opcion == 5:
             estadisticas(capacidad_general, entradas, codigos, nombre_artistas)
         elif opcion == 6:

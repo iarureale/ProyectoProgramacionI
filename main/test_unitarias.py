@@ -8,6 +8,12 @@ def test_no_repetido(): #Validación correcta
 
 #------------
 
-def test_calcular_disponibilidad():
+def test_calcular_disponibilidad(): # Cálculo simple con resultado conocido
     assert calcular_disponibilidad_general(5, 10) == 50
 
+# Casos límite
+def test_es_cantidad_valida():
+    assert es_cantidad_valida("0") == False
+
+def test_es_cantidad_invalida():
+    assert es_cantidad_valida("1") == True
