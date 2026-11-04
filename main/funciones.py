@@ -173,7 +173,7 @@ def imprimir_grilla_con_nombres(lineup, horarios, escenarios, codigos, nombre_ar
 
     imprimir_grilla(copia, horarios, escenarios)
 
-def calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_operacion):
+def calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip):
     """
     Recibe el tipo de entrada, la configuración de entradas y lo vendido hasta ahora.
     Retorna la cantidad máxima permitida en esta operación.
@@ -181,7 +181,7 @@ def calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_opera
     vendidas = vendidas_gen if tipo == 1 else vendidas_vip
     nombre = "General" if tipo == 1 else "VIP"
     stock_restante = entradas[nombre]["cupo_maximo"] - vendidas
-    return min(max_operacion, stock_restante)
+    return min(entradas[nombre]["max_operacion"], stock_restante)
 
 
 def es_cantidad_valida(texto):

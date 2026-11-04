@@ -381,7 +381,7 @@ def pedir_cantidad_entradas(limite):
 
     return cantidad
 
-def menu_comprar_entradas(entradas, capacidad_general, max_operacion):
+def menu_comprar_entradas(entradas, capacidad_general):
     """
     Recibe los acumuladores de venta, las configuraciones de entradas, la capacidad total, el límite de compra por operación y las estructuras de artistas y escenarios.
     No retorna un valor; gestiona la compra de entradas General y VIP, chequea la disponibilidad 
@@ -440,7 +440,7 @@ def menu_comprar_entradas(entradas, capacidad_general, max_operacion):
                 print(f"\n{'=' * 50}")
 
             else:
-                limite = calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip, max_operacion)
+                limite = calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip)
                 cantidad = pedir_cantidad_entradas(limite)
 
                 confirmar = pedir_opcion_valida(f'\n[ATENCION] Estás por comprar {cantidad} entrada(s). Para confirmar su compra, ingrese (1). De lo contrario, ingrese (2) para salir: ',[1, 2])
