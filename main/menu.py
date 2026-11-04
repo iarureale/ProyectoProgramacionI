@@ -466,7 +466,6 @@ def menu_comprar_entradas(entradas, capacidad_general, max_operacion):
 
         elif opcion == 3:
             break
-    return tot, venta_tot, vendidas_gen, vendidas_vip
 
 def estadisticas(capacidad_general, entradas, codigos, nombre_artistas):
     """
@@ -499,7 +498,7 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas):
             porcentaje_vip = 100 - calcular_disponibilidad_general(vendidas_vip, entradas['VIP']['cupo_maximo'])
             porcentaje_gen = 100 - calcular_disponibilidad_general(vendidas_gen, entradas['General']['cupo_maximo'])
             print(f"Porcentaje de ocupación: {porcentaje:.2f}% ({tot} de {capacidad_general})")
-            print(f"General: {porcentaje_vip:.2f}%")
+            print(f"General: {porcentaje_gen:.2f}%")
             print(f"VIP: {porcentaje_vip:.2f}%")
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
@@ -509,7 +508,7 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas):
                 print("No hay artistas registrados todavía. Vuelva mas tarde!")
             else:
                 for i in range(len(codigos)):
-                    print(f'Artista {i}: {nombre_artistas[i]}')
+                    print(f'Artista {i+1}: {nombre_artistas[i]}')
 
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
