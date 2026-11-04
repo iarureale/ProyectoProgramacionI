@@ -26,7 +26,7 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
 
         print("\n1. Iniciar sesión\n2. Crear Cuenta\n3. Salir\n")
 
-        tipo_ingreso = pedir_opcion_valida("Ingresar:", [1, 2, 3])
+        tipo_ingreso = pedir_opcion_valida("Ingresar: ", [1, 2, 3])
 
         if tipo_ingreso == 1:
 
@@ -392,10 +392,12 @@ def menu_comprar_entradas(entradas, capacidad_general):
         print("✦" + "═" * 44 + "✦")
         print(f"✦{' MENÚ: Comprar entradas '.center(44, '═')}✦")
         print("✦" + "═" * 44 + "✦")
-        disponibilidad = calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
-        disponibilidad_gen = calcular_disponibilidad_general(vendidas_gen, entradas["General"]["cupo_maximo"])
-        disponibilidad_vip = calcular_disponibilidad_general(vendidas_vip, entradas["VIP"]["cupo_maximo"])
-
+        try:
+            disponibilidad = calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
+            disponibilidad_gen = calcular_disponibilidad_general(vendidas_gen, entradas["General"]["cupo_maximo"])
+            disponibilidad_vip = calcular_disponibilidad_general(vendidas_vip, entradas["VIP"]["cupo_maximo"])
+        except ValueError:
+            print("\n[ERROR] Revisá la configuración de entradas.")
         if disponibilidad <= 0:
             print("=" * 50)
             print("¡Las entradas están agotadas!".center(50,"-"))
@@ -494,12 +496,15 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas):
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
         elif opcion == 2:
-            porcentaje = 100 - calcular_disponibilidad_general(tot, capacidad_general)
-            porcentaje_vip = 100 - calcular_disponibilidad_general(vendidas_vip, entradas['VIP']['cupo_maximo'])
-            porcentaje_gen = 100 - calcular_disponibilidad_general(vendidas_gen, entradas['General']['cupo_maximo'])
-            print(f"Porcentaje de ocupación: {porcentaje:.2f}% ({tot} de {capacidad_general})")
-            print(f"General: {porcentaje_gen:.2f}%")
-            print(f"VIP: {porcentaje_vip:.2f}%")
+            try:
+                porcentaje = 100 - calcular_disponibilidad_general(tot, capacidad_general)
+                porcentaje_vip = 100 - calcular_disponibilidad_general(vendidas_vip, entradas['VIP']['cupo_maximo'])
+                porcentaje_gen = 100 - calcular_disponibilidad_general(vendidas_gen, entradas['General']['cupo_maximo'])
+                print(f"Porcentaje de ocupación: {porcentaje:.2f}% ({tot} de {capacidad_general})")
+                print(f"General: {porcentaje_gen:.2f}%")
+                print(f"VIP: {porcentaje_vip:.2f}%")
+            except ValueError:
+                print("\n[ERROR] Revisá la configuración de entradas.")
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
         elif opcion == 3:
