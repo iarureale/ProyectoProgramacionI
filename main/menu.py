@@ -88,10 +88,10 @@ def menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad
         elif opcion == 2:
             modificar_programacion(lineup, nombre_artistas, codigos, horarios, escenarios)
         elif opcion == 3:
-            estadisticas(lineup, escenarios, capacidad_general, entradas)
+            estadisticas(capacidad_general, entradas, codigos, nombre_artistas)
         elif opcion == 4:
             print("="*60)
-            print('¡Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
+            print('¡Sesión cerrada con éxito!'.center(60, '-'))
             print("="*60)
             break
 
@@ -111,10 +111,10 @@ def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacid
         elif opcion == 4:
             menu_comprar_entradas(entradas, capacidad_general, max_operacion)
         elif opcion == 5:
-            estadisticas(lineup, escenarios, capacidad_general, entradas)
+            estadisticas(capacidad_general, entradas, codigos, nombre_artistas)
         elif opcion == 6:
             print("="*60)
-            print('¡Gracias por asistir al OVERPALOOZA!'.center(60, '-'))
+            print('¡Sesión cerrada con éxito!'.center(60, '-'))
             print("="*60)
             break
 
@@ -468,64 +468,52 @@ def menu_comprar_entradas(entradas, capacidad_general, max_operacion):
             break
     return tot, venta_tot, vendidas_gen, vendidas_vip
 
-def estadisticas(lineup, escenarios, capacidad_general, entradas):
+def estadisticas(capacidad_general, entradas, codigos, nombre_artistas):
     """
     Recibe las estructuras de programacion del festival, los acumuladores de venta, la capacidad general y la configuracion de entradas.
     No retorna un valor; muestra los distintos informes y estadisticas del sistema segun la opcion elegida.
     """
     while True:
         tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total()
+        recaudada_gen = vendidas_gen * entradas["General"]["precio"]
+        recaudada_vip = vendidas_vip * entradas["VIP"]["precio"]
         print("✦" + "═" * 44 + "✦")
         print(f"✦{' MENÚ: Estadísticas e informes '.center(44, '═')}✦")
         print("✦" + "═" * 44 + "✦")
-        print("│ 1. Entradas generales\n│ 2. Entradas VIP\n│ 3. Recaudación total\n│ 4. Porcentaje de ocupación\n│ 5. Total de artistas asignados\n│ 6. Celdas asignadas / libres\n│ 7. Ingresos fallidos de ingreso\n│ 8. Salir")
+        print("│ 1. Ventas y recaudación\n│ 2. Ocupación y disponibilidad\n│ 3. Lineup\n│ 4. Intentos fallidos de ingreso\n│ 5. Salir")
         print("✦" + "═" * 44 + "✦")
 
-        opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6,7 ,8])
+        opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5])
 
-        if opcion == 8:
+
+        if opcion == 5:
             break
-        else:
-            if opcion == 1:
-                print("=" * 50)
-                print("ENTRADAS GENERALES".center(50, "-"))
-                print("=" * 50, "\n")
+        elif opcion == 1:
+            print(f"Entradas General vendidas: {vendidas_gen} - Recaudación: ${recaudada_gen}")
+            print(f"Entradas VIP vendidas: {vendidas_vip} - Recaudación: ${recaudada_vip}")
+            print(f"Entradas vendidas: {tot} - Recaudación total acumulada: ${venta_tot:.0f}")
+            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
-                pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
-            elif opcion == 2:
-                print("=" * 50)
-                print("ENTRADAS VIP".center(50, "-"))
-                print("=" * 50, "\n")
+        elif opcion == 2:
+            porcentaje = 100 - calcular_disponibilidad_general(tot, capacidad_general)
+            porcentaje_vip = 100 - calcular_disponibilidad_general(vendidas_vip, entradas['VIP']['cupo_maximo'])
+            porcentaje_gen = 100 - calcular_disponibilidad_general(vendidas_gen, entradas['General']['cupo_maximo'])
+            print(f"Porcentaje de ocupación: {porcentaje:.2f}% ({tot} de {capacidad_general})")
+            print(f"General: {porcentaje_vip:.2f}%")
+            print(f"VIP: {porcentaje_vip:.2f}%")
+            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
-                pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
-            elif opcion == 3:
-                print("=" * 50)
-                print("RECAUDACIÓN TOTAL ACUMULADA".center(50, "-"))
-                print("=" * 50, "\n")
-                print(f"La recaudación total es de: ${venta_tot}")
-                pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
-            elif opcion == 4:
-                print("=" * 50)
-                print("PORCENTAJE DE OCUPACIÓN".center(50, "-"))
-                print("=" * 50, "\n")
-                porcentaje = 100 - calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
-                print(f"Porcentaje de ocupación: {porcentaje:.2f}%")
-                pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
-            elif opcion == 5:
-                print("=" * 50)
-                print("TOTAL DE ARTISTAS ASIGNADOS EN EL SISTEMA".center(50, "-"))
-                print("=" * 50, "\n")
-            
-            elif opcion == 6:
-                print("=" * 50)
-                print("ESCENARIOS ASIGNADOS / ESCENARIOS LIBRES".center(50, "-"))
-                print("=" * 50, "\n")
-                
-            elif opcion == 7:
-                print("=" * 50)
-                print("INTENTOS FALLIDOS DE INGRESO".center(50, "-"))
-                print("=" * 50, "\n")
-                
-                pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+        elif opcion == 3:
+            print(f"\nArtistas registrados: {len(codigos)}\n")
+            if len(codigos) == 0:
+                print("No hay artistas registrados todavía. Vuelva mas tarde!")
+            else:
+                for i in range(len(codigos)):
+                    print(f'Artista {i}: {nombre_artistas[i]}')
+
+            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+
+        elif opcion == 4:
+            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
 
