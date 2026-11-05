@@ -528,7 +528,8 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, 
                 print(f"\nTotal de intentos fallidos: {sum(acumulador.values())}")
                 print("\nUsuarios que han intentado ingresar sin exito.")
                 for nombre, intentos in acumulador.items():
-                    print(f"Nombre: {nombre}, Intentos: {intentos}")
+                    alerta = "  [ALERTA: 3 o más intentos]" if intentos >= 3 else ""
+                    print(f"Nombre: {nombre}, Intentos: {intentos}{alerta}")
             else:
                 print('\nNo hay intentos de inicio fallidos!')
 

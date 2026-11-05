@@ -170,35 +170,3 @@ def crear_reporte():
         if usuario is not None:
             acumulador[usuario] = acumulador.get(usuario, 0) + 1
     return acumulador
-
-def leer_compras():
-    """
-    Lee compras.csv y retorna una lista de diccionarios (diccionario de registro):
-    uno por cada fila válida, con los campos identificados por nombre.
-    Las filas con formato incorrecto se informan y se omiten.
-    """
-    nombres = ("id", "fecha", "nombre_completo", "mail", "dni", "tipo_entrada", "cantidad", "monto_final")
-    compras = []
-    try:
-        with open("compras.csv", mode='rt', encoding='utf-8') as arch:
-            arch.readline()
-            for linea in arch:
-                if linea.strip() == "":
-                    continue
-                campos = linea.strip().split(';')
-                if len(campos) != len(nombres):
-                    print(f"[AVISO] Fila con formato incorrecto: {linea.strip()}")
-                    continue
-                registro = dict(zip(nombres, campos))
-                try:
-                    registro["cantidad"] = int(registro["cantidad"])
-                    registro["monto_final"] = float(registro["monto_final"])
-                except ValueError:
-                    print(f"[AVISO] Fila con formato incorrecto: {linea.strip()}")
-                    continue
-                compras.append(registro)
-    except FileNotFoundError:
-        pass
-    except OSError:
-        print("[ERROR] No se pudo leer compras.csv.")
-    return compras
