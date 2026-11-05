@@ -1,1 +1,16 @@
 id;fecha;nombre_completo;mail;dni;tipo_entrada;cantidad;monto_final
+1042;20-10-2026;Juan Pérez;juan.perez@gmail.com;30123456;general;6;600000
+1187;20-10-2026;Lucía Fernández;lucia.fernandez@hotmail.com;32456789;vip;5;1250000
+2310;21-10-2026;Martín Gómez;martin.gomez@gmail.com;28987654;general;6;600000
+2675;21-10-2026;Camila Núñez;camila.nunez@yahoo.com;40111222;general;6;600000
+3021;22-10-2026;Sofía Rodríguez;sofia.rodriguez@gmail.com;41222333;vip;6;1500000
+3498;22-10-2026;Tomás Álvarez;tomas.alvarez@outlook.com;35333444;general;6;600000
+4107;22-10-2026;Juan Pérez;juan.perez@gmail.com;30123456;general;6;600000
+4562;25-10-2026;Valentina Díaz;valen.diaz@gmail.com;42444555;general;6;600000
+5033;25-10-2026;Nicolás Benítez;nico.benitez@gmail.com;37555666;vip;6;1500000
+5390;27-10-2026;Agustina Muñoz;agus.munoz@gmail.com;39666777;general;6;600000
+6148;27-10-2026;Federico Sosa;fede.sosa@hotmail.com;31777888;general;6;600000
+6721;28-10-2026;Julieta Acosta;juli.acosta@gmail.com;43888999;general;6;600000
+7204;28-10-2026;Matías Ibáñez;matias.ibanez@gmail.com;36999000;vip;3;750000
+8456;30-10-2026;Florencia Peña;flor.pena@yahoo.com;38010203;general;6;600000
+9012;02-11-2026;Bruno Castro;bruno.castro@gmail.com;44112233;general;5;500000
