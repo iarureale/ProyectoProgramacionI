@@ -184,13 +184,6 @@ def calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip):
     return min(entradas[nombre]["max_operacion"], stock_restante)
 
 
-def es_cantidad_valida(texto):
-    """
-    Recibe el texto ingresado por el usuario.
-    Retorna True si representa un número entero positivo.
-    """
-    return texto.isdigit() and int(texto) > 0
-
 def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios):
     """
     Recibe el codigo o nombre buscado, las listas de codigos y nombres, la matriz y las tuplas de escenarios y horarios.
@@ -224,19 +217,6 @@ def calcular_disponibilidad_general(tot, capacidad):
     capacidad_general = 100 - porcentaje_vendido
     return capacidad_general
 
-def validar_codigo(codigo):
-    """
-    Válida qué el código (str) cumpla con el formato adecuado; "A-XX"
-    False: Si no cumple con el formato indicado.
-    True: Si cumple con el formato indicado.
-    """
-    if len(codigo) != 4:
-        return False
-    if codigo[0:2] != "A-":
-        return False
-    if not codigo[2::].isdigit():
-        return False
-    return True
 
 def cambiar_artista(lineup, codigos, indice, codigo_nuevo):
     """

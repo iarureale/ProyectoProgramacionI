@@ -1,5 +1,34 @@
 from re import fullmatch
 
+'''
+VALIDACIONES DEL PRIMER ALCANCE
+'''
+
+def validar_codigo(codigo):
+    """
+    Válida qué el código (str) cumpla con el formato adecuado; "A-XX"
+    False: Si no cumple con el formato indicado.
+    True: Si cumple con el formato indicado.
+    """
+    if len(codigo) != 4:
+        return False
+    if codigo[0:2] != "A-":
+        return False
+    if not codigo[2::].isdigit():
+        return False
+    return True
+
+def es_cantidad_valida(texto):
+    """
+    Recibe el texto ingresado por el usuario.
+    Retorna True si representa un número entero positivo.
+    """
+    return texto.isdigit() and int(texto) > 0
+
+'''
+VALIDACIONES DEL SEGUNDO ALCANCE
+'''
+
 def validacion_nombre():
     while True:
         nombre = input("Ingresar nombre de la cuenta (4 a 15 caracteres: letras, numeros o _): ").strip()

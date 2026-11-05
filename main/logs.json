@@ -13,5 +13,20 @@
         "user_ingresado": "adsadsad",
         "fecha": "27-10-2026",
         "causa": "Usuario no encontrado."
+    },
+    {
+        "user_ingresado": "admin",
+        "fecha": "28-10-2026",
+        "causa": "Los campos no coinciden."
+    },
+    {
+        "user_ingresado": "admin",
+        "fecha": "29-10-2026",
+        "causa": "Los campos no coinciden."
+    },
+    {
+        "user_ingresado": "Juan_234",
+        "fecha": "30-10-2026",
+        "causa": "Usuario no encontrado."
     }
 ]
