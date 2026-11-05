@@ -7,6 +7,11 @@ from validaciones import *
 
 
 def leer_archivo():
+    """
+    Lee configuracion.json y retorna el diccionario de configuración.
+    Si el archivo no se puede leer o tiene un formato inválido, informa el error
+    y retorna None.
+    """
     config = None
     try:
         with open("configuracion.json", 'rt', encoding='utf-8') as arch:
@@ -17,7 +22,23 @@ def leer_archivo():
         print("ERROR. configuracion.json tiene un formato inválido (revisar comas, comillas y llaves).")
     return config
 
+def verificar_login():
+    """
+    Verifica que login.txt exista y se pueda abrir (es un archivo obligatorio).
+    Retorna True si está disponible; si no, informa el error y retorna False.
+    """
+    try:
+        with open("login.txt", "rt", encoding="utf-8"):
+            return True
+    except OSError:
+        print("[ERROR] No se encontró login.txt. El programa no puede iniciar sin ese archivo.")
+        return False
+
 def repitencia_usuarios(nombre, mail):
+    """
+    Recibe un nombre de usuario y un mail.
+    Recorre login.txt y retorna True si alguno de los dos ya está registrado.
+    """
     try:
         with open("login.txt", "rt", encoding="utf-8") as arch:
             arch.readline()
@@ -32,6 +53,10 @@ def repitencia_usuarios(nombre, mail):
     return False
 
 def registrar_cuenta(nombre, contrasena, mail):
+    """
+    Recibe nombre, contraseña y mail ya validados.
+    No retorna un valor; agrega la cuenta a login.txt con el rol 'Usuario'.
+    """
     try:
         with open("login.txt", "at", encoding="utf-8") as arch:
             arch.write(f"{nombre};{contrasena};{mail};Usuario\n")
@@ -40,6 +65,11 @@ def registrar_cuenta(nombre, contrasena, mail):
         print("Error al acceder al archivo")
 
 def buscar_usuarios(nombre, contrasena):
+    """
+    Recibe el nombre de usuario y la contraseña ingresados.
+    Retorna una tupla (rol, None) si las credenciales son correctas, o (None, causa)
+    con el motivo del fallo: formato incorrecto, usuario no encontrado o campos que no coinciden.
+    """
     causa = ("Usuario no encontrado.", "Usuario con formato incorrecto.",  "Los campos no coinciden.")
     if not es_usuario_valido(nombre):
         return None, causa[1]
@@ -59,6 +89,11 @@ def buscar_usuarios(nombre, contrasena):
     return None, causa[0]
 
 def intento_fallido(nombre, causa):
+    """
+    Recibe el usuario ingresado y la causa del fallo.
+    No retorna un valor; agrega el intento (usuario, fecha y causa) a la lista de logs.json.
+    La contraseña ingresada nunca se guarda.
+    """
 
     ingreso_fallido ={
     "user_ingresado": nombre,
@@ -78,6 +113,11 @@ def intento_fallido(nombre, causa):
         print("Error al guardar el archivo")
 
 def calcular_total():
+    """
+    Recorre compras.csv y acumula cantidad y monto en un diccionario por tipo de entrada.
+    Retorna la tupla (total_entradas, monto_total, total_general, total_vip).
+    Las filas con formato incorrecto se informan sin perder las válidas.
+    """
     ventas = {"general": {"cantidad": 0, "monto": 0},
               "vip": {"cantidad": 0, "monto": 0}}
     try:
@@ -103,6 +143,10 @@ def calcular_total():
     return tot_gen + tot_vip, monto_total, tot_gen, tot_vip
 
 def crear_compras_si_no_existe():
+    """
+    Crea compras.csv con su encabezado si todavía no existe.
+    No retorna un valor.
+    """
     try:
         open("compras.csv", "rt", encoding="utf-8").close()
     except FileNotFoundError:
@@ -110,6 +154,10 @@ def crear_compras_si_no_existe():
             arch.write("id;fecha;nombre_completo;mail;dni;tipo_entrada;cantidad;monto_final\n")
 
 def chequear_id():
+    """
+    Genera un id aleatorio de 4 dígitos que no esté repetido en compras.csv.
+    Retorna el id generado.
+    """
     crear_compras_si_no_existe()
     id = random.randint(1000,9999)
     repetido = True
@@ -129,6 +177,11 @@ def chequear_id():
     return id
 
 def guardar_compra(tipo_entrada, cantidad, precio_general, precio_vip, nombre_completo, mail, dni):
+    """
+    Recibe el tipo de entrada (1 = general, 2 = vip), la cantidad, los precios y los datos
+    del comprador ya validados. Calcula el monto final y agrega la compra a compras.csv.
+    Retorna True si se guardó, o False si hubo un error de escritura.
+    """
     id = chequear_id()
     fecha = datetime.today().strftime("%d-%m-%Y")
     if tipo_entrada == 1:
@@ -144,6 +197,10 @@ def guardar_compra(tipo_entrada, cantidad, precio_general, precio_vip, nombre_co
         return False
 
 def crear_reporte():
+    """
+    Lee logs.json y acumula en un diccionario la cantidad de intentos fallidos por usuario.
+    Retorna el diccionario {usuario: cantidad}; queda vacío si no hay intentos o no se puede leer el archivo.
+    """
     acumulador = {}
 
     try:
@@ -160,11 +217,3 @@ def crear_reporte():
         if usuario is not None:
             acumulador[usuario] = acumulador.get(usuario, 0) + 1
     return acumulador
-
-def verificar_login():
-    try:
-        with open("login.txt", "rt", encoding="utf-8"):
-            return True
-    except OSError:
-        print("[ERROR] No se encontró login.txt. El programa no puede iniciar sin ese archivo.")
-        return False

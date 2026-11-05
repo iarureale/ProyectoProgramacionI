@@ -76,6 +76,10 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
             break
 
 def menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, entradas):
+    """
+    Recibe la matriz lineup, las listas de artistas, los horarios, los escenarios, la capacidad total y la configuración de entradas.
+    No retorna un valor; muestra el menú del administrador (grilla, programación y estadísticas) hasta que decide salir.
+    """
     while True:
         admin = True
         print("\nMENU ADMIN\n")
@@ -97,6 +101,10 @@ def menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad
             break
 
 def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, entradas):
+    """
+    Recibe las mismas estructuras que menu_admin.
+    No retorna un valor; muestra el menú del usuario (información, búsqueda de artistas, grilla, compra de entradas y estadísticas) hasta que decide salir.
+    """
     while True:
         admin = False
         print("\nMENU Usuario\n")
@@ -546,6 +554,3 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, 
             for i in range(len(escenarios)):
                 print(f"{escenarios[i]}: {conteo[i]}")
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
-            
-
-

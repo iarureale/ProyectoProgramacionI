@@ -293,6 +293,10 @@ En archivos.py: login.txt, configuracion.json, logs.json y compras.csv.
 '''
 
 def validacion_nombre():
+    """
+    Solicita por teclado el nombre de la cuenta hasta que cumpla es_usuario_valido.
+    Retorna el nombre validado.
+    """
     while True:
         nombre = input("Ingresar nombre de la cuenta (4 a 15 caracteres: letras, numeros o _): ").strip()
         if es_usuario_valido(nombre):
@@ -300,6 +304,10 @@ def validacion_nombre():
         print("[ERROR] El nombre de usuario debe tener entre 4 y 15 caracteres: letras, números o guion bajo (_).")
 
 def validacion_contrasena():
+    """
+    Solicita por teclado la contraseña hasta que cumpla es_contrasena_valida.
+    Retorna la contraseña validada.
+    """
     mensaje = "Ingresar contraseña. Debe contener un numero y 4 caracteres: "
     contrasena = input(mensaje)
     while not es_contrasena_valida(contrasena):
@@ -311,6 +319,10 @@ def validacion_contrasena():
     return contrasena
 
 def validacion_mail():
+    """
+    Solicita por teclado el mail hasta que cumpla es_mail_valido.
+    Retorna el mail validado.
+    """
     mail = input("Ingresá tu mail: ").strip()
     while not es_mail_valido(mail):
         print("[ERROR] El mail debe tener el formato usuario@dominio.com (ej: nombre@gmail.com).")
@@ -318,6 +330,10 @@ def validacion_mail():
     return mail
 
 def validar_dni():
+    """
+    Solicita por teclado el DNI del responsable hasta que cumpla es_dni_valido.
+    Retorna el DNI validado.
+    """
     dni = input("Ingresar DNI del responsable de la entrada: ").strip()
     while not es_dni_valido(dni):
         print("[ERROR] El DNI debe tener 7 u 8 dígitos, solo números y sin puntos (ej: 12345678).")
