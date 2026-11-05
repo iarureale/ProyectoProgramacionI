@@ -20,6 +20,11 @@ def leer_archivo():
         print("ERROR. No se pudo leer el archivo")
     except ValueError:
         print("ERROR. configuracion.json tiene un formato inválido (revisar comas, comillas y llaves).")
+    if config is not None:
+        for clave in ("escenarios", "horarios", "entradas"):
+            if clave not in config:
+                print(f"ERROR. configuracion.json no tiene la clave '{clave}'.")
+                return None
     return config
 
 def verificar_login():
