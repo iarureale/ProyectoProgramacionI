@@ -56,3 +56,17 @@ def test_contar_artistas_por_escenario(): # Acumulación por clave (escenario).
     lineup[1][0] = "A-02"
     lineup[0][2] = "A-03"
     assert contar_artistas_escenario(lineup, escenarios) == [2, 0, 1, 0, 0]
+
+#------------
+
+def test_usuario_valido_e_invalido():
+    assert es_usuario_valido("Juan_234") == True
+    assert es_usuario_valido("a") == False
+
+def test_mail_valido_e_invalido():
+    assert es_mail_valido("nombre@gmail.com") == True
+    assert es_mail_valido("nombre@gmail") == False
+
+def test_dni_limite():
+    assert es_dni_valido("1234567") == True    # límite inferior (7 dígitos)
+    assert es_dni_valido("123456") == False
