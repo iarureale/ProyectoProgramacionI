@@ -160,3 +160,11 @@ def crear_reporte():
         if usuario is not None:
             acumulador[usuario] = acumulador.get(usuario, 0) + 1
     return acumulador
+
+def verificar_login():
+    try:
+        with open("login.txt", "rt", encoding="utf-8"):
+            return True
+    except OSError:
+        print("[ERROR] No se encontró login.txt. El programa no puede iniciar sin ese archivo.")
+        return False

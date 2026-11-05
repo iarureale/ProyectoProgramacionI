@@ -1,9 +1,11 @@
 from menu import menu_principal
-from funciones import grilla, leer_archivo
+from funciones import grilla, leer_archivo, verificar_login
 
 def main():
     config = leer_archivo()
     if config is None: # Para que el programa no se rompa en menú en caso de no poder abrir el archivo.
+        return
+    if not verificar_login():
         return
     lineup = grilla()
     codigos = []
