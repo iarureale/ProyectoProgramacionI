@@ -400,7 +400,7 @@ def intento_fallido(nombre, causa):
     try:
         with open("logs.json", "rt", encoding="utf-8") as arch:
             intentos = json.load(arch)
-    except:
+    except (OSError, ValueError):
         intentos = []
     intentos.append(ingreso_fallido)
     try:
@@ -435,16 +435,19 @@ def calcular_total():
 def chequear_id():
     id = random.randint(1000,9999)
     repetido = True
-    with open('compras.csv', mode='rt') as arch:
-        while repetido:
-            repetido = False
-            arch.seek(0) #Nos permite volver al principio sin abrir varias veces un archivo
-            for lineas in arch:
-                campos = lineas.strip().split(';')
-                if campos[0] == str(id):
-                    repetido = True
-                    id = random.randint(1000,9999)
-                    break
+    try:
+        with open('compras.csv', mode='rt') as arch:
+            while repetido:
+                repetido = False
+                arch.seek(0) #Nos permite volver al principio sin abrir varias veces un archivo
+                for lineas in arch:
+                    campos = lineas.strip().split(';')
+                    if campos[0] == str(id):
+                        repetido = True
+                        id = random.randint(1000,9999)
+                        break
+    except FileNotFoundError:
+        pass
     return id
 
 

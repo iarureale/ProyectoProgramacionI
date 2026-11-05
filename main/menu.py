@@ -88,14 +88,14 @@ def menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad
         elif opcion == 2:
             modificar_programacion(lineup, nombre_artistas, codigos, horarios, escenarios)
         elif opcion == 3:
-            estadisticas(capacidad_general, entradas, codigos, nombre_artistas)
+            estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios)
         elif opcion == 4:
             print("="*60)
             print('¡Sesión cerrada con éxito!'.center(60, '-'))
             print("="*60)
             break
 
-def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, max_operacion, entradas):
+def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, entradas):
     while True:
         print("\nMENU Usuario\n")
 
@@ -111,7 +111,7 @@ def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacid
         elif opcion == 4:
             menu_comprar_entradas(entradas, capacidad_general)
         elif opcion == 5:
-            estadisticas(capacidad_general, entradas, codigos, nombre_artistas)
+            estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios)
         elif opcion == 6:
             print("="*60)
             print('¡Sesión cerrada con éxito!'.center(60, '-'))
@@ -347,13 +347,15 @@ def modificar_programacion(lineup, nombre_artistas, codigos, horarios, escenario
 
                     elif modificar_datos == 4:
                         horario_viejo, escenario_viejo = buscar_posicion_en_lineup(lineup, modificar_artista)
+                        if '.' not in lineup[horario_viejo-1]:
+                            print("\n[AVISO] Todos los escenarios están ocupados en ese horario.")
+                        else:
+                            escenario_nuevo = pedir_opcion_valida("Ingresar el nuevo escenario: ", [1, 2, 3, 4, 5])
+                            escenario_nuevo = validar_escenario(escenario_nuevo, lineup, horario_viejo)
 
-                        escenario_nuevo = pedir_opcion_valida("Ingresar el nuevo escenario: ", [1, 2, 3, 4, 5])
-                        escenario_nuevo = validar_escenario(escenario_nuevo, lineup, horario_viejo)
-
-                        lineup[horario_viejo-1][escenario_viejo-1] = '.'
-                        lineup[horario_viejo-1][escenario_nuevo-1] = modificar_artista
-                        print(f"El artista {modificar_artista} fue reasignado al escenario {escenario_nuevo}.")
+                            lineup[horario_viejo-1][escenario_viejo-1] = '.'
+                            lineup[horario_viejo-1][escenario_nuevo-1] = modificar_artista
+                            print(f"El artista {modificar_artista} fue reasignado al escenario {escenario_nuevo}.")
                         volver = pedir_opcion_valida("Ingresar (1) para volver al menú anterior: ", [1])
 
         elif opcion == 3:
@@ -396,8 +398,10 @@ def menu_comprar_entradas(entradas, capacidad_general):
             disponibilidad = calcular_disponibilidad_general(vendidas_gen + vendidas_vip, capacidad_general)
             disponibilidad_gen = calcular_disponibilidad_general(vendidas_gen, entradas["General"]["cupo_maximo"])
             disponibilidad_vip = calcular_disponibilidad_general(vendidas_vip, entradas["VIP"]["cupo_maximo"])
-        except ValueError:
+        except ZeroDivisionError:
             print("\n[ERROR] Revisá la configuración de entradas.")
+            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            break
         if disponibilidad <= 0:
             print("=" * 50)
             print("¡Las entradas están agotadas!".center(50,"-"))
@@ -469,7 +473,7 @@ def menu_comprar_entradas(entradas, capacidad_general):
         elif opcion == 3:
             break
 
-def estadisticas(capacidad_general, entradas, codigos, nombre_artistas):
+def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios):
     """
     Recibe las estructuras de programacion del festival, los acumuladores de venta, la capacidad general y la configuracion de entradas.
     No retorna un valor; muestra los distintos informes y estadisticas del sistema segun la opcion elegida.
@@ -481,13 +485,13 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas):
         print("✦" + "═" * 44 + "✦")
         print(f"✦{' MENÚ: Estadísticas e informes '.center(44, '═')}✦")
         print("✦" + "═" * 44 + "✦")
-        print("│ 1. Ventas y recaudación\n│ 2. Ocupación y disponibilidad\n│ 3. Lineup\n│ 4. Intentos fallidos de ingreso\n│ 5. Salir")
+        print("│ 1. Ventas y recaudación\n│ 2. Ocupación y disponibilidad\n│ 3. Lineup\n│ 4. Intentos fallidos de ingreso\n│ 5. Artistas por escenario\n│ 6. Salir")
         print("✦" + "═" * 44 + "✦")
 
-        opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5])
+        opcion = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4, 5, 6])
 
 
-        if opcion == 5:
+        if opcion == 6:
             break
         elif opcion == 1:
             print(f"Entradas General vendidas: {vendidas_gen} - Recaudación: ${recaudada_gen}")
@@ -503,7 +507,7 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas):
                 print(f"Porcentaje de ocupación: {porcentaje:.2f}% ({tot} de {capacidad_general})")
                 print(f"General: {porcentaje_gen:.2f}%")
                 print(f"VIP: {porcentaje_vip:.2f}%")
-            except ValueError:
+            except ZeroDivisionError:
                 print("\n[ERROR] Revisá la configuración de entradas.")
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
@@ -519,5 +523,13 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas):
 
         elif opcion == 4:
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+
+        elif opcion == 5:
+            conteo = contar_artistas_escenario(lineup, escenarios)
+            print("\nArtistas por escenario:\n")
+            for i in range(len(escenarios)):
+                print(f"{escenarios[i]}: {conteo[i]}")
+            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            
 
 
