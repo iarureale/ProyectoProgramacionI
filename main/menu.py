@@ -522,6 +522,11 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, 
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
         elif opcion == 4:
+            acumulador = crear_reporte()
+            print("\nUsuarios que han intentado ingresar sin exito.")
+            for nombre, intentos in acumulador.items():
+                print(f"Nombre: {nombre}, Intentos: {intentos}")
+                
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
         elif opcion == 5:

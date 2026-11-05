@@ -485,3 +485,20 @@ def procesar_compra(tipo_entrada, cantidad, precio_general, precio_vip):
         return False
 
 
+def crear_reporte():
+    acumulador = {}
+
+    try:
+        with open("logs.json", mode="rt") as arch:
+            intentos = load(arch)
+    except FileNotFoundError:
+        return acumulador
+    except (OSError, ValueError):
+        print("[ERROR] No se pudo leer logs.json.")
+        return acumulador
+
+    for intento in intentos:
+        usuario = intento.get("user_ingresado")
+        if usuario is not None:
+            acumulador[usuario] = acumulador.get(usuario, 0) + 1
+    return acumulador
