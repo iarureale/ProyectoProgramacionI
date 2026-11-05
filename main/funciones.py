@@ -388,6 +388,8 @@ def leer_archivo():
             config = load(arch)
     except OSError:
         print("ERROR. No se pudo leer el archivo")
+    except ValueError:
+        print("ERROR. configuracion.json tiene un formato inválido (revisar comas, comillas y llaves).")
     return config
 
 def intento_fallido(nombre, causa):
@@ -417,10 +419,14 @@ def calcular_total():
         with open("compras.csv", mode='rt') as arch:
             arch.readline()
             for lineas in arch:
+                if lineas.strip() == "":
+                    continue
                 campos = lineas.strip().split(';')
                 try:
-                    ventas[campos[5]]["cantidad"] += int(campos[6])
-                    ventas[campos[5]]["monto"] += float(campos[7])
+                    cantidad = int(campos[6])
+                    monto = float(campos[7])
+                    ventas[campos[5]]["cantidad"] += cantidad
+                    ventas[campos[5]]["monto"] += monto
                 except (IndexError, ValueError, KeyError):
                     print(f"[AVISO] Fila con formato incorrecto: {lineas.strip()}")
     except FileNotFoundError:
@@ -431,8 +437,15 @@ def calcular_total():
     monto_total = ventas["general"]["monto"] + ventas["vip"]["monto"]
     return tot_gen + tot_vip, monto_total, tot_gen, tot_vip
 
+def crear_compras_si_no_existe():
+    try:
+        open("compras.csv", "rt").close()
+    except FileNotFoundError:
+        with open("compras.csv", "wt") as arch:
+            arch.write("id;fecha;nombre_completo;mail;dni;tipo_entrada;cantidad;monto_final\n")
 
 def chequear_id():
+    crear_compras_si_no_existe()
     id = random.randint(1000,9999)
     repetido = True
     try:
@@ -489,7 +502,7 @@ def crear_reporte():
     acumulador = {}
 
     try:
-        with open("logs.json", mode="rt") as arch:
+        with open("logs.json", mode="rt", encoding="utf-8") as arch:
             intentos = load(arch)
     except FileNotFoundError:
         return acumulador

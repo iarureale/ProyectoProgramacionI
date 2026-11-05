@@ -11,7 +11,7 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
 
     capacidad_general = config["entradas"]["General"]["cupo_maximo"] + config["entradas"]["VIP"]["cupo_maximo"] # Entradas en total (80 + 20 = 100)
 
-    max_operacion = config["entradas"]['General']['max_operacion']
+
 
     intentos = 0
 
@@ -41,7 +41,7 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
             elif rol == "Usuario": 
                 print("\nCuenta de Usuario encontrada! Login exitoso\n")
                 intentos = 0 #SE REINICIA EL CONTEO UNA VEZ QUE HAY UN LOGIN EXITOSO
-                menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, max_operacion, entradas)
+                menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, entradas)
 
             else:
                 intentos += 1
@@ -77,6 +77,7 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
 
 def menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, entradas):
     while True:
+        admin = True
         print("\nMENU ADMIN\n")
 
         print("1. Consultar grilla\n2. Modificar programación\n3. Estadísticas\n4. Salir")
@@ -88,7 +89,7 @@ def menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad
         elif opcion == 2:
             modificar_programacion(lineup, nombre_artistas, codigos, horarios, escenarios)
         elif opcion == 3:
-            estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios)
+            estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios, admin)
         elif opcion == 4:
             print("="*60)
             print('¡Sesión cerrada con éxito!'.center(60, '-'))
@@ -97,6 +98,7 @@ def menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad
 
 def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad_general, entradas):
     while True:
+        admin = False
         print("\nMENU Usuario\n")
 
         print("1. Consultar información\n2. Buscar artista\n3. Consultar grilla\n4. Comprar entradas\n5. Estadisticas\n6. Salir")
@@ -111,7 +113,7 @@ def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacid
         elif opcion == 4:
             menu_comprar_entradas(entradas, capacidad_general)
         elif opcion == 5:
-            estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios)
+            estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios, admin)
         elif opcion == 6:
             print("="*60)
             print('¡Sesión cerrada con éxito!'.center(60, '-'))
@@ -120,7 +122,6 @@ def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacid
 
 def consultar_informacion():
     """
-    Recibe la matriz lineup, las listas de artistas y codigos, y los acumuladores de venta.
     No retorna un valor, muestra el submenú de información general del festival y la informacion correspondiente a la opción elegida por el usuario.
     """
     while True:
@@ -158,7 +159,7 @@ def consultar_informacion():
 
 def menu_buscar_artista(lineup, nombre_artistas, codigos, escenarios, horarios):
     """
-    Recibe la matriz lineup, las listas de artistas y codigos, los acumuladores de venta y las tuplas de escenarios y horarios.
+    Recibe la matriz lineup, las listas de artistas y codigos, y las listas de escenarios y horarios.
     No retorna un valor; permite buscar un artista por código o nombre, mostrando su información correspondiente, y permite volver al menú principal.
     """
     while True:                                   
@@ -385,9 +386,9 @@ def pedir_cantidad_entradas(limite):
 
 def menu_comprar_entradas(entradas, capacidad_general):
     """
-    Recibe los acumuladores de venta, las configuraciones de entradas, la capacidad total, el límite de compra por operación y las estructuras de artistas y escenarios.
+    Recibe las configuraciones de entradas, la capacidad total
     No retorna un valor; gestiona la compra de entradas General y VIP, chequea la disponibilidad 
-    restante y llama a la encuesta de escenarios tras una operación exitosa.
+    restante.
     """
     while True:
         tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total()
@@ -473,10 +474,10 @@ def menu_comprar_entradas(entradas, capacidad_general):
         elif opcion == 3:
             break
 
-def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios):
+def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios, admin):
     """
-    Recibe las estructuras de programacion del festival, los acumuladores de venta, la capacidad general y la configuracion de entradas.
-    No retorna un valor; muestra los distintos informes y estadisticas del sistema segun la opcion elegida.
+    Recibe la capacidad general, la configuración de entradas, las listas de artistas, la matriz lineup, los escenarios 
+    y si el usuario es admin.
     """
     while True:
         tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total()
@@ -521,12 +522,21 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, 
 
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
-        elif opcion == 4:
+        elif opcion == 4 and admin == True:
             acumulador = crear_reporte()
-            print("\nUsuarios que han intentado ingresar sin exito.")
-            for nombre, intentos in acumulador.items():
-                print(f"Nombre: {nombre}, Intentos: {intentos}")
-                
+            if acumulador:
+                print(f"\nTotal de intentos fallidos: {sum(acumulador.values())}")
+                print("\nUsuarios que han intentado ingresar sin exito.")
+                for nombre, intentos in acumulador.items():
+                    print(f"Nombre: {nombre}, Intentos: {intentos}")
+            else:
+                print('\nNo hay intentos de inicio fallidos!')
+
+
+            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+
+        elif opcion == 4 and admin == False:
+            print("\nNo se tiene los privilegios para acceder a esta información!")
             pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
 
         elif opcion == 5:
