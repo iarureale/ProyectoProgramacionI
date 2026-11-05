@@ -3,7 +3,7 @@ import random
 from json import load
 from re import fullmatch
 from datetime import datetime
-from validaciones import validacion_mail, validar_dni
+from validaciones import *
 
 
 def leer_archivo():
@@ -41,7 +41,7 @@ def registrar_cuenta(nombre, contrasena, mail):
 
 def buscar_usuarios(nombre, contrasena):
     causa = ("Usuario no encontrado.", "Usuario con formato incorrecto.",  "Los campos no coinciden.")
-    if not fullmatch(r"[A-Za-z0-9_]{4,15}", nombre):
+    if not es_usuario_valido(nombre):
         return None, causa[1]
     try:
         with open("login.txt", "rt", encoding="utf-8") as arch:
@@ -128,23 +128,13 @@ def chequear_id():
         pass
     return id
 
-def procesar_compra(tipo_entrada, cantidad, precio_general, precio_vip):
-    #id;fecha;nombre_completo;mail;dni;tipo_entrada;cantidad;monto_final
+def guardar_compra(tipo_entrada, cantidad, precio_general, precio_vip, nombre_completo, mail, dni):
     id = chequear_id()
     fecha = datetime.today().strftime("%d-%m-%Y")
-    nombre_completo = input("Ingresar nombre del responsable de la entrada: ").strip()
-    while nombre_completo == "" or ";" in nombre_completo:
-            print("[ERROR] El nombre no puede estar vacío ni contener ';'.")
-            nombre_completo = input("Ingresar nombre del responsable de la entrada: ").strip()
-    mail = validacion_mail()
-    dni = validar_dni()
-
     if tipo_entrada == 1:
-        tipo= 'general'
-        monto_final = cantidad * precio_general
-    elif tipo_entrada == 2:
-        tipo = 'vip'
-        monto_final = cantidad * precio_vip
+        tipo, monto_final = 'general', cantidad * precio_general
+    else:
+        tipo, monto_final = 'vip', cantidad * precio_vip
     try:
         with open('compras.csv', mode='at', encoding='utf-8') as arch:
             arch.write(f"{id};{fecha};{nombre_completo};{mail};{dni};{tipo};{cantidad};{monto_final}\n")

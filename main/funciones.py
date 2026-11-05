@@ -291,3 +291,45 @@ En validaciones.py: Validaciones de formato (expresiones regulares) y de datos i
 
 En archivos.py: login.txt, configuracion.json, logs.json y compras.csv.
 '''
+
+def validacion_nombre():
+    while True:
+        nombre = input("Ingresar nombre de la cuenta (4 a 15 caracteres: letras, numeros o _): ").strip()
+        if es_usuario_valido(nombre):
+            return nombre
+        print("[ERROR] El nombre de usuario debe tener entre 4 y 15 caracteres: letras, números o guion bajo (_).")
+
+def validacion_contrasena():
+    mensaje = "Ingresar contraseña. Debe contener un numero y 4 caracteres: "
+    contrasena = input(mensaje)
+    while not es_contrasena_valida(contrasena):
+        if ";" in contrasena:
+            print("[ERROR] La contraseña no puede contener el carácter ';'.")
+        else:
+            print("[ERROR] La contraseña debe tener al menos 4 caracteres e incluir al menos un número.")
+        contrasena = input(mensaje)
+    return contrasena
+
+def validacion_mail():
+    mail = input("Ingresá tu mail: ").strip()
+    while not es_mail_valido(mail):
+        print("[ERROR] El mail debe tener el formato usuario@dominio.com (ej: nombre@gmail.com).")
+        mail = input("Ingresá tu mail: ").strip()
+    return mail
+
+def validar_dni():
+    dni = input("Ingresar DNI del responsable de la entrada: ").strip()
+    while not es_dni_valido(dni):
+        print("[ERROR] El DNI debe tener 7 u 8 dígitos, solo números y sin puntos (ej: 12345678).")
+        dni = input("Ingresar DNI del responsable de la entrada: ").strip()
+    return dni
+
+def procesar_compra(tipo_entrada, cantidad, precio_general, precio_vip):
+    """Pide los datos del comprador y los guarda con guardar_compra (archivos.py)."""
+    nombre = input("Ingresar nombre del responsable de la entrada: ").strip()
+    while nombre == "" or ";" in nombre:
+        print("[ERROR] El nombre no puede estar vacío ni contener ';'.")
+        nombre = input("Ingresar nombre del responsable de la entrada: ").strip()
+    mail = validacion_mail()
+    dni = validar_dni()
+    return guardar_compra(tipo_entrada, cantidad, precio_general, precio_vip, nombre, mail, dni)

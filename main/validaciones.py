@@ -29,41 +29,16 @@ def es_cantidad_valida(texto):
 VALIDACIONES DEL SEGUNDO ALCANCE
 '''
 
-def validacion_nombre():
-    while True:
-        nombre = input("Ingresar nombre de la cuenta (4 a 15 caracteres: letras, numeros o _): ").strip()
-        if fullmatch(r"[A-Za-z0-9_]{4,15}", nombre):
-            return nombre
-        print("[ERROR] El nombre de usuario debe tener entre 4 y 15 caracteres: letras, números o guion bajo (_).")
+def es_usuario_valido(nombre):
+    return fullmatch(r"[A-Za-z0-9_]{4,15}", nombre) is not None
 
-def validacion_contrasena():
-    contrasena = input("Ingresar contraseña. Debe contener un numero y 4 caracteres: ")
+def es_mail_valido(mail):
+    return fullmatch(r"[A-Za-z0-9._+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}", mail) is not None
 
-    while len(contrasena) < 4 or not any(c.isdigit() for c in contrasena) or ";" in contrasena: #Recorre la string en busca de numeros
-        if ';' in contrasena:
-            print("[ERROR] La contraseña no puede contener el carácter ';'.")
-            contrasena = input("Ingresar contraseña. Debe contener un numero y 4 caracteres: ")
-        else:
-            print("[ERROR] La contraseña debe tener al menos 4 caracteres e incluir al menos un número.")
-            contrasena = input("Ingresar contraseña. Debe contener un numero y 4 caracteres: ")
-    return contrasena
+def es_dni_valido(dni):
+    return fullmatch(r"[0-9]{7,8}", dni) is not None
 
-def validacion_mail():
-    patron = r"^[\w.+-]+@[\w-]+(\.[\w-]+)+$"
-
-    mail = input("Ingresá tu mail: ").strip()
-
-    while not fullmatch(patron, mail):
-        print("[ERROR] El mail debe tener el formato usuario@dominio.com (ej: nombre@gmail.com).")
-        mail = input("Ingresá tu mail: ").strip()
-
-    return mail
-
-def validar_dni():
-    while True:
-        dni = input("Ingresar DNI del responsable de la entrada: ").strip()
-        if fullmatch(r"\d{7,8}", dni):
-            return dni
-        print("[ERROR] El DNI debe tener 7 u 8 dígitos, solo números y sin puntos (ej: 12345678).")
+def es_contrasena_valida(contrasena):
+    return len(contrasena) >= 4 and any(c.isdigit() for c in contrasena) and ";" not in contrasena
 
 
