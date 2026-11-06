@@ -2,8 +2,11 @@ from funciones import *
 
 def menu_principal(lineup, nombre_artistas, codigos, config):
     """
-    Recibe la matriz lineup, las listas de artistas y codigos, y los acumuladores de venta.
-    No retorna un valor, muestra el menu principal del sistema y llama a las funciones correspondientes según la opción elegida por el usuario.
+    Recibe la matriz lineup, las listas nombre_artistas y codigos, y el diccionario config
+    cargado desde configuracion.json.
+    No retorna un valor; muestra el menú inicial (iniciar sesión, crear cuenta, salir), cuenta los
+    intentos fallidos de login (al tercero muestra la alerta, bloquea el acceso y termina) y
+    deriva al menú de Admin o de Usuario según el rol.
     """
     escenarios = config["escenarios"]
     horarios = config["horarios"]
@@ -30,7 +33,7 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
 
         if tipo_ingreso == 1:
 
-            nombre = input("Ingresar nombre de usuario: ")
+            nombre = input("Ingresar nombre de usuario: ").strip()
             contrasena = input("Ingresar contraseña: ")
 
             rol, causa = buscar_usuarios(nombre, contrasena)
@@ -213,8 +216,10 @@ def menu_buscar_artista(lineup, nombre_artistas, codigos, escenarios, horarios):
 
 def consultar_grilla(lineup, horarios, escenarios, nombre_artistas, codigos):
     """
-    Recibe la matriz lineup, las tuplas de horarios y escenarios, las listas de artistas y códigos, y los acumuladores de venta.
-    No retorna un valor; muestra la grilla de programacion del festival por código y por nombre de artista, y permite volver al menú principal.
+    Recibe la matriz lineup, las listas de horarios y escenarios, y las listas de nombres de
+    artistas y códigos.
+    No retorna un valor; muestra la grilla por código y por nombre de artista, y permite volver
+    al menú anterior.
     """
     while True:
         print("✦" + "═" * 44 + "✦")
@@ -256,21 +261,20 @@ def registrar_artistas(lineup, nombre_artistas, codigos, horarios, escenarios):
 
         ingresar_artista(lineup, nombre_artistas, codigos, horarios, escenarios)
         print("\nPara continuar ingresando artistas, presione (1). Para detener el registro, presione (2).")
-        volver = pedir_opcion_valida('Ingresar:', [1, 2])
+        volver = pedir_opcion_valida('Ingresar: ', [1, 2])
 
         if volver == 2:
             break
 
 def elegir_artista_a_modificar(codigos, modificar_artista=None):
     """
-    Recibe las mismas estructuras que modificar_programacion, mas el código ya tipeado (o None
-    la primera vez, en cuyo caso se pide por teclado).
-    Retorna el código válido y ya registrado que ingresó el usuario, o None si el usuario
-    decidió salir (ingresando '2').
+    Recibe la lista de codigos y, opcionalmente, un código ya tipeado (None la primera vez,
+    en cuyo caso se pide por teclado).
+    Retorna el código válido y registrado, o None si el usuario ingresa '2' para salir.
     """
     while True:
         if modificar_artista is None:
-            modificar_artista = input("Ingresar código del artista a modificar, o (2) para salir: ").upper()
+            modificar_artista = input("Ingresar código del artista a modificar, o (2) para salir: ").strip().upper()
             
         if modificar_artista == '2':
             return None
@@ -281,12 +285,13 @@ def elegir_artista_a_modificar(codigos, modificar_artista=None):
                 print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
             else:
                 print('[ERROR] El código ingresado no se encuentra registrado. Por favor, ingrese un código válido.\n')
-            modificar_artista = input("Ingresar código del artista a modificar: ").upper()
+            modificar_artista = input("Ingresar código del artista a modificar: ").strip().upper()
         
 def modificar_programacion(lineup, nombre_artistas, codigos, horarios, escenarios):
     """
-    Recibe la matriz lineup, las listas de artistas y codigos, los acumuladores de venta y las tuplas de horarios y escenarios.
-    No retorna un valor; permite registrar nuevos artistas o modificar los datos de un artista ya registrado (código, nombre, horario o escenario), y permite volver al menú principal.
+    Recibe la matriz lineup, las listas de artistas y codigos, y las listas de horarios y escenarios.
+    No retorna un valor; permite registrar artistas o modificar los datos de uno ya registrado
+    (código, nombre, horario o escenario), y permite volver al menú anterior.
     """
     while True:
         print("✦" + "═" * 44 + "✦")
@@ -321,23 +326,27 @@ def modificar_programacion(lineup, nombre_artistas, codigos, horarios, escenario
 
                     modificar_datos = pedir_opcion_valida("Ingresar: ", [1, 2, 3, 4])
                     if modificar_datos == 1:
-                        codigo_nuevo = (input("Ingresar un código nuevo: ")).upper()
+                        codigo_nuevo = (input("Ingresar un código nuevo: ")).strip().upper()
                         while not validar_codigo(codigo_nuevo) or artista_ya_ingresado(codigo_nuevo, codigos):
                             if not validar_codigo(codigo_nuevo):
                                 print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
                             else:
                                 print(f"[ERROR] El código {codigo_nuevo} ya está en uso por otro artista.")
-                            codigo_nuevo = input("Ingresar codigo nuevo: ").upper()
+                            codigo_nuevo = input("Ingresar codigo nuevo: ").strip().upper()
                         cambiar_artista(lineup, codigos, indice, codigo_nuevo)
                         print(f"El código del artista {nombre_artistas[indice]} fue actualizado a {codigo_nuevo}.")
 
                         volver = pedir_opcion_valida("Ingresar (1) para volver al menú anterior: ", [1])
 
                     elif modificar_datos == 2:
-                        nombre = input("Ingresar el nombre nuevo: ")
-                        while nombre == "" or nombre.isspace():
-                            print("[ERROR] El nombre no puede quedar vacío ni contener únicamente espacios en blanco.")
-                            nombre = input("Ingresar el nombre nuevo: ")
+                        nombre = input("Ingresar el nombre nuevo: ").strip()
+                        otros = nombre_artistas[:indice] + nombre_artistas[indice+1:]
+                        while nombre == "" or nombre_artista_repetido(nombre, otros):
+                            if nombre == "":
+                                print("[ERROR] El nombre no puede quedar vacío ni contener únicamente espacios en blanco.")
+                            else:
+                                print(f"[ERROR] Ya existe un artista llamado '{nombre}'. Ingrese un nombre distinto.")
+                            nombre = input("Ingresar el nombre nuevo: ").strip()
                         nombre_artistas[indice] = nombre
                         print(f"El nombre del artista {codigos[indice]} fue actualizado a {nombre}.")
                         volver = pedir_opcion_valida("Ingresar (1) para volver al menú anterior: ", [1])
@@ -376,18 +385,18 @@ def pedir_cantidad_entradas(limite):
     Retorna la cantidad válida ingresada.
     """
     print("\nIngrese la cantidad de entradas que desea comprar.")
-    entrada_usuario = input("Ingresar: ")
+    entrada_usuario = input("Ingresar: ").strip()
     while not es_cantidad_valida(entrada_usuario):
         print("[ERROR] La cantidad debe ser un número entero positivo (ej: 2).")
-        entrada_usuario = input("Ingresar: ")
+        entrada_usuario = input("Ingresar: ").strip()
 
     cantidad = int(entrada_usuario)
     while cantidad > limite:
         print(f"[ERROR] Puede comprar como máximo {limite} entradas en esta operación.")
-        entrada_usuario = input("Ingresar:")
+        entrada_usuario = input("Ingresar: ").strip()
         while not es_cantidad_valida(entrada_usuario):
             print("[ERROR] La cantidad debe ser un número entero positivo (ej: 2).")
-            entrada_usuario = input("Ingresar: ")
+            entrada_usuario = input("Ingresar: ").strip()
         cantidad = int(entrada_usuario)
 
     return cantidad
@@ -484,8 +493,10 @@ def menu_comprar_entradas(entradas, capacidad_general):
 
 def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, escenarios, admin):
     """
-    Recibe la capacidad general, la configuración de entradas, las listas de artistas, la matriz lineup, los escenarios 
-    y si el usuario es admin.
+    Recibe la capacidad general, la configuración de entradas, las listas de artistas y códigos,
+    la matriz lineup, los escenarios y si el usuario es admin.
+    No retorna un valor; muestra el menú de estadísticas (ventas, ocupación, lineup, artistas por
+    escenario e intentos fallidos). Los intentos fallidos solo se muestran si admin es True.
     """
     while True:
         tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total()

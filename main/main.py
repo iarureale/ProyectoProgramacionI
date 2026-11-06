@@ -1,5 +1,6 @@
 from menu import menu_principal
-from funciones import grilla, leer_archivo, verificar_login
+from funciones import grilla, leer_archivo, verificar_login, calcular_total
+
 
 def main():
     """
@@ -11,10 +12,12 @@ def main():
         return
     if not verificar_login():
         return
+    calcular_total(mostrar_avisos=True)
     lineup = grilla()
     codigos = []
     nombre_artistas = []
 
     menu_principal(lineup, nombre_artistas, codigos, config)
 
-main()
+if __name__ == "__main__":
+    main()

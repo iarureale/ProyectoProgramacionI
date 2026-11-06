@@ -9,11 +9,11 @@ def pedir_opcion_valida(mensaje, opciones_validas):
     Retorna la opcion ingresada como entero, solicitandola nuevamente mientras
     no sea un numero dentro de las opciones validas.
     """
-    opcion = input(mensaje)
+    opcion = input(mensaje).strip()
 
-    while not opcion.isdigit() or int(opcion) not in opciones_validas:
+    while not (opcion.strip().isascii() and opcion.strip().isdigit() and int(opcion.strip()) in opciones_validas):
         print('\n[ERROR] Opción inválida. Por favor, seleccione una opción disponible.')
-        opcion = input(mensaje)
+        opcion = input(mensaje).strip()
 
     return int(opcion)
 
@@ -31,8 +31,9 @@ def grilla():
 
 def artista_ya_ingresado(codigo, codigos):
     """
-    Recorre toda la matriz en busca del artista. Retorna true si lo encuentra.
-    No se encuentra "while artista in lineup" debido a que chequearia si toda la fila equivale a artista
+    Recibe un código y la lista de codigos registrados.
+    Retorna True si el código ya está registrado.
+    (No se usa "codigo in lineup" porque lineup es una matriz: compararía filas completas.)
     """
     if codigo in codigos:
         return True
@@ -62,8 +63,9 @@ def validar_horario(horario, lineup, escenario):
 
 def validar_horario_escenario(lineup, horario, escenario):
     """
-    Recibe la matriz lineup, y el horario/escenario propuestos.
-    Retorna la tupla (escenario, horario) validada: solicita nuevos valores mientras esten fuera de rango o mientras la combinacion ya tenga un artista asignado.
+    Recibe la matriz lineup y el horario/escenario ya elegidos (en base 1, ya dentro de rango).
+    Retorna la tupla (escenario, horario) validada: mientras la combinación ya tenga un
+    artista asignado, solicita ambos valores de nuevo.
     """
 
     while lineup[horario-1][escenario-1] != '.':
@@ -78,16 +80,22 @@ def ingresar_codigo():
     Solicita por teclado el código del artista y valida que cumpla con el formato 'A-XX'.
     Retorna el código validado en mayúsculas.
     """
-    codigo = input("Ingresar codigo del artista a registrar: ").upper()
+    codigo = input("Ingresar codigo del artista a registrar: ").strip().upper()
     while not validar_codigo(codigo):
         print("[ERROR] Código inválido. Por favor, ingrese un código con el formato 'A-XX'.")
-        codigo = input("Ingresar código del artista a registrar: ").upper()
+        codigo = input("Ingresar código del artista a registrar: ").strip().upper()
     return codigo
 
+def nombre_artista_repetido(nombre, nombre_artistas):
+    """
+    Recibe un nombre y la lista de nombres registrados.
+    Retorna True si ya existe, sin distinguir mayúsculas ni espacios extra.
+    """
+    return nombre.strip().lower() in [n.strip().lower() for n in nombre_artistas]
 
 def ingresar_artista(lineup, nombre_artistas, codigos, horarios, escenarios):
     """
-    Recibe la matriz lineup, las listas de nombres y codigos de artistas, y las tuplas de horarios y escenarios.
+    Recibe la matriz lineup, las listas de nombres y codigos de artistas, y las listas de horarios y escenarios.
     No retorna un valor; solicita por teclado el codigo, nombre, horario y escenario del nuevo artista,
     valida los datos y actualiza la matriz y las listas correspondientes.
     """
@@ -102,10 +110,13 @@ def ingresar_artista(lineup, nombre_artistas, codigos, horarios, escenarios):
         codigo = ingresar_codigo()
 
     codigos.append(codigo)
-    nombre_artistico = input("Ingresar nombre del artista: ")
-    while nombre_artistico == "" or nombre_artistico.isspace():
-        print("[ERROR] El nombre no puede quedar vacío ni contener únicamente espacios en blanco.")
-        nombre_artistico = input("Ingresar nombre del artista: ")
+    nombre_artistico = input("Ingresar nombre del artista: ").strip()
+    while nombre_artistico == "" or nombre_artista_repetido(nombre_artistico, nombre_artistas):
+        if nombre_artistico == "":
+            print("[ERROR] El nombre no puede quedar vacío ni contener únicamente espacios en blanco.")
+        else:
+            print(f"[ERROR] Ya existe un artista llamado '{nombre_artistico}'. Ingrese un nombre distinto.")
+        nombre_artistico = input("Ingresar nombre del artista: ").strip()
 
     nombre_artistas.append(nombre_artistico)
 
@@ -186,7 +197,7 @@ def calcular_limite_compra(tipo, entradas, vendidas_gen, vendidas_vip):
 
 def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horarios):
     """
-    Recibe el codigo o nombre buscado, las listas de codigos y nombres, la matriz y las tuplas de escenarios y horarios.
+    Recibe el codigo o nombre buscado, las listas de codigos y nombres, la matriz y las listas de escenarios y horarios.
     Retorna una tupla (nombre, escenario, horario) del artista encontrado.
     """
     cods = [c.strip().lower() for c in codigos] # Para ignorar los espacios y las mayúsculas en los elementos dentro de la lista.
@@ -210,8 +221,9 @@ def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horari
 
 def calcular_disponibilidad_general(tot, capacidad):
     """
-    Recibe la cantida total de entradas vendidas y la capacidad correspondiente.
+    Recibe la cantidad total de entradas vendidas y la capacidad correspondiente.
     Retorna el porcentaje de disponibilidad restante sobre esa capacidad.
+    Lanza ZeroDivisionError si la capacidad es 0.
     """
     porcentaje_vendido = (tot/capacidad) *100
     capacidad_general = 100 - porcentaje_vendido
@@ -266,14 +278,14 @@ def chequear_artista(lineup, modificar):
             libres += 1
 
     if libres == 0:
-        print("\n[AVISO]Todos los horarios del escenario están ocupados.")
+        print("\n[AVISO] Todos los horarios del escenario están ocupados.")
         return False
     else:
         return True
 
 def contar_artistas_escenario(lineup, escenarios):
     """
-    Recibe la matriz lineup y la tupla de escenarios.
+    Recibe la matriz lineup y la lista de escenarios.
     Retorna una lista con la cantidad de artistas asignados a cada escenario (mismo orden que escenarios).
     """
     conteo = [0] * len(escenarios)
@@ -308,7 +320,7 @@ def validacion_contrasena():
     Solicita por teclado la contraseña hasta que cumpla es_contrasena_valida.
     Retorna la contraseña validada.
     """
-    mensaje = "Ingresar contraseña. Debe contener un numero y 4 caracteres: "
+    mensaje = "Ingresar contraseña. Debe contener un numero y al menos 4 caracteres: "
     contrasena = input(mensaje)
     while not es_contrasena_valida(contrasena):
         if ";" in contrasena:

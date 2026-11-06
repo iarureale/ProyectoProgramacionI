@@ -10,20 +10,15 @@ def validar_codigo(codigo):
     False: Si no cumple con el formato indicado.
     True: Si cumple con el formato indicado.
     """
-    if len(codigo) != 4:
-        return False
-    if codigo[0:2] != "A-":
-        return False
-    if not codigo[2::].isdigit():
-        return False
-    return True
+
+    return fullmatch(r"A-[0-9]{2}", codigo) is not None
 
 def es_cantidad_valida(texto):
     """
     Recibe el texto ingresado por el usuario.
     Retorna True si representa un número entero positivo.
     """
-    return texto.isdigit() and int(texto) > 0
+    return fullmatch(r"[0-9]+", texto) is not None and int(texto) > 0
 
 '''
 VALIDACIONES DEL SEGUNDO ALCANCE
@@ -41,7 +36,7 @@ def es_mail_valido(mail):
     Recibe el mail.
     Retorna True si tiene la estructura nombre@dominio.ext.
     """
-    return fullmatch(r"[A-Za-z0-9._+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}", mail) is not None
+    return fullmatch(r"[A-Za-z0-9]+([._+-][A-Za-z0-9]+)*@([A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?\.)+[A-Za-z]{2,}", mail) is not None
 
 def es_dni_valido(dni):
     """

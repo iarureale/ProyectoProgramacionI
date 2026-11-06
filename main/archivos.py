@@ -1,7 +1,6 @@
 import json
 import random
 from json import load
-from re import fullmatch
 from datetime import datetime
 from validaciones import *
 
@@ -49,7 +48,7 @@ def repitencia_usuarios(nombre, mail):
             arch.readline()
             for linea in arch:
                 campos = linea.strip().split(";")
-                if len(campos) == 4 and (campos[0] == nombre or campos[2] == mail):
+                if len(campos) == 4 and (campos[0].lower() == nombre.lower() or campos[2].lower() == mail.lower()):
                     return True
     except FileNotFoundError:
         print("ERROR: no se encontro login.txt")
@@ -82,11 +81,15 @@ def buscar_usuarios(nombre, contrasena):
         with open("login.txt", "rt", encoding="utf-8") as arch:
             lineas = arch.readlines()
             for linea in lineas[1:]:  #IGNORO LA PRIMERA LINEA PQ SINO ME TIRA SIEMPRE USUARIO NO ENCONTRADO
+                if not linea.strip():
+                    continue
+
                 campos = linea.strip().split(";")
                 if len(campos) == 4 and campos[0] == nombre:
                     if campos[1] == contrasena:
                         return campos[3], None
                     return None, causa[2]
+        return None, causa[0]
     except FileNotFoundError:
         print("ERROR: no se encontro login.txt")
     except OSError:
@@ -117,7 +120,7 @@ def intento_fallido(nombre, causa):
     except OSError:
         print("Error al guardar el archivo")
 
-def calcular_total():
+def calcular_total(mostrar_avisos=False):
     """
     Recorre compras.csv y acumula cantidad y monto en un diccionario por tipo de entrada.
     Retorna la tupla (total_entradas, monto_total, total_general, total_vip).
@@ -138,7 +141,8 @@ def calcular_total():
                     ventas[campos[5]]["cantidad"] += cantidad
                     ventas[campos[5]]["monto"] += monto
                 except (IndexError, ValueError, KeyError):
-                    print(f"[AVISO] Fila con formato incorrecto: {lineas.strip()}")
+                    if mostrar_avisos:
+                        print(f"[AVISO] Fila con formato incorrecto: {lineas.strip()}")
     except FileNotFoundError:
         pass
 
@@ -150,11 +154,15 @@ def calcular_total():
 def crear_compras_si_no_existe():
     """
     Crea compras.csv con su encabezado si todavía no existe.
+    Crea el encabezado también si el archivo está vacío.
     No retorna un valor.
     """
     try:
-        open("compras.csv", "rt", encoding="utf-8").close()
+        with open("compras.csv", "rt", encoding="utf-8") as arch:
+            tiene_datos = arch.readline() != ""
     except FileNotFoundError:
+        tiene_datos = False
+    if not tiene_datos:
         with open("compras.csv", "wt", encoding="utf-8") as arch:
             arch.write("id;fecha;nombre_completo;mail;dni;tipo_entrada;cantidad;monto_final\n")
 
