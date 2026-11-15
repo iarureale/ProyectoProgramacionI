@@ -408,7 +408,7 @@ def menu_comprar_entradas(entradas, capacidad_general):
     restante.
     """
     while True:
-        tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total()
+        tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total(entradas)
         print("✦" + "═" * 44 + "✦")
         print(f"✦{' MENÚ: Comprar entradas '.center(44, '═')}✦")
         print("✦" + "═" * 44 + "✦")
@@ -499,7 +499,7 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, 
     escenario e intentos fallidos). Los intentos fallidos solo se muestran si admin es True.
     """
     while True:
-        tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total()
+        tot, venta_tot, vendidas_gen, vendidas_vip = calcular_total(entradas)
         recaudada_gen = vendidas_gen * entradas["General"]["precio"]
         recaudada_vip = vendidas_vip * entradas["VIP"]["precio"]
         print("✦" + "═" * 44 + "✦")

@@ -12,7 +12,7 @@ def main():
         return
     if not verificar_login():
         return
-    calcular_total(mostrar_avisos=True)
+    calcular_total(config["entradas"], mostrar_avisos=True)
     lineup = grilla()
     codigos = []
     nombre_artistas = []

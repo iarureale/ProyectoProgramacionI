@@ -210,7 +210,8 @@ def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horari
 
     nombre_encontrado = nombre_artistas[indice]
     codigo_encontrado = codigos[indice]
-
+    escenario_encontrado = None
+    horario_encontrado = None
     for f in range(len(lineup)):
         for c in range(len(lineup[f])):
             if lineup[f][c] == codigo_encontrado:

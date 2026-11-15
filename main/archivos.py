@@ -7,23 +7,23 @@ from validaciones import *
 
 def leer_archivo():
     """
-    Lee configuracion.json y retorna el diccionario de configuración.
-    Si el archivo no se puede leer o tiene un formato inválido, informa el error
-    y retorna None.
+    Lee configuracion.json y retorna el diccionario de configuración ya validado.
+    Si el archivo no se puede leer o su estructura es inválida, informa el error y retorna None.
     """
-    config = None
     try:
         with open("configuracion.json", 'rt', encoding='utf-8') as arch:
             config = load(arch)
     except OSError:
-        print("ERROR. No se pudo leer el archivo")
+        print("ERROR. No se pudo leer el archivo configuracion.json")
+        return None
     except ValueError:
         print("ERROR. configuracion.json tiene un formato inválido (revisar comas, comillas y llaves).")
-    if config is not None:
-        for clave in ("escenarios", "horarios", "entradas"):
-            if clave not in config:
-                print(f"ERROR. configuracion.json no tiene la clave '{clave}'.")
-                return None
+        return None
+
+    motivo = validar_configuracion(config)
+    if motivo is not None:
+        print(f"ERROR. configuracion.json es inválido: {motivo}.")
+        return None
     return config
 
 def verificar_login():
@@ -34,7 +34,7 @@ def verificar_login():
     try:
         with open("login.txt", "rt", encoding="utf-8"):
             return True
-    except OSError:
+    except (OSError, ValueError):
         print("[ERROR] No se encontró login.txt. El programa no puede iniciar sin ese archivo.")
         return False
 
@@ -92,64 +92,94 @@ def buscar_usuarios(nombre, contrasena):
         return None, causa[0]
     except FileNotFoundError:
         print("ERROR: no se encontro login.txt")
-    except OSError:
+    except (OSError, ValueError):
         print("Error al leer el archivo")
     return None, causa[0]
+
+def leer_logs():
+    """
+    Lee logs.json y retorna la lista de intentos válidos (diccionarios con 'user_ingresado' de tipo texto).
+    Si el archivo no existe, no se puede leer o no tiene estructura de lista, retorna [].
+    Los elementos con estructura incorrecta se ignoran.
+    """
+    try:
+        with open("logs.json", mode="rt", encoding="utf-8") as arch:
+            datos = load(arch)
+    except FileNotFoundError:
+        return []
+    except (OSError, ValueError):
+        print("[ERROR] No se pudo leer logs.json.")
+        return []
+    if not isinstance(datos, list):
+        print("[ERROR] logs.json debe contener una lista de intentos.")
+        return []
+    return [i for i in datos if isinstance(i, dict) and isinstance(i.get("user_ingresado"), str)]
+
 
 def intento_fallido(nombre, causa):
     """
     Recibe el usuario ingresado y la causa del fallo.
-    No retorna un valor; agrega el intento (usuario, fecha y causa) a la lista de logs.json.
-    La contraseña ingresada nunca se guarda.
+    No retorna un valor; agrega el intento a la lista de logs.json. La contraseña nunca se guarda.
     """
-
-    ingreso_fallido ={
-    "user_ingresado": nombre,
-    "fecha": datetime.now().strftime("%d-%m-%Y"),
-    "causa": causa
-    }
-    try:
-        with open("logs.json", "rt", encoding="utf-8") as arch:
-            intentos = json.load(arch)
-    except (OSError, ValueError):
-        intentos = []
-    intentos.append(ingreso_fallido)
+    intentos = leer_logs()
+    intentos.append({
+        "user_ingresado": nombre,
+        "fecha": datetime.now().strftime("%d-%m-%Y"),
+        "causa": causa
+    })
     try:
         with open("logs.json", "wt", encoding="utf-8") as arch:
             json.dump(intentos, arch, indent=4, ensure_ascii=False)
     except OSError:
         print("Error al guardar el archivo")
 
-def calcular_total(mostrar_avisos=False):
+def crear_reporte():
     """
-    Recorre compras.csv y acumula cantidad y monto en un diccionario por tipo de entrada.
+    Lee logs.json y acumula la cantidad de intentos fallidos por usuario.
+    Retorna el diccionario {usuario: cantidad}; queda vacío si no hay intentos o no se puede leer.
+    """
+    acumulador = {}
+    for intento in leer_logs():
+        usuario = intento["user_ingresado"]
+        acumulador[usuario] = acumulador.get(usuario, 0) + 1
+    return acumulador
+
+def calcular_total(entradas, mostrar_avisos=False):
+    """
+    Recorre compras.csv y acumula cantidad y monto por tipo de entrada.
+    Descarta (informando si mostrar_avisos) las filas inválidas o que superen el cupo máximo.
     Retorna la tupla (total_entradas, monto_total, total_general, total_vip).
-    Las filas con formato incorrecto se informan sin perder las válidas.
     """
     ventas = {"general": {"cantidad": 0, "monto": 0},
               "vip": {"cantidad": 0, "monto": 0}}
+    nombres = {"general": "General", "vip": "VIP"}
     try:
         with open("compras.csv", mode='rt', encoding='utf-8') as arch:
             arch.readline()
-            for lineas in arch:
-                if lineas.strip() == "":
+            for nro, linea in enumerate(arch, start=2):
+                if linea.strip() == "":
                     continue
-                campos = lineas.strip().split(';')
-                try:
-                    cantidad = int(campos[6])
-                    monto = float(campos[7])
-                    ventas[campos[5]]["cantidad"] += cantidad
-                    ventas[campos[5]]["monto"] += monto
-                except (IndexError, ValueError, KeyError):
+                datos, motivo = validar_fila_compra(linea.strip().split(';'), entradas)
+                if datos is not None:
+                    tipo, cantidad, monto = datos
+                    if ventas[tipo]["cantidad"] + cantidad > entradas[nombres[tipo]]["cupo_maximo"]:
+                        datos, motivo = None, "supera el cupo máximo de ese tipo de entrada"
+                if datos is None:
                     if mostrar_avisos:
-                        print(f"[AVISO] Fila con formato incorrecto: {lineas.strip()}")
+                        print(f"[AVISO] Fila {nro} descartada ({motivo}): {linea.strip()}")
+                    continue
+                ventas[tipo]["cantidad"] += cantidad
+                ventas[tipo]["monto"] += monto
     except FileNotFoundError:
         pass
+    except (OSError, ValueError):
+        print("[ERROR] No se pudo leer compras.csv.")
 
     tot_gen = ventas["general"]["cantidad"]
     tot_vip = ventas["vip"]["cantidad"]
     monto_total = ventas["general"]["monto"] + ventas["vip"]["monto"]
     return tot_gen + tot_vip, monto_total, tot_gen, tot_vip
+
 
 def crear_compras_si_no_existe():
     """
@@ -163,8 +193,11 @@ def crear_compras_si_no_existe():
     except FileNotFoundError:
         tiene_datos = False
     if not tiene_datos:
-        with open("compras.csv", "wt", encoding="utf-8") as arch:
-            arch.write("id;fecha;nombre_completo;mail;dni;tipo_entrada;cantidad;monto_final\n")
+        try:
+            with open("compras.csv", "wt", encoding="utf-8") as arch:
+                arch.write("id;fecha;nombre_completo;mail;dni;tipo_entrada;cantidad;monto_final\n")
+        except OSError:
+            print("[ERROR] No se pudo crear compras.csv.")
 
 def chequear_id():
     """
@@ -185,7 +218,7 @@ def chequear_id():
                         repetido = True
                         id = random.randint(1000,9999)
                         break
-    except FileNotFoundError:
+    except (OSError, ValueError):
         pass
     return id
 
@@ -208,25 +241,3 @@ def guardar_compra(tipo_entrada, cantidad, precio_general, precio_vip, nombre_co
     except OSError:
         print("El archivo tuvo un error al intentar procesarlo, porfavor revisar.")
         return False
-
-def crear_reporte():
-    """
-    Lee logs.json y acumula en un diccionario la cantidad de intentos fallidos por usuario.
-    Retorna el diccionario {usuario: cantidad}; queda vacío si no hay intentos o no se puede leer el archivo.
-    """
-    acumulador = {}
-
-    try:
-        with open("logs.json", mode="rt", encoding="utf-8") as arch:
-            intentos = load(arch)
-    except FileNotFoundError:
-        return acumulador
-    except (OSError, ValueError):
-        print("[ERROR] No se pudo leer logs.json.")
-        return acumulador
-
-    for intento in intentos:
-        usuario = intento.get("user_ingresado")
-        if usuario is not None:
-            acumulador[usuario] = acumulador.get(usuario, 0) + 1
-    return acumulador
