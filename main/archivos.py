@@ -60,12 +60,22 @@ def registrar_cuenta(nombre, contrasena, mail):
     """
     Recibe nombre, contraseña y mail ya validados.
     No retorna un valor; agrega la cuenta a login.txt con el rol 'Usuario'.
+    Si el archivo no termina en salto de línea, lo agrega para no pegar la cuenta a la última línea.
     """
     try:
+        prefijo = ""
+        try:
+            with open("login.txt", "rt", encoding="utf-8") as arch:
+                contenido = arch.read()
+            if contenido != "" and contenido[-1] != "\n":
+                prefijo = "\n"
+        except FileNotFoundError:
+            pass  # si no existe, "at" lo crea
+
         with open("login.txt", "at", encoding="utf-8") as arch:
-            arch.write(f"{nombre};{contrasena};{mail};Usuario\n")
+            arch.write(f"{prefijo}{nombre};{contrasena};{mail};Usuario\n")
         print("Usuario agregado con exito!")
-    except OSError:
+    except (OSError, ValueError):
         print("Error al acceder al archivo")
 
 def buscar_usuarios(nombre, contrasena):

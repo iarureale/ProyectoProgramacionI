@@ -207,6 +207,8 @@ def buscar_artista(buscado, codigos, nombre_artistas, lineup, escenarios, horari
         indice = cods.index(buscado)
     elif buscado in nombres:
         indice = nombres.index(buscado)
+    else:
+        return None
 
     nombre_encontrado = nombre_artistas[indice]
     codigo_encontrado = codigos[indice]
