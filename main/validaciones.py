@@ -1,4 +1,5 @@
 from re import fullmatch
+from datetime import datetime
 
 '''
 VALIDACIONES DEL PRIMER ALCANCE
@@ -52,6 +53,16 @@ def es_contrasena_valida(contrasena):
     """
     return len(contrasena) >= 4 and any(c.isdigit() for c in contrasena) and ";" not in contrasena
 
+def es_fecha_valida(fecha):
+    """Retorna True si la fecha tiene formato dd-mm-aaaa y existe en el calendario."""
+    if fullmatch(r"[0-9]{2}-[0-9]{2}-[0-9]{4}", fecha) is None:
+        return False
+    try:
+        datetime.strptime(fecha, "%d-%m-%Y")
+        return True
+    except ValueError:
+        return False
+
 def validar_fila_compra(campos, entradas):
     """
     Recibe los campos de una fila de compras.csv (lista) y la configuración de entradas.
@@ -61,8 +72,17 @@ def validar_fila_compra(campos, entradas):
     if len(campos) != 8:
         return None, "cantidad de columnas incorrecta"
 
-    _, _, _, mail, dni, tipo, texto_cantidad, texto_monto = [c.strip() for c in campos]
+    id_, fecha, nombre, mail, dni, tipo, texto_cantidad, texto_monto = [c.strip() for c in campos]
     tipo = tipo.lower()
+
+    if fullmatch(r"[0-9]{4}", id_) is None:
+        return None, "id inválido (deben ser 4 dígitos)"
+    
+    if not es_fecha_valida(fecha):
+        return None, "fecha inválida (formato dd-mm-aaaa)"
+    
+    if nombre == "":
+        return None, "nombre vacío"
 
     if tipo not in ("general", "vip"):
         return None, f"tipo de entrada '{tipo}' inexistente"
@@ -103,6 +123,8 @@ def validar_configuracion(config):
         lista = config[clave]
         if not (isinstance(lista, list) and len(lista) == cantidad and all(isinstance(x, str) and x.strip() for x in lista)):
             return f"'{clave}' debe ser una lista de {cantidad} textos no vacíos"
+        if len({x.strip().lower() for x in lista}) != cantidad:
+            return f"'{clave}' no puede tener valores repetidos"
 
     if not isinstance(config["entradas"], dict):
         return "'entradas' debe ser un objeto con 'General' y 'VIP'"
@@ -116,4 +138,7 @@ def validar_configuracion(config):
                 return f"'{tipo}' -> '{campo}' debe ser un número positivo"
         if not isinstance(datos["cupo_maximo"], int) or not isinstance(datos["max_operacion"], int):
             return f"'{tipo}' -> 'cupo_maximo' y 'max_operacion' deben ser enteros"
+        # Este chequeo va al final: antes hay que asegurarse de que ambos valores existan y sean enteros.
+        if datos["max_operacion"] > datos["cupo_maximo"]:
+            return f"'{tipo}' -> 'max_operacion' no puede superar a 'cupo_maximo'"
     return None

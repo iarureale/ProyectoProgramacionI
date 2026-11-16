@@ -28,33 +28,33 @@ def leer_archivo():
 
 def verificar_login():
     """
-    Verifica que login.txt exista y se pueda abrir (es un archivo obligatorio).
-    Retorna True si está disponible; si no, informa el error y retorna False.
+    Verifica que login.txt se pueda leer y tenga al menos una cuenta Admin válida.
+    Retorna True si está todo bien; si no, informa el error y retorna False.
     """
     try:
-        with open("login.txt", "rt", encoding="utf-8"):
-            return True
+        cuentas = leer_cuentas()
     except (OSError, ValueError):
-        print("[ERROR] No se encontró login.txt. El programa no puede iniciar sin ese archivo.")
+        print("[ERROR] No se encontró o no se pudo leer login.txt. El programa no puede iniciar sin ese archivo.")
         return False
+    if not any(c[3] == "Admin" for c in cuentas):
+        print("[ERROR] login.txt no contiene ninguna cuenta Admin válida.")
+        return False
+    return True
 
 def repitencia_usuarios(nombre, mail):
     """
     Recibe un nombre de usuario y un mail.
-    Recorre login.txt y retorna True si alguno de los dos ya está registrado.
+    Retorna True si alguno de los dos ya está registrado en login.txt.
     """
     try:
-        with open("login.txt", "rt", encoding="utf-8") as arch:
-            arch.readline()
-            for linea in arch:
-                campos = linea.strip().split(";")
-                if len(campos) == 4 and (campos[0].lower() == nombre.lower() or campos[2].lower() == mail.lower()):
-                    return True
+        cuentas = leer_cuentas()
     except FileNotFoundError:
         print("ERROR: no se encontro login.txt")
-    except OSError:
+        return False
+    except (OSError, ValueError):
         print("Error al leer el archivo")
-    return False
+        return False
+    return any(c[0].lower() == nombre.lower() or c[2].lower() == mail.lower() for c in cuentas)
 
 def registrar_cuenta(nombre, contrasena, mail):
     """
@@ -78,17 +78,11 @@ def buscar_usuarios(nombre, contrasena):
     if not es_usuario_valido(nombre):
         return None, causa[1]
     try:
-        with open("login.txt", "rt", encoding="utf-8") as arch:
-            lineas = arch.readlines()
-            for linea in lineas[1:]:  #IGNORO LA PRIMERA LINEA PQ SINO ME TIRA SIEMPRE USUARIO NO ENCONTRADO
-                if not linea.strip():
-                    continue
-
-                campos = linea.strip().split(";")
-                if len(campos) == 4 and campos[0] == nombre:
-                    if campos[1] == contrasena:
-                        return campos[3], None
-                    return None, causa[2]
+        for c in leer_cuentas():
+            if c[0] == nombre:
+                if c[1] == contrasena:
+                    return c[3], None
+                return None, causa[2]
         return None, causa[0]
     except FileNotFoundError:
         print("ERROR: no se encontro login.txt")
@@ -115,12 +109,26 @@ def leer_logs():
         return []
     return [i for i in datos if isinstance(i, dict) and isinstance(i.get("user_ingresado"), str)]
 
+def logs_ilegibles():
+    """Retorna True si logs.json existe pero no se puede interpretar como una lista."""
+    try:
+        with open("logs.json", mode="rt", encoding="utf-8") as arch:
+            datos = load(arch)
+    except FileNotFoundError:
+        return False
+    except (OSError, ValueError):
+        return True
+    return not isinstance(datos, list)
 
 def intento_fallido(nombre, causa):
     """
     Recibe el usuario ingresado y la causa del fallo.
-    No retorna un valor; agrega el intento a la lista de logs.json. La contraseña nunca se guarda.
+    No retorna un valor; agrega el intento a logs.json. La contraseña nunca se guarda.
+    Si logs.json está dañado no lo sobrescribe, para no perder el historial.
     """
+    if logs_ilegibles():
+        print("[ERROR] logs.json está dañado. No se registró el intento para no perder el historial.")
+        return
     intentos = leer_logs()
     intentos.append({
         "user_ingresado": nombre,
@@ -153,13 +161,23 @@ def calcular_total(entradas, mostrar_avisos=False):
     ventas = {"general": {"cantidad": 0, "monto": 0},
               "vip": {"cantidad": 0, "monto": 0}}
     nombres = {"general": "General", "vip": "VIP"}
+    ids_vistos = set()
     try:
         with open("compras.csv", mode='rt', encoding='utf-8') as arch:
-            arch.readline()
-            for nro, linea in enumerate(arch, start=2):
+            primera = arch.readline()
+            inicio = 2
+            if primera.strip() != "id;fecha;nombre_completo;mail;dni;tipo_entrada;cantidad;monto_final":
+                if mostrar_avisos and primera != "":
+                    print("[AVISO] compras.csv no tiene el encabezado esperado; se procesa desde la primera línea.")
+                arch.seek(0)
+                inicio = 1
+            for nro, linea in enumerate(arch, start=inicio):
                 if linea.strip() == "":
                     continue
-                datos, motivo = validar_fila_compra(linea.strip().split(';'), entradas)
+                campos = linea.strip().split(';')
+                datos, motivo = validar_fila_compra(campos, entradas)
+                if datos is not None and campos[0].strip() in ids_vistos:
+                    datos, motivo = None, "id repetido"
                 if datos is not None:
                     tipo, cantidad, monto = datos
                     if ventas[tipo]["cantidad"] + cantidad > entradas[nombres[tipo]]["cupo_maximo"]:
@@ -168,6 +186,7 @@ def calcular_total(entradas, mostrar_avisos=False):
                     if mostrar_avisos:
                         print(f"[AVISO] Fila {nro} descartada ({motivo}): {linea.strip()}")
                     continue
+                ids_vistos.add(campos[0].strip())
                 ventas[tipo]["cantidad"] += cantidad
                 ventas[tipo]["monto"] += monto
     except FileNotFoundError:
@@ -241,3 +260,18 @@ def guardar_compra(tipo_entrada, cantidad, precio_general, precio_vip, nombre_co
     except OSError:
         print("El archivo tuvo un error al intentar procesarlo, porfavor revisar.")
         return False
+
+def leer_cuentas():
+    """
+    Lee login.txt y retorna la lista de cuentas válidas [usuario, contraseña, mail, rol].
+    Ignora el encabezado y las líneas con estructura incorrecta.
+    Puede lanzar OSError / ValueError si no se puede leer el archivo.
+    """
+    cuentas = []
+    with open("login.txt", "rt", encoding="utf-8") as arch:
+        for linea in arch:
+            campos = linea.strip().split(";")
+            # El encabezado termina en "rol", que no es Admin ni Usuario, por eso se ignora.
+            if len(campos) == 4 and campos[3] in ("Admin", "Usuario"):
+                cuentas.append(campos)
+    return cuentas
