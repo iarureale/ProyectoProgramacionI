@@ -121,7 +121,6 @@ Un conjunto elimina los duplicados automáticamente. Si su tamaño es menor que 
 
 No se usan para obtener un listado o conteo de elementos distintos, por lo que el "Resumen de únicos" queda fuera del alcance.
 
-## Validaciones (expresiones regulares)
 
 ## Validaciones (expresiones regulares)
 
