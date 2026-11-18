@@ -11,7 +11,7 @@ def pedir_opcion_valida(mensaje, opciones_validas):
     """
     opcion = input(mensaje).strip()
 
-    while not (opcion.strip().isascii() and opcion.strip().isdigit() and int(opcion.strip()) in opciones_validas):
+    while not (opcion.isascii() and opcion.isdigit() and len(opcion) <= 6 and int(opcion) in opciones_validas):
         print('\n[ERROR] Opción inválida. Por favor, seleccione una opción disponible.')
         opcion = input(mensaje).strip()
 

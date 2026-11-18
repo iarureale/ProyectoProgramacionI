@@ -19,7 +19,7 @@ def es_cantidad_valida(texto):
     Recibe el texto ingresado por el usuario.
     Retorna True si representa un número entero positivo.
     """
-    return fullmatch(r"[0-9]+", texto) is not None and int(texto) > 0
+    return fullmatch(r"[0-9]{1,6}", texto) is not None and int(texto) > 0
 
 '''
 VALIDACIONES DEL SEGUNDO ALCANCE
