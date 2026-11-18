@@ -75,7 +75,7 @@ def validar_fila_compra(campos, entradas):
     id_, fecha, nombre, mail, dni, tipo, texto_cantidad, texto_monto = [c.strip() for c in campos]
     tipo = tipo.lower()
 
-    if fullmatch(r"[0-9]{4}", id_) is None:
+    if fullmatch(r"[1-9][0-9]{3}", id_) is None:
         return None, "id inválido (deben ser 4 dígitos)"
     
     if not es_fecha_valida(fecha):
