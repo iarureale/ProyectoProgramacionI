@@ -258,6 +258,7 @@ def guardar_compra(tipo_entrada, cantidad, precio_general, precio_vip, nombre_co
     """
     Recibe el tipo de entrada (1 = general, 2 = vip), la cantidad, los precios y los datos
     del comprador ya validados. Calcula el monto final y agrega la compra a compras.csv.
+    Si el archivo no termina en salto de línea, lo agrega para no pegar la compra a la última fila.
     Retorna True si se guardó, o False si hubo un error de escritura.
     """
     id = chequear_id()
@@ -267,8 +268,14 @@ def guardar_compra(tipo_entrada, cantidad, precio_general, precio_vip, nombre_co
     else:
         tipo, monto_final = 'vip', cantidad * precio_vip
     try:
+        prefijo = ""
+        with open('compras.csv', mode='rt', encoding='utf-8') as arch:
+            contenido = arch.read()
+        if contenido != "" and contenido[-1] != "\n":
+            prefijo = "\n"
+
         with open('compras.csv', mode='at', encoding='utf-8') as arch:
-            arch.write(f"{id};{fecha};{nombre_completo};{mail};{dni};{tipo};{cantidad};{monto_final}\n")
+            arch.write(f"{prefijo}{id};{fecha};{nombre_completo};{mail};{dni};{tipo};{cantidad};{monto_final}\n")
         return True
     except OSError:
         print("[ERROR] No se pudo guardar la compra en compras.csv. Por favor, revisar el archivo.")
