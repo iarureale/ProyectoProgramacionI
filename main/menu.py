@@ -25,7 +25,7 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
         print("✦   ★   ✦   ★   ✦   ★   ✦   ★")
         print()
 
-        print("Ingresar tipo de cuenta para iniciar sesion:")
+        print("Seleccionar una opción:")
 
         print("\n1. Iniciar sesión\n2. Crear Cuenta\n3. Salir\n")
 
@@ -57,7 +57,7 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
                 intento_fallido(nombre, causa)
 
                 if intentos >= 3:
-                    print("Se han superado los intentos de ingreso. Por favor, intente nuevamente más tarde.")
+                    print("[ALERTA] Se superaron los 3 intentos fallidos de inicio de sesión. Acceso bloqueado.")
                     break
 
 
@@ -69,7 +69,7 @@ def menu_principal(lineup, nombre_artistas, codigos, config):
             mail = validacion_mail()
 
             if repitencia_usuarios(nombre, mail):
-                print("El usuario ya esta registrado. Ingresar otro.")
+                print("[ERROR] El usuario o el mail ya están registrados. Ingresar otros.")
             else:
                 registrar_cuenta(nombre, contrasena, mail)
         if tipo_ingreso == 3:
@@ -85,7 +85,7 @@ def menu_admin(lineup, nombre_artistas, codigos, horarios, escenarios, capacidad
     """
     while True:
         admin = True
-        print("\nMENU ADMIN\n")
+        print("\nMENÚ ADMIN\n")
 
         print("1. Consultar grilla\n2. Modificar programación\n3. Estadísticas\n4. Salir")
 
@@ -110,9 +110,9 @@ def menu_usuario(lineup, nombre_artistas, codigos, horarios, escenarios, capacid
     """
     while True:
         admin = False
-        print("\nMENU Usuario\n")
+        print("\nMENÚ USUARIO\n")
 
-        print("1. Consultar información\n2. Buscar artista\n3. Consultar grilla\n4. Comprar entradas\n5. Estadisticas\n6. Salir")
+        print("1. Consultar información\n2. Buscar artista\n3. Consultar grilla\n4. Comprar entradas\n5. Estadísticas\n6. Salir")
 
         opcion = pedir_opcion_valida("Elegir opción (6 para finalizar): ", [1, 2, 3, 4, 5, 6])
         if opcion == 1:
@@ -418,7 +418,7 @@ def menu_comprar_entradas(entradas, capacidad_general):
             disponibilidad_vip = calcular_disponibilidad_general(vendidas_vip, entradas["VIP"]["cupo_maximo"])
         except ZeroDivisionError:
             print("\n[ERROR] Revisá la configuración de entradas.")
-            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
             break
         if disponibilidad <= 0:
             print("=" * 50)
@@ -479,14 +479,14 @@ def menu_comprar_entradas(entradas, capacidad_general):
                 else:
                     break
 
-            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
         
         elif opcion == 2:
             print("=" * 50)
             print("DISPONIBILIDAD".center(50, "-"))
             print("=" * 50)
             print(f'\nTodavía queda el {disponibilidad:.2f}% de las entradas.')
-            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
 
         elif opcion == 3:
             break
@@ -517,7 +517,7 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, 
             print(f"Entradas General vendidas: {vendidas_gen} - Recaudación: ${recaudada_gen}")
             print(f"Entradas VIP vendidas: {vendidas_vip} - Recaudación: ${recaudada_vip}")
             print(f"Entradas vendidas: {tot} - Recaudación total acumulada: ${venta_tot:.0f}")
-            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
 
         elif opcion == 2:
             try:
@@ -529,7 +529,7 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, 
                 print(f"VIP: {porcentaje_vip:.2f}%")
             except ZeroDivisionError:
                 print("\n[ERROR] Revisá la configuración de entradas.")
-            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
 
         elif opcion == 3:
             print(f"\nArtistas registrados: {len(codigos)}\n")
@@ -539,7 +539,7 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, 
                 for i in range(len(codigos)):
                     print(f'Artista {i+1}: {nombre_artistas[i]}')
 
-            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
 
         elif opcion == 4 and admin == True:
             acumulador = crear_reporte()
@@ -553,15 +553,15 @@ def estadisticas(capacidad_general, entradas, codigos, nombre_artistas, lineup, 
                 print('\nNo hay intentos de inicio fallidos!')
 
 
-            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
 
         elif opcion == 4 and admin == False:
             print("\nNo se tiene los privilegios para acceder a esta información!")
-            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])
 
         elif opcion == 5:
             conteo = contar_artistas_escenario(lineup, escenarios)
             print("\nArtistas por escenario:\n")
             for i in range(len(escenarios)):
                 print(f"{escenarios[i]}: {conteo[i]}")
-            pedir_opcion_valida("\nIngresar (1) para volver al menu anterior: ", [1])
+            pedir_opcion_valida("\nIngresar (1) para volver al menú anterior: ", [1])

@@ -271,7 +271,7 @@ def guardar_compra(tipo_entrada, cantidad, precio_general, precio_vip, nombre_co
             arch.write(f"{id};{fecha};{nombre_completo};{mail};{dni};{tipo};{cantidad};{monto_final}\n")
         return True
     except OSError:
-        print("El archivo tuvo un error al intentar procesarlo, porfavor revisar.")
+        print("[ERROR] No se pudo guardar la compra en compras.csv. Por favor, revisar el archivo.")
         return False
 
 def leer_cuentas():
