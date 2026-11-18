@@ -19,6 +19,9 @@ def leer_archivo():
     except ValueError:
         print("ERROR. configuracion.json tiene un formato inválido (revisar comas, comillas y llaves).")
         return None
+    except RecursionError:
+        print("ERROR. configuracion.json tiene demasiados niveles anidados.")
+        return None
 
     motivo = validar_configuracion(config)
     if motivo is not None:
@@ -111,7 +114,7 @@ def leer_logs():
             datos = load(arch)
     except FileNotFoundError:
         return []
-    except (OSError, ValueError):
+    except (OSError, ValueError, RecursionError):
         print("[ERROR] No se pudo leer logs.json.")
         return []
     if not isinstance(datos, list):
@@ -126,7 +129,7 @@ def logs_ilegibles():
             datos = load(arch)
     except FileNotFoundError:
         return False
-    except (OSError, ValueError):
+    except (OSError, ValueError, RecursionError):
         return True
     return not isinstance(datos, list)
 
