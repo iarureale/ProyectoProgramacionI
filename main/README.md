@@ -96,6 +96,31 @@ Las compras, las cuentas y los intentos fallidos se conservan entre ejecuciones.
 - **Diccionario de configuración:** datos cargados desde `configuracion.json`.
 - **Lineup:** matriz de 8 horarios x 5 escenarios, más dos listas paralelas (`codigos` y `nombre_artistas`). Se mantiene del modelo de la Etapa 1.
 
+## Conjuntos (set)
+
+Los conjuntos se usan de forma interna, siempre para **detectar valores repetidos**. No generan ningún reporte de valores únicos.
+
+### 1. Ids de compra repetidos (`calcular_total` en `archivos.py`)
+
+Al recorrer `compras.csv` se crea un conjunto vacío `ids_vistos`. Por cada fila:
+
+- Si la fila es válida y su id ya está en `ids_vistos`, se descarta con el motivo "id repetido" y no se suma a los totales.
+- Si la fila es válida y se acepta, su id se agrega a `ids_vistos`.
+
+Esto evita que una compra duplicada, por ejemplo por una edición manual del archivo, se cuente dos veces en las ventas y en el cupo. Se eligió un conjunto porque preguntar `id in ids_vistos` no recorre una lista cada vez: la búsqueda es directa, sin importar cuántas filas haya.
+
+### 2. Escenarios y horarios repetidos (`validar_configuracion` en `validaciones.py`)
+
+Al iniciar, se arma un conjunto por comprensión con los escenarios y otro con los horarios de `configuracion.json`, sin espacios extra y sin distinguir mayúsculas:
+
+    len({x.strip().lower() for x in lista}) != cantidad
+
+Un conjunto elimina los duplicados automáticamente. Si su tamaño es menor que el de la lista original, hay valores repetidos y el archivo se rechaza. Así, "McStage" y " mcstage " no pueden convivir como dos escenarios distintos en la grilla.
+
+### Qué no hacen los conjuntos
+
+No se usan para obtener un listado o conteo de elementos distintos, por lo que el "Resumen de únicos" queda fuera del alcance.
+
 ## Validaciones (expresiones regulares)
 
 | Dato | Formato esperado |
@@ -117,7 +142,7 @@ Se controlan los archivos inexistentes (`FileNotFoundError`), los errores de lec
 ## Alcance y decisiones
 
 - El lineup (matriz y listas de artistas) vive en memoria y **no se guarda en archivos**: se reinicia en cada ejecución.
-- Quedan **fuera de este alcance**: conjuntos (resumen de únicos), recursividad y persistencia del lineup.
+- Quedan **fuera de este alcance**: resumen de únicos con conjuntos, recursividad y persistencia del lineup.
 
 ## Cuentas de demostración
 
