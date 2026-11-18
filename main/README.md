@@ -123,13 +123,22 @@ No se usan para obtener un listado o conteo de elementos distintos, por lo que e
 
 ## Validaciones (expresiones regulares)
 
-| Dato | Formato esperado |
-|---|---|
-| Usuario | 4 a 15 caracteres: letras, números o guion bajo |
-| DNI | 7 u 8 dígitos, sin puntos |
-| Mail | `nombre@dominio.ext` |
+## Validaciones (expresiones regulares)
 
-Además se valida el código de artista (`A-XX`), la cantidad de entradas (entero positivo, dentro del límite por operación y del stock) y la contraseña (mínimo 4 caracteres, al menos un número y sin `;`). Los mensajes de error indican qué formato se espera.
+Los formatos se validan con `re.fullmatch` en `validaciones.py`. Cada mensaje de error indica qué formato se espera.
+
+| Dato | Formato esperado | Dónde se usa |
+|---|---|---|
+| Usuario | 4 a 15 caracteres: letras, números o guion bajo | Login / Crear cuenta |
+| DNI | 7 u 8 dígitos, solo números y sin puntos | Compra de entradas / `compras.csv` |
+| Mail | `nombre@dominio.ext` | Crear cuenta / Compra de entradas / `compras.csv` |
+| Código de artista | `A-XX` (dos dígitos) | Registro y modificación de artistas |
+| Cantidad de entradas | Entero positivo de hasta 6 dígitos | Compra de entradas / `compras.csv` |
+| Id de compra | 4 dígitos (1000 a 9999) | `compras.csv` |
+| Fecha | `dd-mm-aaaa`; además debe existir en el calendario (se controla con `datetime.strptime`) | `compras.csv` |
+
+La **contraseña** se valida sin expresión regular: mínimo 4 caracteres, al menos un número y sin `;`. Al iniciar sesión solo se valida el formato del usuario y la contraseña se compara tal cual contra `login.txt`.
+
 
 ## Manejo de excepciones
 
